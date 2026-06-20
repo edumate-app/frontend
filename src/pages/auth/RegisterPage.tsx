@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Loader2, CheckCircle2, Film } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRegister } from "@/features/auth/hooks/useRegister";
 
 function strength(pw: string) {
   let score = 0;
@@ -26,6 +27,7 @@ const colors = [
 ];
 
 export default function RegisterPage() {
+  const { register } = useRegister();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -51,16 +53,21 @@ export default function RegisterPage() {
     return Object.keys(e).length === 0;
   }
 
-  function onSubmit(e: FormEvent) {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+
+    try {
+      await register(name, email, password);
       setSuccess(true);
-      setTimeout(() => navigate("/onboarding"), 1400);
-    }, 1100);
-  }
+      setTimeout(() => navigate("/dashboard", { replace: true }), 1400);
+    } catch {
+      setErrors({ email: "Registration failed. Please try again" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (success) {
     return (

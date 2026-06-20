@@ -6,14 +6,16 @@ import { Eye, EyeOff, Loader2, Film } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
+import { useLogin } from "../../features/auth/hooks/useLogin";
 
 export default function LoginPage() {
+  const { login } = useLogin();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
-  const [remember, setRemember] = useState(true);
+  // const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {},
@@ -23,20 +25,25 @@ export default function LoginPage() {
     const e: typeof errors = {};
     if (!/^\S+@\S+\.\S+$/.test(email))
       e.email = "Podaj prawidłowy adres e-mail.";
-    if (password.length < 6) e.password = "Hasło musi mieć min. 6 znaków.";
+    if (password.length < 5) e.password = "Hasło musi mieć min. 6 znaków.";
     setErrors(e);
     return Object.keys(e).length === 0;
   }
 
-  function onSubmit(e: FormEvent) {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
-    setTimeout(() => {
+    try {
+      await login(email, password);
+      navigate("/dashboard", { replace: true });
+    } catch {
       setLoading(false);
-      navigate("/app/dashboard");
-    }, 1100);
-  }
+      setErrors({ email: "Nieprawidłowy e-mail lub hasło." });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
@@ -143,7 +150,7 @@ export default function LoginPage() {
                 <p className="text-xs text-destructive">{errors.password}</p>
               )}
             </div>
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <Checkbox
                 id="remember"
                 checked={remember}
@@ -155,7 +162,7 @@ export default function LoginPage() {
               >
                 Zapamiętaj mnie
               </Label>
-            </div>
+            </div> */}
             <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
               {loading ? "Logowanie…" : "Zaloguj się"}
