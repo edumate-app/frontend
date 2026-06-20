@@ -2,6 +2,8 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { PublicRoute } from "./PublicRoute";
 import { ProtectedRoute } from "./ProtectedRoute";
 import HomePage from "@/pages/HomePage";
+import LoginPage from "@/pages/auth/LoginPage";
+import RegisterPage from "@/pages/auth/RegisterPage";
 
 export const router = createBrowserRouter([
   {
@@ -11,11 +13,11 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "/login",
-            element: <h1>Login Page</h1>,
+            element: <LoginPage />,
           },
           {
             path: "/register",
-            element: <h1>Register Page</h1>,
+            element: <RegisterPage />,
           },
         ],
       },
