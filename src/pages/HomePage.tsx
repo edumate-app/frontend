@@ -76,7 +76,7 @@ export default function HomePage() {
 
         <div className="relative">
           <div className="rounded-xl border border-border bg-surface p-3 shadow-lg">
-            <div className="flex aspect-video items-center justify-center rounded-lg bg-gradient-to-br from-primary-900 to-primary-700">
+            <div className="flex aspect-video items-center justify-center rounded-lg bg-linear-to-br from-primary-900 to-primary-700">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/15 backdrop-blur">
                 <Play className="h-6 w-6 fill-white text-white" />
               </div>

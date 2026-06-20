@@ -84,7 +84,7 @@ export default function RegisterPage() {
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
-      <div className="relative hidden overflow-hidden bg-gradient-to-br from-primary-900 via-primary-700 to-primary-600 lg:flex lg:flex-col lg:justify-between lg:p-12">
+      <div className="relative hidden overflow-hidden bg-linear-to-br from-primary-900 via-primary-700 to-primary-600 lg:flex lg:flex-col lg:justify-between lg:p-12">
         <Film className="h-9 w-9 text-white" />
         <div className="space-y-4 text-white">
           <h2 className="font-display text-3xl font-semibold leading-tight">

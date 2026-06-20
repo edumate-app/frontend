@@ -174,7 +174,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="relative hidden overflow-hidden bg-gradient-to-br from-primary-700 via-primary-600 to-primary-900 lg:flex lg:flex-col lg:justify-end lg:p-12">
+      <div className="relative hidden overflow-hidden bg-linear-to-br from-primary-700 via-primary-600 to-primary-900 lg:flex lg:flex-col lg:justify-end lg:p-12">
         <div
           className="absolute inset-0 opacity-20"
           style={{
