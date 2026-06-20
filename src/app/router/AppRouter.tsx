@@ -4,9 +4,11 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
+import { AppLayout } from "../layouts/AppLayout";
 
 export const router = createBrowserRouter([
   {
+    element: <AppLayout />,
     children: [
       {
         element: <PublicRoute />,
