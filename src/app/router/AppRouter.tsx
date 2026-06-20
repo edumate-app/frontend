@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { PublicRoute } from "./PublicRoute";
 import { ProtectedRoute } from "./ProtectedRoute";
+import HomePage from "@/pages/HomePage";
 
 export const router = createBrowserRouter([
   {
@@ -33,7 +34,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/",
-        element: <h1>Home Page</h1>,
+        element: <HomePage />,
       },
       {
         path: "*",
