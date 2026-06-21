@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Settings, CreditCard, HelpCircle, LogOut } from "lucide-react";
 import { useAuthStore } from "@/features/auth/store/auth.store";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 
 export const UserMenu = () => {
@@ -19,7 +19,11 @@ export const UserMenu = () => {
       <DropdownMenu>
         <DropdownMenuTrigger className="rounded-full focus-visible:outline-none focus-visible:shadow-focus">
           <Avatar className="h-8 w-8 cursor-pointer">
-            {user?.profileUrl && <img src={user.profileUrl} alt={user.name} />}
+            <AvatarImage
+              src={user?.avatarUrl ?? undefined}
+              alt={user?.name}
+              className="rounded-full"
+            />
             <AvatarFallback>
               {user?.name
                 ?.split(" ")

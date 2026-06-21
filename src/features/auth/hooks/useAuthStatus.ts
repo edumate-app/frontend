@@ -15,7 +15,7 @@ export const useAuthStatus = () => {
           id: data.id,
           email: data.email,
           name: data.name,
-          profileUrl: data.profileUrl,
+          avatarUrl: data.avatarUrl,
         });
       })
       .finally(() => {

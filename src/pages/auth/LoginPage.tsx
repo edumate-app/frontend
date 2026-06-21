@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 // import { Checkbox } from "@/components/ui/checkbox";
 import { useLogin } from "../../features/auth/hooks/useLogin";
+import { env } from "@/utils/env";
+import type { AuthProvider } from "@/features/auth/api/auth.types";
 
 export default function LoginPage() {
   const { login } = useLogin();
@@ -45,6 +47,10 @@ export default function LoginPage() {
     }
   };
 
+  const redirectToOAuth = (provider: AuthProvider) => {
+    window.location.href = `${env.VITE_BASE_URL}/oauth2/authorization/${provider}`;
+  };
+
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <div className="flex items-center justify-center px-6 py-12">
@@ -66,7 +72,12 @@ export default function LoginPage() {
           </p>
 
           <div className="mt-6 grid grid-cols-2 gap-3">
-            <Button variant="outline" type="button" className="gap-2">
+            <Button
+              variant="outline"
+              type="button"
+              className="gap-2"
+              onClick={() => redirectToOAuth("google")}
+            >
               <svg viewBox="0 0 24 24" className="h-4 w-4">
                 <path
                   fill="#4285F4"
@@ -88,7 +99,12 @@ export default function LoginPage() {
               Google
             </Button>
 
-            <Button variant="outline" type="button" className="gap-2">
+            <Button
+              variant="outline"
+              type="button"
+              className="gap-2"
+              onClick={() => redirectToOAuth("github")}
+            >
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
                 <path d="M12 .5C5.73.5.75 5.7.75 12.34c0 5.3 3.44 9.79 8.2 11.38.6.12.82-.27.82-.6v-2.1c-3.34.75-4.04-1.66-4.04-1.66-.55-1.45-1.34-1.84-1.34-1.84-1.1-.78.08-.77.08-.77 1.22.09 1.86 1.3 1.86 1.3 1.08 1.9 2.82 1.35 3.5 1.03.1-.8.42-1.35.76-1.66-2.66-.31-5.46-1.38-5.46-6.14 0-1.36.47-2.47 1.24-3.34-.13-.31-.54-1.56.12-3.26 0 0 1.01-.33 3.3 1.27.96-.27 1.98-.4 3-.4s2.04.13 3 .4c2.28-1.6 3.29-1.27 3.29-1.27.66 1.7.25 2.95.12 3.26.77.87 1.24 1.98 1.24 3.34 0 4.77-2.8 5.83-5.47 6.13.43.38.81 1.12.81 2.26v3.35c0 .33.22.73.83.6 4.76-1.59 8.19-6.08 8.19-11.38C23.25 5.7 18.27.5 12 .5z" />
               </svg>
