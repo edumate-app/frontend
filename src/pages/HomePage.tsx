@@ -10,8 +10,13 @@ import {
   Quote,
   Clapperboard,
 } from "lucide-react";
+import { useAuthStore } from "@/features/auth/store/auth.store";
+import { UserMenu } from "@/components/UserMenu";
 
 export default function HomePage() {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const hasCheckedAuth = useAuthStore((s) => s.hasCheckedAuth);
+
   return (
     <div className="min-h-screen bg-canvas">
       <header className="sticky top-0 z-30 border-b border-border bg-surface/90 backdrop-blur">
@@ -26,14 +31,19 @@ export default function HomePage() {
               </span>
             </div>
           </Link>
-          <div className="ml-auto flex items-center gap-2">
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/login">Zaloguj się</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link to="/register">Zacznij za darmo</Link>
-            </Button>
-          </div>
+          {hasCheckedAuth &&
+            (!isAuthenticated ? (
+              <div className="ml-auto flex items-center gap-2">
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/login">Zaloguj się</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link to="/register">Zacznij za darmo</Link>
+                </Button>
+              </div>
+            ) : (
+              <UserMenu />
+            ))}
         </div>
       </header>
 
