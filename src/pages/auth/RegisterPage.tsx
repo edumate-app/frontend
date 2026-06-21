@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Loader2, CheckCircle2, Film } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRegister } from "@/features/auth/hooks/useRegister";
+import { OAuth2Buttons } from "@/components/oauth";
 
 function strength(pw: string) {
   let score = 0;
@@ -128,6 +129,8 @@ export default function RegisterPage() {
           <p className="mt-1.5 text-sm text-muted-foreground">
             Zacznij naukę już za chwilę.
           </p>
+
+          <OAuth2Buttons />
 
           <form onSubmit={onSubmit} className="mt-6 space-y-4" noValidate>
             <div className="space-y-1.5">
