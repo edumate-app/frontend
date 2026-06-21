@@ -42,7 +42,12 @@ export default function HomePage() {
                 </Button>
               </div>
             ) : (
-              <UserMenu />
+              <div className="ml-auto flex items-center gap-2">
+                <Button size="sm" asChild>
+                  <Link to="/dashboard">Dashboard</Link>
+                </Button>
+                <UserMenu />
+              </div>
             ))}
         </div>
       </header>
