@@ -13,5 +13,7 @@ export type UserDto = {
   id: string;
   email: string;
   name: string;
-  profileUrl: string | null;
+  avatarUrl: string | null;
 };
+
+export type AuthProvider = "google" | "github";
