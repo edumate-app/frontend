@@ -10,8 +10,13 @@ import {
   Quote,
   Clapperboard,
 } from "lucide-react";
+import { useAuthStore } from "@/features/auth/store/auth.store";
+import { UserMenu } from "@/components/UserMenu";
 
 export default function HomePage() {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const hasCheckedAuth = useAuthStore((s) => s.hasCheckedAuth);
+
   return (
     <div className="min-h-screen bg-canvas">
       <header className="sticky top-0 z-30 border-b border-border bg-surface/90 backdrop-blur">
@@ -26,14 +31,24 @@ export default function HomePage() {
               </span>
             </div>
           </Link>
-          <div className="ml-auto flex items-center gap-2">
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/login">Zaloguj się</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link to="/register">Zacznij za darmo</Link>
-            </Button>
-          </div>
+          {hasCheckedAuth &&
+            (!isAuthenticated ? (
+              <div className="ml-auto flex items-center gap-2">
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/login">Zaloguj się</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link to="/register">Zacznij za darmo</Link>
+                </Button>
+              </div>
+            ) : (
+              <div className="ml-auto flex items-center gap-2">
+                <Button size="sm" asChild>
+                  <Link to="/dashboard">Dashboard</Link>
+                </Button>
+                <UserMenu />
+              </div>
+            ))}
         </div>
       </header>
 
@@ -76,7 +91,7 @@ export default function HomePage() {
 
         <div className="relative">
           <div className="rounded-xl border border-border bg-surface p-3 shadow-lg">
-            <div className="flex aspect-video items-center justify-center rounded-lg bg-gradient-to-br from-primary-900 to-primary-700">
+            <div className="flex aspect-video items-center justify-center rounded-lg bg-linear-to-br from-primary-900 to-primary-700">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/15 backdrop-blur">
                 <Play className="h-6 w-6 fill-white text-white" />
               </div>
