@@ -5,6 +5,8 @@ import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
 import { AppLayout } from "../layouts/AppLayout";
+import DashboardPage from "@/pages/DashboardPage";
+import { DashboardLayout } from "../layouts/dashboard/DashboardLayout";
 
 export const router = createBrowserRouter([
   {
@@ -27,10 +29,11 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
+            element: <DashboardLayout />,
             children: [
               {
                 path: "/dashboard",
-                element: <h1>Dashboard Page</h1>,
+                element: <DashboardPage />,
               },
             ],
           },
