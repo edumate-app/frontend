@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Loader2, CheckCircle2, Film } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRegister } from "@/features/auth/hooks/useRegister";
+import { OAuth2Buttons } from "@/components/oauth";
 
 function strength(pw: string) {
   let score = 0;
@@ -26,6 +28,7 @@ const colors = [
 ];
 
 export default function RegisterPage() {
+  const { register } = useRegister();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -51,16 +54,21 @@ export default function RegisterPage() {
     return Object.keys(e).length === 0;
   }
 
-  function onSubmit(e: FormEvent) {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+
+    try {
+      await register(name, email, password);
       setSuccess(true);
-      setTimeout(() => navigate("/onboarding"), 1400);
-    }, 1100);
-  }
+      setTimeout(() => navigate("/dashboard", { replace: true }), 1400);
+    } catch {
+      setErrors({ email: "Registration failed. Please try again" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (success) {
     return (
@@ -84,7 +92,7 @@ export default function RegisterPage() {
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
-      <div className="relative hidden overflow-hidden bg-gradient-to-br from-primary-900 via-primary-700 to-primary-600 lg:flex lg:flex-col lg:justify-between lg:p-12">
+      <div className="relative hidden overflow-hidden bg-linear-to-br from-primary-900 via-primary-700 to-primary-600 lg:flex lg:flex-col lg:justify-between lg:p-12">
         <Film className="h-9 w-9 text-white" />
         <div className="space-y-4 text-white">
           <h2 className="font-display text-3xl font-semibold leading-tight">
@@ -121,6 +129,8 @@ export default function RegisterPage() {
           <p className="mt-1.5 text-sm text-muted-foreground">
             Zacznij naukę już za chwilę.
           </p>
+
+          <OAuth2Buttons />
 
           <form onSubmit={onSubmit} className="mt-6 space-y-4" noValidate>
             <div className="space-y-1.5">
