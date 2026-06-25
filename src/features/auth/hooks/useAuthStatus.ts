@@ -12,7 +12,6 @@ export const useAuthStatus = () => {
       .me()
       .then(({ data }) => {
         setAuth({
-          id: data.id,
           email: data.email,
           name: data.name,
           avatarUrl: data.avatarUrl,

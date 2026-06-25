@@ -3,10 +3,8 @@ import type { FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Loader2, Film } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-// import { Checkbox } from "@/components/ui/checkbox";
 import { useLogin } from "../../features/auth/hooks/useLogin";
 import { OAuth2Buttons } from "@/components/oauth";
 
@@ -16,7 +14,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
-  // const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {},
@@ -67,12 +64,6 @@ export default function LoginPage() {
           </p>
 
           <OAuth2Buttons />
-
-          <div className="my-5 flex items-center gap-3">
-            <Separator className="flex-1" />
-            <span className="text-2xs text-muted-foreground">lub e-mailem</span>
-            <Separator className="flex-1" />
-          </div>
 
           <form onSubmit={onSubmit} className="space-y-4" noValidate>
             <div className="space-y-1.5">

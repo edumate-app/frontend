@@ -9,10 +9,9 @@ export const useLogin = () => {
     await authApi.me().then((response) => {
       const user = response.data;
       setAuth({
-        id: user.id,
         email: user.email,
         name: user.name,
-        profileUrl: user.profileUrl,
+        avatarUrl: user.avatarUrl,
       });
     });
   };
