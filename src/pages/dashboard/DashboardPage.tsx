@@ -12,9 +12,9 @@ import {
   Plus,
   Calendar,
 } from "lucide-react";
-import { videos } from "./mock";
 import { PageHeader } from "@/app/layouts/dashboard/components/page-header";
 import { useAuthStore } from "@/features/auth/store/auth.store";
+import { videos } from "../mock";
 
 export default function DashboardPage() {
   const user = useAuthStore((s) => s.user);
@@ -26,7 +26,7 @@ export default function DashboardPage() {
         description="Gotowy na kolejną sesję nauki?"
         actions={
           <Button asChild>
-            <Link to="/app/videos/new">
+            <Link to="/dashboard/videos/new">
               <Plus className="h-4 w-4" /> Dodaj nowy film
             </Link>
           </Button>
@@ -51,7 +51,7 @@ export default function DashboardPage() {
             <Flame className="h-9 w-9 text-warning/30" />
           </div>
           <Button size="sm" className="w-full mt-15" asChild>
-            <Link to="/app/review">Rozpocznij sesję</Link>
+            <Link to="/dashboard/review">Rozpocznij sesję</Link>
           </Button>
         </Card>
 
@@ -84,7 +84,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <Link
-            to="/app/stats"
+            to="/dashboard/stats"
             className="mt-3 inline-block text-xs font-medium text-primary hover:underline"
           >
             Zobacz statystyki →
@@ -150,7 +150,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-display text-lg font-semibold">Twoje filmy</h2>
           <Link
-            to="/app/videos"
+            to="/dashboard/videos"
             className="text-xs font-medium text-primary hover:underline"
           >
             Zobacz wszystkie
@@ -161,7 +161,7 @@ export default function DashboardPage() {
           <div className="divide-y divide-border">
             {videos.slice(0, 3).map((v) => (
               <Link
-                to={`/app/videos/${v.id}`}
+                to={`/dashboard/videos/${v.id}`}
                 key={v.id}
                 className="flex items-center gap-4 px-4 py-3 hover:bg-surface-hover transition-colors"
               >
@@ -218,7 +218,7 @@ export default function DashboardPage() {
           className="border-primary-300 bg-surface"
           asChild
         >
-          <Link to="/app/videos/build-habits">Kontynuuj</Link>
+          <Link to="/dashboard/videos/build-habits">Kontynuuj</Link>
         </Button>
       </Card>
     </div>

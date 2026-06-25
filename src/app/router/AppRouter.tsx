@@ -5,8 +5,9 @@ import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
 import { AppLayout } from "../layouts/AppLayout";
-import DashboardPage from "@/pages/DashboardPage";
 import { DashboardLayout } from "../layouts/dashboard/DashboardLayout";
+import DashboardPage from "@/pages/dashboard/DashboardPage";
+import AddVideo from "@/pages/dashboard/AddVideo";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
               {
                 path: "/dashboard",
                 element: <DashboardPage />,
+              },
+              {
+                path: "/dashboard/videos/new",
+                element: <AddVideo />,
               },
             ],
           },
