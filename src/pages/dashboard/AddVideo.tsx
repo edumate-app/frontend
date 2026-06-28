@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useValidateUrl } from "@/features/dashboard/hooks/useValidateUrl";
 import {
   Card,
   CardContent,
@@ -26,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useImportVideo } from "@/features/dashboard/hooks/useImportVideo";
 
 const steps = [
   { icon: FileText, title: "Pobieramy transkrypcję" },
@@ -37,13 +39,23 @@ const steps = [
 export default function AddVideo() {
   const navigate = useNavigate();
   const [url, setUrl] = useState("");
-  const [lang, setLang] = useState("auto");
   const [loading, setLoading] = useState(false);
+  const { importVideo } = useImportVideo();
+  const {
+    lang,
+    setLang,
+    languages,
+    isLoading: fetchingLanguages,
+    error: languageError,
+    validateUrl,
+    handleUrlPaste,
+  } = useValidateUrl();
 
-  function handleImport() {
+  async function handleImport() {
     if (!url) return;
     setLoading(true);
-    setTimeout(() => navigate("/"), 1600);
+    importVideo(url);
+    navigate("/dashboard");
   }
 
   return (
@@ -64,6 +76,8 @@ export default function AddVideo() {
                 id="url"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
+                onPaste={handleUrlPaste}
+                onBlur={() => void validateUrl(url)}
                 placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                 className="pl-8"
               />
@@ -71,24 +85,42 @@ export default function AddVideo() {
           </div>
 
           <div className="space-y-1.5">
-            <Label>Język filmu (wykryty automatycznie)</Label>
-            <Select value={lang} onValueChange={setLang}>
+            <Label>Język filmu</Label>
+            <Select
+              value={lang}
+              onValueChange={setLang}
+              disabled={fetchingLanguages || languages.length === 0}
+            >
               <SelectTrigger>
-                <SelectValue placeholder="English" />
+                <SelectValue
+                  placeholder={
+                    fetchingLanguages
+                      ? "Wykrywanie dostępnych języków…"
+                      : "Wklej link, aby wyświetlić języki"
+                  }
+                />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="auto">English</SelectItem>
-                <SelectItem value="es">Español</SelectItem>
-                <SelectItem value="de">Deutsch</SelectItem>
+                {languages.map((item) => (
+                  <SelectItem
+                    key={item.language_code}
+                    value={item.language_code}
+                  >
+                    {item.language}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
+            {languageError ? (
+              <p className="text-xs text-destructive">{languageError}</p>
+            ) : null}
           </div>
 
           <Button
             className="w-full"
             size="lg"
             onClick={handleImport}
-            disabled={!url || loading}
+            disabled={!url || !lang || loading || fetchingLanguages}
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
             {loading ? "Importowanie filmu…" : "Importuj film"}
