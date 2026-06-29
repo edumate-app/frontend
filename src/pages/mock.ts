@@ -11,26 +11,6 @@ export interface VideoLesson {
   totalSentences: number;
 }
 
-export interface SavedSentence {
-  id: string;
-  text: string;
-  translation: string;
-  tag: string;
-  source: string;
-  daysAgo: number;
-}
-
-export interface VocabWord {
-  word: string;
-  translation: string;
-  mastery: number;
-}
-
-export interface ActivityPoint {
-  day: string;
-  minutes: number;
-}
-
 export const videos: VideoLesson[] = [
   {
     id: "psych-money",

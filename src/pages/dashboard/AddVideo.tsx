@@ -59,100 +59,102 @@ export default function AddVideo() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-5 ">
-      <PageHeader
-        title="Dodaj nowy film"
-        breadcrumbs={[{ label: "Moje filmy" }, { label: "Dodaj film" }]}
-        description="Wklej link do filmu z YouTube, a my zajmiemy się resztą."
-      />
+    <div className="w-full max-w-7xl px-4 py-15 sm:px-6 lg:px-8 ml-20">
+      <div className="max-w-2xl space-y-5">
+        <PageHeader
+          title="Dodaj nowy film"
+          breadcrumbs={[{ label: "Moje filmy" }, { label: "Dodaj film" }]}
+          description="Wklej link do filmu z YouTube, a my zajmiemy się resztą."
+        />
 
-      <Card>
-        <CardContent className="pt-5 space-y-5">
-          <div className="space-y-1.5">
-            <Label htmlFor="url">Link do filmu YouTube</Label>
-            <div className="relative">
-              <Film className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-destructive" />
-              <Input
-                id="url"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                onPaste={handleUrlPaste}
-                onBlur={() => void validateUrl(url)}
-                placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                className="pl-8"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-1.5">
-            <Label>Język filmu</Label>
-            <Select
-              value={lang}
-              onValueChange={setLang}
-              disabled={fetchingLanguages || languages.length === 0}
-            >
-              <SelectTrigger>
-                <SelectValue
-                  placeholder={
-                    fetchingLanguages
-                      ? "Wykrywanie dostępnych języków…"
-                      : "Wklej link, aby wyświetlić języki"
-                  }
+        <Card>
+          <CardContent className="pt-5 space-y-5">
+            <div className="space-y-1.5">
+              <Label htmlFor="url">Link do filmu YouTube</Label>
+              <div className="relative">
+                <Film className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-destructive" />
+                <Input
+                  id="url"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  onPaste={handleUrlPaste}
+                  onBlur={() => void validateUrl(url)}
+                  placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                  className="pl-8"
                 />
-              </SelectTrigger>
-              <SelectContent>
-                {languages.map((item) => (
-                  <SelectItem
-                    key={item.language_code}
-                    value={item.language_code}
-                  >
-                    {item.language}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {languageError ? (
-              <p className="text-xs text-destructive">{languageError}</p>
-            ) : null}
-          </div>
-
-          <Button
-            className="w-full"
-            size="lg"
-            onClick={handleImport}
-            disabled={!url || !lang || loading || fetchingLanguages}
-          >
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-            {loading ? "Importowanie filmu…" : "Importuj film"}
-          </Button>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-sm">Jak to działa?</CardTitle>
-          <CardDescription>
-            Cały proces trwa zwykle mniej niż minutę.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid grid-cols-2 gap-4 pt-0 sm:grid-cols-4">
-          {steps.map((s, i) => (
-            <div
-              key={s.title}
-              className="flex flex-col items-center gap-2 text-center"
-            >
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-full ${loading ? "bg-primary-100 text-primary-600 animate-pulse" : "bg-secondary text-muted-foreground"}`}
-              >
-                <s.icon className="h-4.5 w-4.5" />
               </div>
-              <p className="text-2xs leading-snug text-muted-foreground">
-                {i + 1}. {s.title}
-              </p>
             </div>
-          ))}
-        </CardContent>
-      </Card>
+
+            <div className="space-y-1.5">
+              <Label>Język filmu</Label>
+              <Select
+                value={lang}
+                onValueChange={setLang}
+                disabled={fetchingLanguages || languages.length === 0}
+              >
+                <SelectTrigger>
+                  <SelectValue
+                    placeholder={
+                      fetchingLanguages
+                        ? "Wykrywanie dostępnych języków…"
+                        : "Wklej link, aby wyświetlić języki"
+                    }
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {languages.map((item) => (
+                    <SelectItem
+                      key={item.language_code}
+                      value={item.language_code}
+                    >
+                      {item.language}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {languageError ? (
+                <p className="text-xs text-destructive">{languageError}</p>
+              ) : null}
+            </div>
+
+            <Button
+              className="w-full"
+              size="lg"
+              onClick={handleImport}
+              disabled={!url || !lang || loading || fetchingLanguages}
+            >
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+              {loading ? "Importowanie filmu…" : "Importuj film"}
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">Jak to działa?</CardTitle>
+            <CardDescription>
+              Cały proces trwa zwykle mniej niż minutę.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid grid-cols-2 gap-4 pt-0 sm:grid-cols-4">
+            {steps.map((s, i) => (
+              <div
+                key={s.title}
+                className="flex flex-col items-center gap-2 text-center"
+              >
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-full ${loading ? "bg-primary-100 text-primary-600 animate-pulse" : "bg-secondary text-muted-foreground"}`}
+                >
+                  <s.icon className="h-4.5 w-4.5" />
+                </div>
+                <p className="text-2xs leading-snug text-muted-foreground">
+                  {i + 1}. {s.title}
+                </p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
