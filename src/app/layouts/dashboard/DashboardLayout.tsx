@@ -15,9 +15,7 @@ export function DashboardLayout() {
       <div className="flex min-w-0 flex-1 flex-col">
         <TopNavigation onMenuClick={() => setMobileOpen(true)} />
         <main className="flex-1 overflow-y-auto scrollbar-thin">
-          <div className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-            <Outlet />
-          </div>
+          <Outlet />
         </main>
       </div>
     </div>

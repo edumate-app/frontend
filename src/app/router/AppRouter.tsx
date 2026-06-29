@@ -8,6 +8,7 @@ import { AppLayout } from "../layouts/AppLayout";
 import { DashboardLayout } from "../layouts/dashboard/DashboardLayout";
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import AddVideo from "@/pages/dashboard/AddVideo";
+import VideoLessonPage from "@/pages/dashboard/video-lesson";
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
               {
                 path: "/dashboard/videos/new",
                 element: <AddVideo />,
+              },
+              {
+                path: "/dashboard/videos/:video_id",
+                element: <VideoLessonPage />,
               },
             ],
           },
