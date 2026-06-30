@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { TranscriptSegment } from "@/features/dashboard/api/dashboard.types";
+import { useYouTubePlayer } from "@/features/dashboard/hooks/useYouTubePlayer";
+import { getActiveSegmentIndex } from "@/features/dashboard/utils/transcript";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Maximize2, Minimize2 } from "lucide-react";
@@ -112,12 +114,20 @@ function formatTime(seconds: number) {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
+type TranscriptListProps = {
+  segments: TranscriptSegment[];
+  activeIndex: number;
+  onSegmentClick: (segment: TranscriptSegment) => void;
+};
+
 function FullscreenView({
   onExit,
   videoSlotRef,
+  transcriptProps,
 }: {
   onExit: () => void;
   videoSlotRef: React.RefObject<HTMLDivElement | null>;
+  transcriptProps: TranscriptListProps;
 }) {
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -154,7 +164,7 @@ function FullscreenView({
           </Button>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto scrollbar-thin [&_button:hover]:bg-white/5 [&_.bg-primary\/10]:bg-white/10 [&_p]:text-white/90 [&_.text-muted-foreground]:text-white/40">
-          <TranscriptList />
+          <TranscriptList {...transcriptProps} />
         </div>
       </div>
     </div>
@@ -164,9 +174,11 @@ function FullscreenView({
 function NormalView({
   onEnterFullscreen,
   videoSlotRef,
+  transcriptProps,
 }: {
   onEnterFullscreen: () => void;
   videoSlotRef: React.RefObject<HTMLDivElement | null>;
+  transcriptProps: TranscriptListProps;
 }) {
   return (
     <div className="w-full">
@@ -200,7 +212,7 @@ function NormalView({
         </div>
 
         {/* RIGHT: transcript sidebar */}
-        <div className="flex w-full shrink-0 flex-col border-l lg:w-80 xl:w-96 lg:max-h-[calc(100vh-7rem)]">
+        <div className="flex w-full shrink-0 flex-col border-l lg:w-80 xl:w-96 lg:max-h-[calc(100vh-4rem)]">
           <div className="shrink-0 border-b px-4 py-3">
             <h2 className="font-display text-base font-semibold">
               Transkrypcja
@@ -212,14 +224,14 @@ function NormalView({
             </p> */}
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto scrollbar-thin">
-            <TranscriptList />
+            <TranscriptList {...transcriptProps} />
           </div>
 
           {/* Vocabulary counter */}
-          <div className="shrink-0 border-t px-4 py-3">
+          {/* <div className="shrink-0 border-t px-4 py-3">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>Słowa do zapamiętania</span>
-              <span className="font-medium text-foreground">cipa</span>
+              <span className="font-medium text-foreground">14%</span>
             </div>
             <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-muted">
               <div
@@ -229,35 +241,78 @@ function NormalView({
                 }}
               />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
   );
 }
 
-function TranscriptList() {
+function TranscriptList({
+  segments,
+  activeIndex,
+  onSegmentClick,
+}: TranscriptListProps) {
+  const activeItemRef = useRef<HTMLLIElement>(null);
+  const prevActiveIndexRef = useRef(activeIndex);
+
+  useEffect(() => {
+    if (activeIndex < 0 || activeIndex === prevActiveIndexRef.current) return;
+    prevActiveIndexRef.current = activeIndex;
+    activeItemRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [activeIndex]);
+
   return (
     <ul className="divide-y">
-      {transcript.map((segment, index) => (
-        <li
-          key={`${segment.start}-${index}`}
-          className={cn(
-            "px-4 py-3 transition-colors hover:bg-muted/40",
-            index === 0 && "bg-primary/5",
-          )}
-        >
-          <span className="font-mono text-2xs text-muted-foreground">
-            {formatTime(segment.start)}
-          </span>
-          <p className="mt-1 text-sm font-medium leading-snug">
-            {segment.nativeText}
-          </p>
-          <p className="mt-1 text-sm leading-snug text-muted-foreground">
-            {segment.targetText}
-          </p>
-        </li>
-      ))}
+      {segments.map((segment, index) => {
+        const isActive = index === activeIndex;
+
+        return (
+          <li
+            key={`${segment.start}-${index}`}
+            ref={isActive ? activeItemRef : undefined}
+          >
+            <button
+              type="button"
+              onClick={() => onSegmentClick(segment)}
+              className={cn(
+                "w-full px-4 py-3 text-left transition-colors hover:bg-muted/40",
+                isActive && "bg-primary/10",
+              )}
+            >
+              <span
+                className={cn(
+                  "font-mono text-2xs",
+                  isActive
+                    ? "font-medium text-primary"
+                    : "text-muted-foreground",
+                )}
+              >
+                {formatTime(segment.start)}
+              </span>
+              <p
+                className={cn(
+                  "mt-1 text-sm leading-snug",
+                  isActive ? "font-semibold text-foreground" : "font-medium",
+                )}
+              >
+                {segment.nativeText}
+              </p>
+              <p
+                className={cn(
+                  "mt-1 text-sm leading-snug",
+                  isActive ? "text-foreground/80" : "text-muted-foreground",
+                )}
+              >
+                {segment.targetText}
+              </p>
+            </button>
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -265,29 +320,39 @@ function TranscriptList() {
 export default function VideoLessonPage() {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // Single iframe ref — never changes
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  // The slot div rendered by whichever view is active
+  const playerContainerRef = useRef<HTMLDivElement>(null);
   const videoSlotRef = useRef<HTMLDivElement>(null);
 
-  // Sync iframe position to the slot on every frame (RAF loop).
-  // This is cheap — getBoundingClientRect is read-only and triggers no layout.
+  const { currentTime, seekTo } = useYouTubePlayer(
+    playerContainerRef,
+    VIDEO_ID,
+  );
+
+  const activeIndex = useMemo(
+    () => getActiveSegmentIndex(transcript, currentTime),
+    [currentTime],
+  );
+
+  const transcriptProps: TranscriptListProps = {
+    segments: transcript,
+    activeIndex,
+    onSegmentClick: (segment) => seekTo(segment.start),
+  };
+
   useEffect(() => {
     let raf: number;
 
     function sync() {
       const slot = videoSlotRef.current;
-      const iframe = iframeRef.current;
-      if (slot && iframe) {
+      const player = playerContainerRef.current;
+      if (slot && player) {
         const r = slot.getBoundingClientRect();
-        iframe.style.position = "fixed";
-        iframe.style.top = `${r.top}px`;
-        iframe.style.left = `${r.left}px`;
-        iframe.style.width = `${r.width}px`;
-        iframe.style.height = `${r.height}px`;
-        // In fullscreen the iframe sits above the overlay (z-50); in normal mode
-        // it sits just above normal content but below any modals.
-        iframe.style.zIndex = isFullscreen ? "51" : "1";
+        player.style.position = "fixed";
+        player.style.top = `${r.top}px`;
+        player.style.left = `${r.left}px`;
+        player.style.width = `${r.width}px`;
+        player.style.height = `${r.height}px`;
+        player.style.zIndex = isFullscreen ? "51" : "1";
       }
       raf = requestAnimationFrame(sync);
     }
@@ -298,20 +363,15 @@ export default function VideoLessonPage() {
 
   return (
     <>
-      {/* The one and only iframe — permanently in the DOM */}
-      <iframe
-        ref={iframeRef}
-        src={`https://www.youtube.com/embed/${VIDEO_ID}?rel=0&modestbranding=1&fs=0`}
-        title="YouTube video player"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowFullScreen={false}
+      <div
+        ref={playerContainerRef}
+        className="overflow-hidden bg-black [&_iframe]:h-full [&_iframe]:w-full [&_iframe]:border-0"
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           width: 0,
           height: 0,
-          border: "none",
         }}
       />
 
@@ -319,11 +379,13 @@ export default function VideoLessonPage() {
         <FullscreenView
           onExit={() => setIsFullscreen(false)}
           videoSlotRef={videoSlotRef}
+          transcriptProps={transcriptProps}
         />
       ) : (
         <NormalView
           onEnterFullscreen={() => setIsFullscreen(true)}
           videoSlotRef={videoSlotRef}
+          transcriptProps={transcriptProps}
         />
       )}
     </>
