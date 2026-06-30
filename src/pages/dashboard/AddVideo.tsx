@@ -53,9 +53,15 @@ export default function AddVideo() {
 
   async function handleImport() {
     if (!url) return;
+
     setLoading(true);
-    importVideo(url);
-    navigate("/dashboard");
+
+    try {
+      const videoId = await importVideo(url);
+      navigate(`/dashboard/videos/${videoId}`);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

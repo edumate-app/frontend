@@ -9,3 +9,7 @@ export type TranscriptSegment = {
   start: number;
   duration: number;
 };
+
+export type ImportResponse = {
+  video_uuid: string;
+};
