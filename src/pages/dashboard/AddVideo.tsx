@@ -51,13 +51,17 @@ export default function AddVideo() {
     handleUrlPaste,
   } = useValidateUrl();
 
+  const selectableLanguages = languages.filter((l) => !l.alreadyImported);
+  const singleAlreadyImported =
+    languages.length === 1 && languages[0].alreadyImported;
+
   async function handleImport() {
     if (!url) return;
 
     setLoading(true);
 
     try {
-      const videoId = await importVideo(url);
+      const videoId = await importVideo(url, lang);
       navigate(`/dashboard/videos/${videoId}`);
     } finally {
       setLoading(false);
@@ -112,12 +116,20 @@ export default function AddVideo() {
                     <SelectItem
                       key={item.language_code}
                       value={item.language_code}
+                      disabled={item.alreadyImported}
                     >
                       {item.language}
+                      {item.alreadyImported ? " (już zaimportowany)" : ""}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
+              {singleAlreadyImported ? (
+                <p className="text-xs text-muted-foreground">
+                  Ten film został już zaimportowany w języku{" "}
+                  {languages[0].language}.
+                </p>
+              ) : null}
               {languageError ? (
                 <p className="text-xs text-destructive">{languageError}</p>
               ) : null}
@@ -127,7 +139,13 @@ export default function AddVideo() {
               className="w-full"
               size="lg"
               onClick={handleImport}
-              disabled={!url || !lang || loading || fetchingLanguages}
+              disabled={
+                !url ||
+                !lang ||
+                loading ||
+                fetchingLanguages ||
+                selectableLanguages.length === 0
+              }
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {loading ? "Importowanie filmu…" : "Importuj film"}

@@ -1,6 +1,7 @@
 export type LanguageDto = {
   language: string;
   language_code: string;
+  alreadyImported: boolean;
 };
 
 export type TranscriptSegment = {
@@ -12,4 +13,9 @@ export type TranscriptSegment = {
 
 export type ImportResponse = {
   video_uuid: string;
+};
+
+export type ImportRequest = {
+  url: string;
+  targetLang: string;
 };
