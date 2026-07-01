@@ -5,108 +5,7 @@ import { getActiveSegmentIndex } from "@/features/dashboard/utils/transcript";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Maximize2, Minimize2 } from "lucide-react";
-
-const VIDEO_ID = "MAydh43X4RQ";
-
-const transcript: TranscriptSegment[] = [
-  {
-    start: 0,
-    duration: 4.2,
-    nativeText: "We're no strangers to love.",
-    targetText: "Nie jesteśmy obcy miłości.",
-  },
-  {
-    start: 4.2,
-    duration: 3.8,
-    nativeText: "You know the rules and so do I.",
-    targetText: "Znasz zasady i ja też.",
-  },
-  {
-    start: 8,
-    duration: 4.5,
-    nativeText: "A full commitment's what I'm thinking of.",
-    targetText: "Myślę o pełnym zaangażowaniu.",
-  },
-  {
-    start: 12.5,
-    duration: 3.9,
-    nativeText: "You wouldn't get this from any other guy.",
-    targetText: "Tego nie dostaniesz od żadnego innego faceta.",
-  },
-  {
-    start: 16.4,
-    duration: 4.1,
-    nativeText: "I just wanna tell you how I'm feeling.",
-    targetText: "Chcę ci tylko powiedzieć, co czuję.",
-  },
-  {
-    start: 20.5,
-    duration: 3.2,
-    nativeText: "Gotta make you understand.",
-    targetText: "Muszę sprawić, żebyś zrozumiała.",
-  },
-  {
-    start: 23.7,
-    duration: 4.8,
-    nativeText: "Never gonna give you up, never gonna let you down.",
-    targetText: "Nigdy cię nie opuszczę, nigdy cię nie zawiodę.",
-  },
-  {
-    start: 28.5,
-    duration: 4.6,
-    nativeText: "Never gonna run around and desert you.",
-    targetText: "Nigdy nie będę biegał i cię nie porzucę.",
-  },
-  {
-    start: 33.1,
-    duration: 4.4,
-    nativeText: "Never gonna make you cry, never gonna say goodbye.",
-    targetText: "Nigdy nie sprawię, że zapłaczesz, nigdy nie powiem żegnaj.",
-  },
-  {
-    start: 37.5,
-    duration: 4.7,
-    nativeText: "Never gonna tell a lie and hurt you.",
-    targetText: "Nigdy nie skłamię i nie zranię cię.",
-  },
-  {
-    start: 42.2,
-    duration: 4.3,
-    nativeText: "We've known each other for so long.",
-    targetText: "Znamy się tak długo.",
-  },
-  {
-    start: 46.5,
-    duration: 4.9,
-    nativeText: "Your heart's been aching, but you're too shy to say it.",
-    targetText:
-      "Twoje serce bolało, ale jesteś zbyt nieśmiała, by to powiedzieć.",
-  },
-  {
-    start: 51.4,
-    duration: 4.2,
-    nativeText: "Inside we both know what's been going on.",
-    targetText: "W środku oboje wiemy, co się dzieje.",
-  },
-  {
-    start: 55.6,
-    duration: 4.5,
-    nativeText: "We know the game and we're gonna play it.",
-    targetText: "Znamy grę i zamierzamy w nią grać.",
-  },
-  {
-    start: 60.1,
-    duration: 4.0,
-    nativeText: "And if you ask me how I'm feeling.",
-    targetText: "A jeśli zapytasz mnie, co czuję.",
-  },
-  {
-    start: 64.1,
-    duration: 3.5,
-    nativeText: "Don't tell me you're too blind to see.",
-    targetText: "Nie mów mi, że jesteś zbyt ślepa, by to zobaczyć.",
-  },
-];
+import { useGetTranscript } from "@/features/dashboard/hooks/useGetTranscript";
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);
@@ -323,18 +222,20 @@ export default function VideoLessonPage() {
   const playerContainerRef = useRef<HTMLDivElement>(null);
   const videoSlotRef = useRef<HTMLDivElement>(null);
 
+  const { segments, videoId } = useGetTranscript();
+
   const { currentTime, seekTo } = useYouTubePlayer(
     playerContainerRef,
-    VIDEO_ID,
+    videoId ?? "",
   );
 
   const activeIndex = useMemo(
-    () => getActiveSegmentIndex(transcript, currentTime),
-    [currentTime],
+    () => getActiveSegmentIndex(segments, currentTime),
+    [currentTime, segments],
   );
 
   const transcriptProps: TranscriptListProps = {
-    segments: transcript,
+    segments: segments,
     activeIndex,
     onSegmentClick: (segment) => seekTo(segment.start),
   };
@@ -360,6 +261,8 @@ export default function VideoLessonPage() {
     raf = requestAnimationFrame(sync);
     return () => cancelAnimationFrame(raf);
   }, [isFullscreen]);
+
+  if (!videoId) return <div>Ładowanie...</div>;
 
   return (
     <>

@@ -19,3 +19,8 @@ export type ImportRequest = {
   url: string;
   targetLang: string;
 };
+
+export type TranscriptResponse = {
+  video_id: string;
+  segments: TranscriptSegment[];
+};

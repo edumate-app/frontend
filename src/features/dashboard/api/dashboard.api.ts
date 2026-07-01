@@ -3,6 +3,7 @@ import type {
   ImportRequest,
   ImportResponse,
   LanguageDto,
+  TranscriptResponse,
 } from "./dashboard.types";
 
 export const dashboardApi = {
@@ -10,4 +11,6 @@ export const dashboardApi = {
     apiClient.post<LanguageDto[]>(`/video/validation?url=${url}`),
   add: (req: ImportRequest) =>
     apiClient.post<ImportResponse>(`/video/import`, req),
+  getTranscript: (video_uuid: string) =>
+    apiClient.get<TranscriptResponse>(`/video/transcript/${video_uuid}`),
 };

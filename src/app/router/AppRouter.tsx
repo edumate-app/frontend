@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
                 element: <AddVideo />,
               },
               {
-                path: "/dashboard/videos/:video_id",
+                path: "/dashboard/videos/:video_uuid",
                 element: <VideoLessonPage />,
               },
             ],

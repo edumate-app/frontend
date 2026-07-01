@@ -53,6 +53,8 @@ export function useYouTubePlayer(
       interval = setInterval(syncTime, POLL_INTERVAL_MS);
     };
 
+    if (!videoId) return;
+
     void loadYouTubeApi().then(() => {
       if (cancelled || !containerRef.current) return;
 
