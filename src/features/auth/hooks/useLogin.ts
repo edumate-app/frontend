@@ -11,6 +11,7 @@ export const useLogin = () => {
       setAuth({
         email: user.email,
         name: user.name,
+        nativeLang: user.nativeLang,
         avatarUrl: user.avatarUrl,
       });
     });

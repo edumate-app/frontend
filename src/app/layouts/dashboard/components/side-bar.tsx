@@ -15,12 +15,12 @@ import { useLogout } from "@/features/auth/hooks/useLogout";
 
 const nav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/videos", label: "Moje filmy", icon: Film },
-  { to: "/review", label: "Powtórki", icon: RotateCcw },
-  { to: "/saved", label: "Zapisane", icon: Bookmark },
-  { to: "/stats", label: "Statystyki", icon: BarChart3 },
-  { to: "/explain", label: "AI Wyjaśnienia", icon: Sparkles },
-  { to: "/settings", label: "Ustawienia", icon: Settings },
+  { to: "/dashboard/videos", label: "Moje filmy", icon: Film },
+  { to: "/dashboard/review", label: "Powtórki", icon: RotateCcw },
+  { to: "/dashboard/saved", label: "Zapisane", icon: Bookmark },
+  { to: "/dashboard/stats", label: "Statystyki", icon: BarChart3 },
+  { to: "/dashboard/explain", label: "AI Wyjaśnienia", icon: Sparkles },
+  { to: "/dashboard/settings", label: "Ustawienia", icon: Settings },
 ];
 
 type SidebarProps = {
@@ -30,10 +30,7 @@ type SidebarProps = {
 export function Sidebar({ onNavigate }: SidebarProps) {
   const { logout } = useLogout();
   return (
-    <aside
-      className=
-        "flex h-full w-60 shrink-0 flex-col border-r border-border bg-surface px-3 py-4"
-    >
+    <aside className="flex h-full w-60 shrink-0 flex-col border-r border-border bg-surface px-3 py-4">
       <div className="flex items-center gap-2 px-2 pb-5">
         <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground font-display text-sm font-bold">
           L

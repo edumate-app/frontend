@@ -13,4 +13,6 @@ export const dashboardApi = {
     apiClient.post<ImportResponse>(`/video/import`, req),
   getTranscript: (video_uuid: string) =>
     apiClient.get<TranscriptResponse>(`/video/transcript/${video_uuid}`),
+  updateNativeLang: (lang: string) =>
+    apiClient.patch(`/user/native-lang`, { lang: lang }),
 };
