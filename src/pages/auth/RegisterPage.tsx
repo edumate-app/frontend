@@ -1,14 +1,14 @@
-import { useState, useMemo } from "react";
-import type { FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Eye, EyeOff, Loader2, CheckCircle2, Film } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useRegister } from "@/features/auth/hooks/useRegister";
-import { OAuth2Buttons } from "@/components/oauth";
+import { useState, useMemo } from 'react';
+import type { FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Eye, EyeOff, Loader2, CheckCircle2, Film } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useRegister } from '@/features/auth/hooks/useRegister';
+import { OAuth2Buttons } from '@/components/oauth';
 
 function strength(pw: string) {
   let score = 0;
@@ -18,22 +18,22 @@ function strength(pw: string) {
   if (/[^A-Za-z0-9]/.test(pw)) score++;
   return score;
 }
-const labels = ["Bardzo słabe", "Słabe", "Średnie", "Dobre", "Silne"];
+const labels = ['Bardzo słabe', 'Słabe', 'Średnie', 'Dobre', 'Silne'];
 const colors = [
-  "bg-destructive",
-  "bg-destructive",
-  "bg-warning",
-  "bg-info",
-  "bg-success",
+  'bg-destructive',
+  'bg-destructive',
+  'bg-warning',
+  'bg-info',
+  'bg-success',
 ];
 
 export default function RegisterPage() {
   const { register } = useRegister();
   const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
   const [showPw, setShowPw] = useState(false);
   const [terms, setTerms] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -44,12 +44,12 @@ export default function RegisterPage() {
 
   function validate() {
     const e: Record<string, string> = {};
-    if (name.trim().length < 2) e.name = "Podaj imię i nazwisko.";
+    if (name.trim().length < 2) e.name = 'Podaj imię i nazwisko.';
     if (!/^\S+@\S+\.\S+$/.test(email))
-      e.email = "Podaj prawidłowy adres e-mail.";
-    if (score < 2) e.password = "Hasło jest zbyt słabe.";
-    if (confirm !== password) e.confirm = "Hasła nie są zgodne.";
-    if (!terms) e.terms = "Musisz zaakceptować regulamin.";
+      e.email = 'Podaj prawidłowy adres e-mail.';
+    if (score < 2) e.password = 'Hasło jest zbyt słabe.';
+    if (confirm !== password) e.confirm = 'Hasła nie są zgodne.';
+    if (!terms) e.terms = 'Musisz zaakceptować regulamin.';
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -62,9 +62,9 @@ export default function RegisterPage() {
     try {
       await register(name, email, password);
       setSuccess(true);
-      setTimeout(() => navigate("/dashboard", { replace: true }), 1400);
+      setTimeout(() => navigate('/dashboard', { replace: true }), 1400);
     } catch {
-      setErrors({ email: "Registration failed. Please try again" });
+      setErrors({ email: 'Registration failed. Please try again' });
     } finally {
       setLoading(false);
     }
@@ -81,7 +81,7 @@ export default function RegisterPage() {
             Konto utworzone!
           </h1>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            Witaj w LangFilm, {name.split(" ")[0]}. Przenosimy Cię do wyboru
+            Witaj w LangFilm, {name.split(' ')[0]}. Przenosimy Cię do wyboru
             języków…
           </p>
           <Loader2 className="mt-5 h-5 w-5 animate-spin text-primary" />
@@ -165,7 +165,7 @@ export default function RegisterPage() {
               <div className="relative">
                 <Input
                   id="password"
-                  type={showPw ? "text" : "password"}
+                  type={showPw ? 'text' : 'password'}
                   placeholder="Min. 8 znaków"
                   value={password}
                   error={!!errors.password}
@@ -191,7 +191,7 @@ export default function RegisterPage() {
                       <div
                         key={i}
                         className={cn(
-                          "h-1 flex-1 rounded-full bg-muted",
+                          'h-1 flex-1 rounded-full bg-muted',
                           i < score && colors[score],
                         )}
                       />
@@ -210,7 +210,7 @@ export default function RegisterPage() {
               <Label htmlFor="confirm">Potwierdź hasło</Label>
               <Input
                 id="confirm"
-                type={showPw ? "text" : "password"}
+                type={showPw ? 'text' : 'password'}
                 placeholder="Powtórz hasło"
                 value={confirm}
                 error={!!errors.confirm}
@@ -232,11 +232,11 @@ export default function RegisterPage() {
                   htmlFor="terms"
                   className="font-normal text-muted-foreground leading-snug"
                 >
-                  Akceptuję{" "}
+                  Akceptuję{' '}
                   <a href="#" className="text-primary hover:underline">
                     regulamin
-                  </a>{" "}
-                  oraz{" "}
+                  </a>{' '}
+                  oraz{' '}
                   <a href="#" className="text-primary hover:underline">
                     politykę prywatności
                   </a>
@@ -249,12 +249,12 @@ export default function RegisterPage() {
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              {loading ? "Tworzenie konta…" : "Zacznij za darmo"}
+              {loading ? 'Tworzenie konta…' : 'Zacznij za darmo'}
             </Button>
           </form>
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
-            Masz już konto?{" "}
+            Masz już konto?{' '}
             <Link
               to="/login"
               className="font-medium text-primary hover:underline"

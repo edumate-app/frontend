@@ -1,10 +1,10 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
-import { PublicRoute } from "./PublicRoute";
-import { ProtectedRoute } from "./ProtectedRoute";
-import HomePage from "@/pages/HomePage";
-import LoginPage from "@/pages/auth/LoginPage";
-import RegisterPage from "@/pages/auth/RegisterPage";
-import { AppLayout } from "../layouts/AppLayout";
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { PublicRoute } from './PublicRoute';
+import { ProtectedRoute } from './ProtectedRoute';
+import HomePage from '@/pages/HomePage';
+import LoginPage from '@/pages/auth/LoginPage';
+import RegisterPage from '@/pages/auth/RegisterPage';
+import { AppLayout } from '../layouts/AppLayout';
 
 export const router = createBrowserRouter([
   {
@@ -14,11 +14,11 @@ export const router = createBrowserRouter([
         element: <PublicRoute />,
         children: [
           {
-            path: "/login",
+            path: '/login',
             element: <LoginPage />,
           },
           {
-            path: "/register",
+            path: '/register',
             element: <RegisterPage />,
           },
         ],
@@ -29,7 +29,7 @@ export const router = createBrowserRouter([
           {
             children: [
               {
-                path: "/dashboard",
+                path: '/dashboard',
                 element: <h1>Dashboard Page</h1>,
               },
             ],
@@ -37,11 +37,11 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: "/",
+        path: '/',
         element: <HomePage />,
       },
       {
-        path: "*",
+        path: '*',
         element: <Navigate to="/" replace />,
       },
     ],

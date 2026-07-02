@@ -5,11 +5,11 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { Settings, CreditCard, HelpCircle, LogOut } from "lucide-react";
-import { useAuthStore } from "@/features/auth/store/auth.store";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useLogout } from "@/features/auth/hooks/useLogout";
+} from '@/components/ui/dropdown-menu';
+import { Settings, CreditCard, HelpCircle, LogOut } from 'lucide-react';
+import { useAuthStore } from '@/features/auth/store/auth.store';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useLogout } from '@/features/auth/hooks/useLogout';
 
 export const UserMenu = () => {
   const user = useAuthStore((s) => s.user);
@@ -26,9 +26,9 @@ export const UserMenu = () => {
             />
             <AvatarFallback>
               {user?.name
-                ?.split(" ")
+                ?.split(' ')
                 .map((n) => n[0])
-                .join("")
+                .join('')
                 .toUpperCase()}
             </AvatarFallback>
           </Avatar>

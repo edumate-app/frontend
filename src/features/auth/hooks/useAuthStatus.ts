@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { authApi } from "../api/auth.api";
-import { useAuthStore } from "../store/auth.store";
+import { useEffect } from 'react';
+import { authApi } from '../api/auth.api';
+import { useAuthStore } from '../store/auth.store';
 
 export const useAuthStatus = () => {
   const setAuth = useAuthStore((state) => state.setAuth);

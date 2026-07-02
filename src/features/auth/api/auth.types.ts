@@ -15,4 +15,4 @@ export type UserDto = {
   avatarUrl: string | null;
 };
 
-export type AuthProvider = "google" | "github";
+export type AuthProvider = 'google' | 'github';
