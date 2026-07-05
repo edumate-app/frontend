@@ -1,18 +1,18 @@
-import { useState } from "react";
-import type { FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, Loader2, Film } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { useLogin } from "../../features/auth/hooks/useLogin";
-import { OAuth2Buttons } from "@/components/oauth";
+import { useState } from 'react';
+import type { FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Eye, EyeOff, Loader2, Film } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { useLogin } from '../../features/auth/hooks/useLogin';
+import { OAuth2Buttons } from '@/components/oauth';
 
 export default function LoginPage() {
   const { login } = useLogin();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
@@ -22,8 +22,8 @@ export default function LoginPage() {
   function validate() {
     const e: typeof errors = {};
     if (!/^\S+@\S+\.\S+$/.test(email))
-      e.email = "Podaj prawidłowy adres e-mail.";
-    if (password.length < 5) e.password = "Hasło musi mieć min. 6 znaków.";
+      e.email = 'Podaj prawidłowy adres e-mail.';
+    if (password.length < 5) e.password = 'Hasło musi mieć min. 6 znaków.';
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -34,10 +34,10 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login(email, password);
-      navigate("/dashboard", { replace: true });
+      navigate('/dashboard', { replace: true });
     } catch {
       setLoading(false);
-      setErrors({ email: "Nieprawidłowy e-mail lub hasło." });
+      setErrors({ email: 'Nieprawidłowy e-mail lub hasło.' });
     } finally {
       setLoading(false);
     }
@@ -90,7 +90,7 @@ export default function LoginPage() {
               <div className="relative">
                 <Input
                   id="password"
-                  type={showPw ? "text" : "password"}
+                  type={showPw ? 'text' : 'password'}
                   placeholder="••••••••"
                   value={password}
                   error={!!errors.password}
@@ -128,12 +128,12 @@ export default function LoginPage() {
             </div> */}
             <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              {loading ? "Logowanie…" : "Zaloguj się"}
+              {loading ? 'Logowanie…' : 'Zaloguj się'}
             </Button>
           </form>
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
-            Nie masz konta?{" "}
+            Nie masz konta?{' '}
             <Link
               to="/register"
               className="font-medium text-primary hover:underline"
@@ -149,8 +149,8 @@ export default function LoginPage() {
           className="absolute inset-0 opacity-20"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 20% 20%, white 1px, transparent 1px)",
-            backgroundSize: "28px 28px",
+              'radial-gradient(circle at 20% 20%, white 1px, transparent 1px)',
+            backgroundSize: '28px 28px',
           }}
         />
         <div className="relative space-y-5 text-white">
