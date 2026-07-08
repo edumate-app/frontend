@@ -19,132 +19,32 @@ type TranscriptListProps = {
   onSegmentClick: (segment: TranscriptSegment) => void;
 };
 
-function FullscreenView({
-  onExit,
-  videoSlotRef,
-  transcriptProps,
-}: {
-  onExit: () => void;
-  videoSlotRef: React.RefObject<HTMLDivElement | null>;
+type TranscriptPanelProps = {
+  isLoading: boolean;
+  error: string | null;
   transcriptProps: TranscriptListProps;
-}) {
-  useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onExit();
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [onExit]);
+  loadingClassName?: string;
+  errorClassName?: string;
+};
 
-  return (
-    <div className="fixed inset-0 z-50 flex bg-black">
-      <div
-        ref={videoSlotRef}
-        className="flex min-w-0 flex-1 items-center justify-center p-4"
-      />
-      <div className="flex w-72 shrink-0 flex-col border-l border-white/10 xl:w-80">
-        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
-          <h2 className="font-display text-base font-semibold text-white">
-            Transkrypcja
-          </h2>
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            onClick={onExit}
-            className="shrink-0 gap-1.5 border-white/20 bg-white/5 text-white hover:bg-white/10"
-          >
-            <Minimize2 className="h-3.5 w-3.5" /> Wyjdź
-          </Button>
-        </div>
-        <div className="min-h-0 flex-1 overflow-y-auto scrollbar-thin [&_button:hover]:bg-white/5 [&_.bg-primary\/10]:bg-white/10 [&_p]:text-white/90 [&_.text-muted-foreground]:text-white/40">
-          <TranscriptList {...transcriptProps} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function NormalView({
-  onEnterFullscreen,
-  videoSlotRef,
+function TranscriptPanel({
+  isLoading,
+  error,
   transcriptProps,
-}: {
-  onEnterFullscreen: () => void;
-  videoSlotRef: React.RefObject<HTMLDivElement | null>;
-  transcriptProps: TranscriptListProps;
-}) {
-  return (
-    <div className="w-full">
-      <div className="flex flex-col gap-0 lg:flex-row lg:min-h-[calc(100vh-7rem)]">
-        {/* LEFT: video + analysis panel */}
-        <div className="flex min-w-0 flex-1 flex-col">
-          {/* Video */}
-          <div className="group relative overflow-hidden">
-            <div ref={videoSlotRef} className="aspect-video w-full bg-black" />
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-linear-to-b from-black/40 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-            <Button
-              type="button"
-              size="sm"
-              variant="secondary"
-              onClick={onEnterFullscreen}
-              className="absolute right-3 top-3 z-10 h-8 gap-1.5 bg-black/60 px-2.5 text-white backdrop-blur-sm hover:bg-black/75 opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-              <Maximize2 className="h-3.5 w-3.5" /> Pełny ekran
-            </Button>
-          </div>
+  loadingClassName = "text-muted-foreground",
+  errorClassName = "text-destructive",
+}: TranscriptPanelProps) {
+  if (isLoading) {
+    return (
+      <div className={cn("p-4 text-sm", loadingClassName)}>Ładowanie...</div>
+    );
+  }
 
-          <div className="flex flex-1 flex-col items-center justify-center gap-2 border-t bg-canvas px-6 py-10 text-center">
-            <p className="text-base font-medium text-foreground">
-              Wybierz zdanie z transkrypcji
-            </p>
-            <p className="max-w-sm text-sm text-muted-foreground">
-              Kliknij dowolną linię po prawej, aby zobaczyć pełną analizę
-              gramatyczną i słownikową każdego słowa.
-            </p>
-          </div>
-        </div>
+  if (error) {
+    return <div className={cn("p-4 text-sm", errorClassName)}>{error}</div>;
+  }
 
-        {/* RIGHT: transcript sidebar */}
-        <div className="flex w-full shrink-0 flex-col border-l lg:w-80 xl:w-96 lg:max-h-[calc(100vh-4rem)]">
-          <div className="shrink-0 border-b px-4 py-3">
-            <h2 className="font-display text-base font-semibold">
-              Transkrypcja
-            </h2>
-            {/* <p className="text-xs text-muted-foreground">
-              {
-                ? `Analizujesz: ${formatTime(transcript[selectedIndex].start)}`
-                : "Kliknij zdanie, aby je przeanalizować."}
-            </p> */}
-          </div>
-          <div className="min-h-0 flex-1 overflow-y-auto scrollbar-thin">
-            <TranscriptList {...transcriptProps} />
-          </div>
-
-          {/* Vocabulary counter */}
-          {/* <div className="shrink-0 border-t px-4 py-3">
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>Słowa do zapamiętania</span>
-              <span className="font-medium text-foreground">14%</span>
-            </div>
-            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-muted">
-              <div
-                className="h-full rounded-full bg-emerald-500 transition-all duration-500"
-                style={{
-                  width: `${Math.min((15 / 30) * 100, 100)}%`,
-                }}
-              />
-            </div>
-          </div> */}
-        </div>
-      </div>
-    </div>
-  );
+  return <TranscriptList {...transcriptProps} />;
 }
 
 function TranscriptList({
@@ -218,11 +118,9 @@ function TranscriptList({
 
 export default function VideoLessonPage() {
   const [isFullscreen, setIsFullscreen] = useState(false);
-
   const playerContainerRef = useRef<HTMLDivElement>(null);
-  const videoSlotRef = useRef<HTMLDivElement>(null);
 
-  const { segments, videoId } = useGetTranscript();
+  const { segments, videoId, isLoading, error } = useGetTranscript();
 
   const { currentTime, seekTo } = useYouTubePlayer(
     playerContainerRef,
@@ -235,62 +133,146 @@ export default function VideoLessonPage() {
   );
 
   const transcriptProps: TranscriptListProps = {
-    segments: segments,
+    segments,
     activeIndex,
     onSegmentClick: (segment) => seekTo(segment.start),
   };
 
+  const transcriptPanelProps: TranscriptPanelProps = {
+    isLoading,
+    error,
+    transcriptProps,
+  };
+
   useEffect(() => {
-    let raf: number;
+    if (!isFullscreen) return;
 
-    function sync() {
-      const slot = videoSlotRef.current;
-      const player = playerContainerRef.current;
-      if (slot && player) {
-        const r = slot.getBoundingClientRect();
-        player.style.position = "fixed";
-        player.style.top = `${r.top}px`;
-        player.style.left = `${r.left}px`;
-        player.style.width = `${r.width}px`;
-        player.style.height = `${r.height}px`;
-        player.style.zIndex = isFullscreen ? "51" : "1";
-      }
-      raf = requestAnimationFrame(sync);
-    }
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-    raf = requestAnimationFrame(sync);
-    return () => cancelAnimationFrame(raf);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsFullscreen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKeyDown);
+    };
   }, [isFullscreen]);
 
-  if (!videoId) return <div>Ładowanie...</div>;
-
   return (
-    <>
-      <div
-        ref={playerContainerRef}
-        className="overflow-hidden bg-black [&_iframe]:h-full [&_iframe]:w-full [&_iframe]:border-0"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: 0,
-          height: 0,
-        }}
-      />
-
-      {isFullscreen ? (
-        <FullscreenView
-          onExit={() => setIsFullscreen(false)}
-          videoSlotRef={videoSlotRef}
-          transcriptProps={transcriptProps}
-        />
-      ) : (
-        <NormalView
-          onEnterFullscreen={() => setIsFullscreen(true)}
-          videoSlotRef={videoSlotRef}
-          transcriptProps={transcriptProps}
-        />
+    <div
+      className={cn(
+        isFullscreen
+          ? "fixed inset-0 z-50 flex bg-black"
+          : "w-full",
       )}
-    </>
+    >
+      <div
+        className={cn(
+          "flex min-w-0",
+          isFullscreen
+            ? "flex-1"
+            : "flex-col lg:flex-row lg:min-h-[calc(100vh-7rem)]",
+        )}
+      >
+        <div className="flex min-w-0 flex-1 flex-col">
+          <div
+            className={cn(
+              "group relative overflow-hidden bg-black",
+              isFullscreen && "flex flex-1 items-center justify-center p-4",
+            )}
+          >
+            <div
+              ref={playerContainerRef}
+              className={cn(
+                "overflow-hidden [&_iframe]:h-full [&_iframe]:w-full [&_iframe]:border-0",
+                isFullscreen
+                  ? "aspect-video max-h-full w-full"
+                  : "aspect-video w-full",
+              )}
+            />
+            {!isFullscreen && (
+              <>
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-linear-to-b from-black/40 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => setIsFullscreen(true)}
+                  className="absolute right-3 top-3 z-10 h-8 gap-1.5 bg-black/60 px-2.5 text-white backdrop-blur-sm hover:bg-black/75 opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <Maximize2 className="h-3.5 w-3.5" /> Pełny ekran
+                </Button>
+              </>
+            )}
+          </div>
+
+          {!isFullscreen && (
+            <div className="flex flex-1 flex-col items-center justify-center gap-2 border-t bg-canvas px-6 py-10 text-center">
+              <p className="text-base font-medium text-foreground">
+                Wybierz zdanie z transkrypcji
+              </p>
+              <p className="max-w-sm text-sm text-muted-foreground">
+                Kliknij dowolną linię po prawej, aby zobaczyć pełną analizę
+                gramatyczną i słownikową każdego słowa.
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div
+          className={cn(
+            "flex w-full shrink-0 flex-col border-l",
+            isFullscreen
+              ? "w-72 border-white/10 xl:w-80"
+              : "lg:w-80 xl:w-96 lg:max-h-[calc(100vh-4rem)]",
+          )}
+        >
+          <div
+            className={cn(
+              "flex shrink-0 items-center justify-between gap-3 border-b px-4 py-3",
+              isFullscreen && "border-white/10",
+            )}
+          >
+            <h2
+              className={cn(
+                "font-display text-base font-semibold",
+                isFullscreen && "text-white",
+              )}
+            >
+              Transkrypcja
+            </h2>
+            {isFullscreen && (
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={() => setIsFullscreen(false)}
+                className="shrink-0 gap-1.5 border-white/20 bg-white/5 text-white hover:bg-white/10"
+              >
+                <Minimize2 className="h-3.5 w-3.5" /> Wyjdź
+              </Button>
+            )}
+          </div>
+          <div
+            className={cn(
+              "min-h-0 flex-1 overflow-y-auto scrollbar-thin",
+              isFullscreen &&
+                "[&_button:hover]:bg-white/5 [&_.bg-primary\\/10]:bg-white/10 [&_p]:text-white/90 [&_.text-muted-foreground]:text-white/40",
+            )}
+          >
+            <TranscriptPanel
+              {...transcriptPanelProps}
+              loadingClassName={
+                isFullscreen ? "text-white/60" : "text-muted-foreground"
+              }
+              errorClassName={isFullscreen ? "text-red-400" : "text-destructive"}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -55,10 +55,25 @@ export function useYouTubePlayer(
 
     if (!videoId) return;
 
+    let resizeObserver: ResizeObserver | null = null;
+
+    const syncPlayerSize = () => {
+      const container = containerRef.current;
+      const player = playerRef.current;
+      if (!container || !player) return;
+
+      const { width, height } = container.getBoundingClientRect();
+      if (width > 0 && height > 0) {
+        player.setSize(Math.floor(width), Math.floor(height));
+      }
+    };
+
     void loadYouTubeApi().then(() => {
       if (cancelled || !containerRef.current) return;
 
-      playerRef.current = new window.YT.Player(containerRef.current, {
+      const container = containerRef.current;
+
+      playerRef.current = new window.YT.Player(container, {
         videoId,
         width: "100%",
         height: "100%",
@@ -70,7 +85,11 @@ export function useYouTubePlayer(
         },
         events: {
           onReady: () => {
-            if (!cancelled) setIsReady(true);
+            if (cancelled) return;
+            syncPlayerSize();
+            resizeObserver = new ResizeObserver(syncPlayerSize);
+            resizeObserver.observe(container);
+            setIsReady(true);
           },
           onStateChange: (event) => {
             const { PLAYING, PAUSED, ENDED, BUFFERING } =
@@ -97,6 +116,8 @@ export function useYouTubePlayer(
     return () => {
       cancelled = true;
       stopPolling();
+      resizeObserver?.disconnect();
+      resizeObserver = null;
       playerRef.current?.destroy();
       playerRef.current = null;
       setIsReady(false);

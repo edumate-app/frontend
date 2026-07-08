@@ -23,6 +23,7 @@ declare global {
     destroy(): void;
     getCurrentTime(): number;
     seekTo(seconds: number, allowSeekAhead: boolean): void;
+    setSize(width: number, height: number): void;
   }
 
   interface YTPlayerOptions {
