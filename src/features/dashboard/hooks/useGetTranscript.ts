@@ -7,6 +7,7 @@ export const useGetTranscript = () => {
   const { video_uuid } = useParams<{ video_uuid: string }>();
   const [segments, setSegments] = useState<TranscriptSegment[]>([]);
   const [videoId, setVideoId] = useState<string | null>(null);
+  const [lastPositionSeconds, setLastPositionSeconds] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export const useGetTranscript = () => {
     setError(null);
     setVideoId(null);
     setSegments([]);
+    setLastPositionSeconds(0);
 
     dashboardApi
       .getTranscript(video_uuid)
@@ -30,6 +32,7 @@ export const useGetTranscript = () => {
         if (cancelled) return;
         setSegments(response.data.segments);
         setVideoId(response.data.video_id);
+        setLastPositionSeconds(response.data.lastPositionSeconds);
       })
       .catch((err) => {
         if (err.response.status === 400) navigate("/app/settings");
@@ -45,5 +48,5 @@ export const useGetTranscript = () => {
     };
   }, [video_uuid]);
 
-  return { segments, videoId, isLoading, error };
+  return { segments, videoId, lastPositionSeconds, isLoading, error };
 };

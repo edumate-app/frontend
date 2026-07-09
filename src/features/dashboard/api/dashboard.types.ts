@@ -23,6 +23,7 @@ export type ImportRequest = {
 export type TranscriptResponse = {
   video_id: string;
   segments: TranscriptSegment[];
+  lastPositionSeconds: number;
 };
 
 export type VideoDto = {
