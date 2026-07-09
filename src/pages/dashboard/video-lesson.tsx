@@ -95,36 +95,50 @@ function TranscriptList({
               type="button"
               onClick={() => onSegmentClick(segment)}
               className={cn(
-                "w-full px-4 py-3 text-left transition-colors hover:bg-muted/40",
+                "flex w-full gap-3 px-4 pl-2 py-3 text-left transition-colors hover:bg-muted/40",
                 isActive && "bg-primary/10",
               )}
             >
-              <span
-                className={cn(
-                  "font-mono text-2xs",
-                  isActive
-                    ? "font-medium text-primary"
-                    : "text-muted-foreground",
-                )}
-              >
-                {formatTime(segment.start)}
-              </span>
-              <p
-                className={cn(
-                  "mt-1 text-sm leading-snug",
-                  isActive ? "font-semibold text-foreground" : "font-medium",
-                )}
-              >
-                {segment.nativeText}
-              </p>
-              <p
-                className={cn(
-                  "mt-1 text-sm leading-snug",
-                  isActive ? "text-foreground/80" : "text-muted-foreground",
-                )}
-              >
-                {segment.targetText}
-              </p>
+              <div className="flex shrink-0 items-start gap-2 pt-0.5 font-mono text-2xs tabular-nums">
+                <span
+                  className={cn(
+                    "w-4 text-right",
+                    isActive
+                      ? "text-primary/60"
+                      : "text-muted-foreground/50",
+                  )}
+                >
+                  {index + 1}
+                </span>
+                <span
+                  className={cn(
+                    "w-9",
+                    isActive
+                      ? "font-medium text-primary"
+                      : "text-muted-foreground",
+                  )}
+                >
+                  {formatTime(segment.start)}
+                </span>
+              </div>
+              <div className="min-w-0 flex-1">
+                <p
+                  className={cn(
+                    "text-sm leading-snug",
+                    isActive ? "font-semibold text-foreground" : "font-medium",
+                  )}
+                >
+                  {segment.nativeText}
+                </p>
+                <p
+                  className={cn(
+                    "mt-1 text-sm leading-snug",
+                    isActive ? "text-foreground/80" : "text-muted-foreground",
+                  )}
+                >
+                  {segment.targetText}
+                </p>
+              </div>
             </button>
           </li>
         );
