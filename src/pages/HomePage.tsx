@@ -44,7 +44,7 @@ export default function HomePage() {
             ) : (
               <div className="ml-auto flex items-center gap-2">
                 <Button size="sm" asChild>
-                  <Link to="/dashboard">Dashboard</Link>
+                  <Link to="/app/dashboard">Dashboard</Link>
                 </Button>
                 <UserMenu />
               </div>

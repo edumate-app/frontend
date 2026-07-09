@@ -35,19 +35,19 @@ export const router = createBrowserRouter([
             element: <DashboardLayout />,
             children: [
               {
-                path: "/dashboard",
+                path: "/app/dashboard",
                 element: <DashboardPage />,
               },
               {
-                path: "/dashboard/videos/new",
+                path: "/app/videos/new",
                 element: <AddVideo />,
               },
               {
-                path: "/dashboard/settings",
+                path: "/app/settings",
                 element: <SettingsPage />,
               },
               {
-                path: "/dashboard/videos/:video_uuid",
+                path: "/app/videos/:video_uuid",
                 element: <VideoLessonPage />,
               },
             ],

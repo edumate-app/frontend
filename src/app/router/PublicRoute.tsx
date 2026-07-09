@@ -10,7 +10,7 @@ export const PublicRoute = () => {
   }
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/app/dashboard" replace />;
   }
   console.log(
     "PublicRoute: User is not authenticated, rendering public content.",

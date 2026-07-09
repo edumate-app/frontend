@@ -14,13 +14,13 @@ import { Button } from "@/components/ui/button";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 
 const nav = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/dashboard/videos", label: "Moje filmy", icon: Film },
-  { to: "/dashboard/review", label: "Powtórki", icon: RotateCcw },
-  { to: "/dashboard/saved", label: "Zapisane", icon: Bookmark },
-  { to: "/dashboard/stats", label: "Statystyki", icon: BarChart3 },
-  { to: "/dashboard/explain", label: "AI Wyjaśnienia", icon: Sparkles },
-  { to: "/dashboard/settings", label: "Ustawienia", icon: Settings },
+  { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/app/videos", label: "Moje filmy", icon: Film },
+  { to: "/app/review", label: "Powtórki", icon: RotateCcw },
+  { to: "/app/saved", label: "Zapisane", icon: Bookmark },
+  { to: "/app/stats", label: "Statystyki", icon: BarChart3 },
+  { to: "/app/explain", label: "AI Wyjaśnienia", icon: Sparkles },
+  { to: "/app/settings", label: "Ustawienia", icon: Settings },
 ];
 
 type SidebarProps = {

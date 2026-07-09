@@ -62,7 +62,7 @@ export default function AddVideo() {
 
     try {
       const videoId = await importVideo(url, lang);
-      navigate(`/dashboard/videos/${videoId}`);
+      navigate(`/app/videos/${videoId}`);
     } finally {
       setLoading(false);
     }

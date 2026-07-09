@@ -45,7 +45,7 @@ export function TopNavigation({ onMenuClick }: { onMenuClick?: () => void }) {
         <Button
           size="sm"
           className="hidden sm:inline-flex"
-          onClick={() => navigate("/dashboard/videos/new")}
+          onClick={() => navigate("/app/videos/new")}
         >
           <Plus className="h-4 w-4" /> Dodaj film
         </Button>

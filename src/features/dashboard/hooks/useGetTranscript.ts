@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { dashboardApi } from "../api/dashboard.api";
 import type { TranscriptSegment } from "../api/dashboard.types";
 
@@ -9,6 +9,7 @@ export const useGetTranscript = () => {
   const [videoId, setVideoId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!video_uuid) {
@@ -30,7 +31,8 @@ export const useGetTranscript = () => {
         setSegments(response.data.segments);
         setVideoId(response.data.video_id);
       })
-      .catch(() => {
+      .catch((err) => {
+        if (err.response.status === 400) navigate("/app/settings");
         if (cancelled) return;
         setError("Nie udało się pobrać transkrypcji.");
       })
