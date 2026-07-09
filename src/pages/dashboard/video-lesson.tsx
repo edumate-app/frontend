@@ -6,8 +6,12 @@ import { useSaveWatchPosition } from "@/features/dashboard/hooks/useSaveWatchPos
 import { getActiveSegmentIndex } from "@/features/dashboard/utils/transcript";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Maximize2, Minimize2 } from "lucide-react";
+import { Loader2, Maximize2, Minimize2 } from "lucide-react";
 import { useGetTranscript } from "@/features/dashboard/hooks/useGetTranscript";
+import {
+  LessonLoadingPanel,
+  TranscriptLoadingSkeleton,
+} from "@/features/dashboard/components/video-lesson-loading";
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);
@@ -25,21 +29,32 @@ type TranscriptPanelProps = {
   isLoading: boolean;
   error: string | null;
   transcriptProps: TranscriptListProps;
-  loadingClassName?: string;
   errorClassName?: string;
 };
+
+function LessonLandingPanel() {
+  return (
+    <div className="flex flex-1 flex-col items-center justify-center gap-2 border-t bg-canvas px-6 py-10 text-center">
+      <p className="text-base font-medium text-foreground">
+        Wybierz zdanie z transkrypcji
+      </p>
+      <p className="max-w-sm text-sm text-muted-foreground">
+        Kliknij dowolną linię po prawej, aby zobaczyć pełną analizę gramatyczną
+        i słownikową każdego słowa.
+      </p>
+    </div>
+  );
+}
 
 function TranscriptPanel({
   isLoading,
   error,
   transcriptProps,
-  loadingClassName = "text-muted-foreground",
   errorClassName = "text-destructive",
-}: TranscriptPanelProps) {
+  isFullscreen = false,
+}: TranscriptPanelProps & { isFullscreen?: boolean }) {
   if (isLoading) {
-    return (
-      <div className={cn("p-4 text-sm", loadingClassName)}>Ładowanie...</div>
-    );
+    return <TranscriptLoadingSkeleton isFullscreen={isFullscreen} />;
   }
 
   if (error) {
@@ -162,6 +177,8 @@ export default function VideoLessonPage() {
     onSegmentClick: (segment) => seekTo(segment.start),
   };
 
+  const isPlayerLoading = isLoading || Boolean(videoId && !isReady);
+
   const transcriptPanelProps: TranscriptPanelProps = {
     isLoading,
     error,
@@ -188,9 +205,7 @@ export default function VideoLessonPage() {
   return (
     <div
       className={cn(
-        isFullscreen
-          ? "fixed inset-0 z-50 flex bg-black"
-          : "w-full",
+        isFullscreen ? "fixed inset-0 z-50 flex bg-black" : "w-full",
       )}
     >
       <div
@@ -217,6 +232,24 @@ export default function VideoLessonPage() {
                   : "aspect-video w-full",
               )}
             />
+            {isPlayerLoading && (
+              <div
+                className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black px-6 text-center"
+                role="status"
+                aria-live="polite"
+              >
+                <Loader2 className="h-8 w-8 animate-spin text-white/70" />
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-white">
+                    Przygotowujemy lekcję
+                  </p>
+                  <p className="max-w-xs text-xs text-white/60">
+                    Pobieramy transkrypcję i ładujemy odtwarzacz — to może
+                    potrwać kilka sekund.
+                  </p>
+                </div>
+              </div>
+            )}
             {!isFullscreen && (
               <>
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-linear-to-b from-black/40 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
@@ -233,17 +266,8 @@ export default function VideoLessonPage() {
             )}
           </div>
 
-          {!isFullscreen && (
-            <div className="flex flex-1 flex-col items-center justify-center gap-2 border-t bg-canvas px-6 py-10 text-center">
-              <p className="text-base font-medium text-foreground">
-                Wybierz zdanie z transkrypcji
-              </p>
-              <p className="max-w-sm text-sm text-muted-foreground">
-                Kliknij dowolną linię po prawej, aby zobaczyć pełną analizę
-                gramatyczną i słownikową każdego słowa.
-              </p>
-            </div>
-          )}
+          {!isFullscreen &&
+            (isLoading ? <LessonLoadingPanel /> : <LessonLandingPanel />)}
         </div>
 
         <div
@@ -254,32 +278,36 @@ export default function VideoLessonPage() {
               : "lg:w-80 xl:w-96 lg:max-h-[calc(100vh-4rem)]",
           )}
         >
-          <div
-            className={cn(
-              "flex shrink-0 items-center justify-between gap-3 border-b px-4 py-3",
-              isFullscreen && "border-white/10",
-            )}
-          >
-            <h2
-              className={cn(
-                "font-display text-base font-semibold",
-                isFullscreen && "text-white",
-              )}
-            >
-              Transkrypcja
-            </h2>
-            {isFullscreen && (
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                onClick={() => setIsFullscreen(false)}
-                className="shrink-0 gap-1.5 border-white/20 bg-white/5 text-white hover:bg-white/10"
+          {isFullscreen && (
+            <>
+              <div
+                className={cn(
+                  "flex shrink-0 items-center justify-between gap-3 border-b px-4 py-3",
+                  isFullscreen && "border-white/10",
+                )}
               >
-                <Minimize2 className="h-3.5 w-3.5" /> Wyjdź
-              </Button>
-            )}
-          </div>
+                <h2
+                  className={cn(
+                    "font-display text-base font-semibold",
+                    isFullscreen && "text-white",
+                  )}
+                >
+                  Transkrypcja
+                </h2>
+                {isFullscreen && (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setIsFullscreen(false)}
+                    className="shrink-0 gap-1.5 border-white/20 bg-white/5 text-white hover:bg-white/10"
+                  >
+                    <Minimize2 className="h-3.5 w-3.5" /> Wyjdź
+                  </Button>
+                )}
+              </div>
+            </>
+          )}
           <div
             className={cn(
               "min-h-0 flex-1 overflow-y-auto scrollbar-thin",
@@ -289,10 +317,10 @@ export default function VideoLessonPage() {
           >
             <TranscriptPanel
               {...transcriptPanelProps}
-              loadingClassName={
-                isFullscreen ? "text-white/60" : "text-muted-foreground"
+              isFullscreen={isFullscreen}
+              errorClassName={
+                isFullscreen ? "text-red-400" : "text-destructive"
               }
-              errorClassName={isFullscreen ? "text-red-400" : "text-destructive"}
             />
           </div>
         </div>
