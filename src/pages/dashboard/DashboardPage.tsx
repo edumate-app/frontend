@@ -19,7 +19,7 @@ import { timeAgo } from "@/features/dashboard/utils/time";
 export default function DashboardPage() {
   const user = useAuthStore((s) => s.user);
 
-  const { videos } = useDashboard();
+  const { videos, isLoading, error } = useDashboard();
 
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
@@ -165,6 +165,11 @@ export default function DashboardPage() {
           </div>
 
           <Card className="overflow-hidden">
+            {isLoading ? (
+              <p className="p-4 text-sm text-muted-foreground">Ładowanie...</p>
+            ) : error ? (
+              <p className="p-4 text-sm text-destructive">{error}</p>
+            ) : (
             <div className="divide-y divide-border">
               {videos.slice(0, 3).map((v) => (
                 <Link
@@ -207,6 +212,7 @@ export default function DashboardPage() {
                 </Link>
               ))}
             </div>
+            )}
           </Card>
         </div>
 
