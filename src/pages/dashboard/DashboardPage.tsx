@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-// import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -14,10 +13,13 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/app/layouts/dashboard/components/page-header";
 import { useAuthStore } from "@/features/auth/store/auth.store";
-import { videos } from "../mock";
+import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
+import { timeAgo } from "@/features/dashboard/utils/time";
 
 export default function DashboardPage() {
   const user = useAuthStore((s) => s.user);
+
+  const { videos } = useDashboard();
 
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
@@ -27,7 +29,7 @@ export default function DashboardPage() {
           description="Gotowy na kolejną sesję nauki?"
           actions={
             <Button asChild>
-              <Link to="/dashboard/videos/new">
+              <Link to="/app/videos/new">
                 <Plus className="h-4 w-4" /> Dodaj nowy film
               </Link>
             </Button>
@@ -166,32 +168,33 @@ export default function DashboardPage() {
             <div className="divide-y divide-border">
               {videos.slice(0, 3).map((v) => (
                 <Link
-                  to={`/dashboard/videos/${v.id}`}
-                  key={v.id}
+                  to={`/app/videos/${v.uuid}`}
+                  key={v.uuid}
                   className="flex items-center gap-4 px-4 py-3 hover:bg-surface-hover transition-colors"
                 >
                   <div className="relative h-12 w-20 shrink-0 overflow-hidden rounded-md">
                     <img
-                      src={v.thumbnail}
-                      alt=""
+                      src={`https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg`}
+                      alt={v.title}
                       className="h-full w-full object-cover"
                     />
                     <Play className="absolute inset-0 m-auto h-4 w-4 fill-white text-white drop-shadow" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium">{v.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {v.language}
+                    <p className="truncate text-xs text-muted-foreground">
+                      {v.author} · {v.targetLang.toUpperCase()}
                     </p>
                   </div>
+                  {/* To do: Implement progress tracking */}
                   <div className="hidden w-40 items-center gap-2 sm:flex">
-                    <Progress value={v.progress} className="h-1.5" />
+                    <Progress value={67} className="h-1.5" />
                     <span className="w-9 shrink-0 text-right text-xs text-muted-foreground">
-                      {v.progress}%
+                      {67}%
                     </span>
                   </div>
                   <span className="hidden w-28 shrink-0 text-right text-2xs text-muted-foreground md:block">
-                    {v.lastActivity}
+                    {timeAgo(v.lastOpenedAt)}
                   </span>
                   <Button
                     variant="ghost"

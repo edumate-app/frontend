@@ -4,6 +4,7 @@ import type {
   ImportResponse,
   LanguageDto,
   TranscriptResponse,
+  VideoDto,
 } from "./dashboard.types";
 
 export const dashboardApi = {
@@ -15,4 +16,5 @@ export const dashboardApi = {
     apiClient.get<TranscriptResponse>(`/video/transcript/${video_uuid}`),
   updateNativeLang: (lang: string) =>
     apiClient.patch(`/user/native-lang`, { lang: lang }),
+  getVideos: () => apiClient.get<VideoDto[]>(`/video`),
 };

@@ -24,3 +24,13 @@ export type TranscriptResponse = {
   video_id: string;
   segments: TranscriptSegment[];
 };
+
+export type VideoDto = {
+  uuid: string;
+  targetLang: string;
+  videoId: string;
+  author: string;
+  title: string;
+  // duration: number;
+  lastOpenedAt: string | null;
+};
