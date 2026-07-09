@@ -31,6 +31,11 @@ export type VideoDto = {
   videoId: string;
   author: string;
   title: string;
-  // duration: number;
+  duration: number;
   lastOpenedAt: string | null;
+  lastPositionSeconds: number;
+};
+
+export type UpdatePositionRequest = {
+  positionSeconds: number;
 };

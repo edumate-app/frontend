@@ -4,6 +4,7 @@ import type {
   ImportResponse,
   LanguageDto,
   TranscriptResponse,
+  UpdatePositionRequest,
   VideoDto,
 } from "./dashboard.types";
 
@@ -17,4 +18,6 @@ export const dashboardApi = {
   updateNativeLang: (lang: string) =>
     apiClient.patch(`/user/native-lang`, { lang: lang }),
   getVideos: () => apiClient.get<VideoDto[]>(`/video`),
+  updatePosition: (video_uuid: string, req: UpdatePositionRequest) =>
+    apiClient.patch(`/video/${video_uuid}/position`, req),
 };

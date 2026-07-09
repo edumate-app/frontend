@@ -14,7 +14,7 @@ import {
 import { PageHeader } from "@/app/layouts/dashboard/components/page-header";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
-import { timeAgo } from "@/features/dashboard/utils/time";
+import { timeAgo, formatDuration } from "@/features/dashboard/utils/time";
 
 export default function DashboardPage() {
   const user = useAuthStore((s) => s.user);
@@ -170,48 +170,62 @@ export default function DashboardPage() {
             ) : error ? (
               <p className="p-4 text-sm text-destructive">{error}</p>
             ) : (
-            <div className="divide-y divide-border">
-              {videos.slice(0, 3).map((v) => (
-                <Link
-                  to={`/app/videos/${v.uuid}`}
-                  key={v.uuid}
-                  className="flex items-center gap-4 px-4 py-3 hover:bg-surface-hover transition-colors"
-                >
-                  <div className="relative h-12 w-20 shrink-0 overflow-hidden rounded-md">
-                    <img
-                      src={`https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg`}
-                      alt={v.title}
-                      className="h-full w-full object-cover"
-                    />
-                    <Play className="absolute inset-0 m-auto h-4 w-4 fill-white text-white drop-shadow" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">{v.title}</p>
-                    <p className="truncate text-xs text-muted-foreground">
-                      {v.author} · {v.targetLang.toUpperCase()}
-                    </p>
-                  </div>
-                  {/* To do: Implement progress tracking */}
-                  <div className="hidden w-40 items-center gap-2 sm:flex">
-                    <Progress value={67} className="h-1.5" />
-                    <span className="w-9 shrink-0 text-right text-xs text-muted-foreground">
-                      {67}%
-                    </span>
-                  </div>
-                  <span className="hidden w-28 shrink-0 text-right text-2xs text-muted-foreground md:block">
-                    {timeAgo(v.lastOpenedAt)}
-                  </span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7 shrink-0"
-                    onClick={(e) => e.preventDefault()}
+              <div className="divide-y divide-border">
+                {videos.slice(0, 3).map((v) => (
+                  <Link
+                    to={`/app/videos/${v.uuid}`}
+                    key={v.uuid}
+                    className="flex items-center gap-4 px-4 py-3 hover:bg-surface-hover transition-colors"
                   >
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                </Link>
-              ))}
-            </div>
+                    <div className="relative h-12 w-20 shrink-0 overflow-hidden rounded-md">
+                      <img
+                        src={`https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg`}
+                        alt={v.title}
+                        className="h-full w-full object-cover"
+                      />
+                      <Play className="absolute inset-0 m-auto h-4 w-4 fill-white text-white drop-shadow" />
+                      <span className="absolute bottom-0.5 right-0.5 rounded bg-black/75 px-1 py-px text-[10px] font-medium leading-tight text-white">
+                        {formatDuration(v.duration)}
+                      </span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{v.title}</p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {v.author} · {v.targetLang.toUpperCase()}
+                      </p>
+                    </div>
+                    <div className="hidden w-40 items-center gap-2 sm:flex">
+                      <Progress
+                        value={
+                          v.duration
+                            ? (v.lastPositionSeconds / v.duration) * 100
+                            : 0
+                        }
+                        className="h-1.5"
+                      />
+                      <span className="w-9 shrink-0 text-right text-xs text-muted-foreground">
+                        {v.duration
+                          ? Math.round(
+                              (v.lastPositionSeconds / v.duration) * 100,
+                            )
+                          : 0}
+                        %
+                      </span>
+                    </div>
+                    <span className="hidden w-28 shrink-0 text-right text-2xs text-muted-foreground md:block">
+                      {timeAgo(v.lastOpenedAt)}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7 shrink-0"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                ))}
+              </div>
             )}
           </Card>
         </div>

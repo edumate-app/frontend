@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import type { TranscriptSegment } from "@/features/dashboard/api/dashboard.types";
 import { useYouTubePlayer } from "@/features/dashboard/hooks/useYouTubePlayer";
+import { useSaveWatchPosition } from "@/features/dashboard/hooks/useSaveWatchPosition";
 import { getActiveSegmentIndex } from "@/features/dashboard/utils/transcript";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -117,6 +119,7 @@ function TranscriptList({
 }
 
 export default function VideoLessonPage() {
+  const { video_uuid } = useParams<{ video_uuid: string }>();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const playerContainerRef = useRef<HTMLDivElement>(null);
 
@@ -126,6 +129,8 @@ export default function VideoLessonPage() {
     playerContainerRef,
     videoId ?? "",
   );
+
+  useSaveWatchPosition(video_uuid, currentTime);
 
   const activeIndex = useMemo(
     () => getActiveSegmentIndex(segments, currentTime),
