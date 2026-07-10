@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { dashboardApi } from "../api/dashboard.api";
-import type { TranscriptSegment } from "../api/dashboard.types";
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { dashboardApi } from '../api/dashboard.api';
+import type { TranscriptSegment } from '../api/dashboard.types';
 
 export const useGetTranscript = () => {
   const { video_uuid } = useParams<{ video_uuid: string }>();
@@ -15,14 +15,12 @@ export const useGetTranscript = () => {
   const isLoading = Boolean(video_uuid && video_uuid !== loadedVideoUuid);
 
   useEffect(() => {
-
     if (!video_uuid) return;
     let cancelled = false;
 
     dashboardApi
       .getTranscript(video_uuid)
       .then((response) => {
-
         if (cancelled) return;
         setSegments(response.data.segments);
         setVideoId(response.data.video_id);
@@ -32,18 +30,15 @@ export const useGetTranscript = () => {
       })
 
       .catch((err) => {
-        if (err.response?.status === 400) navigate("/app/settings");
+        if (err.response?.status === 400) navigate('/app/settings');
         if (cancelled) return;
-        setError("Nie udało się pobrać transkrypcji.");
+        setError('Nie udało się pobrać transkrypcji.');
         setLoadedVideoUuid(video_uuid);
       });
-
-
 
     return () => {
       cancelled = true;
     };
-
   }, [video_uuid, navigate]);
 
   if (!video_uuid) {
@@ -52,7 +47,7 @@ export const useGetTranscript = () => {
       videoId: null,
       lastPositionSeconds: 0,
       isLoading: false,
-      error: "Brak identyfikatora wideo.",
+      error: 'Brak identyfikatora wideo.',
     };
   }
 

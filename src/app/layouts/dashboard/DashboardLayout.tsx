@@ -1,8 +1,8 @@
-import { Outlet } from "react-router-dom";
-import { TopNavigation } from "./components/top-navigation";
-import { useState } from "react";
-import { Sidebar } from "./components/side-bar";
-import { MobileSidebar } from "./components/mobile-side-bar";
+import { Outlet } from 'react-router-dom';
+import { TopNavigation } from './components/top-navigation';
+import { useState } from 'react';
+import { Sidebar } from './components/side-bar';
+import { MobileSidebar } from './components/mobile-side-bar';
 
 export function DashboardLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);

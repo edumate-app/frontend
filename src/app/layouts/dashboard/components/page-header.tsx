@@ -1,6 +1,6 @@
-import type { ReactNode } from "react";
-import { ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import type { ReactNode } from 'react';
+import { ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface Crumb {
   label: string;
@@ -23,7 +23,7 @@ export function PageHeader({
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 pb-5 sm:flex-row sm:items-end sm:justify-between",
+        'flex flex-col gap-3 pb-5 sm:flex-row sm:items-end sm:justify-between',
         className,
       )}
     >
@@ -36,8 +36,8 @@ export function PageHeader({
                 <span
                   className={
                     i === breadcrumbs.length - 1
-                      ? "text-foreground font-medium"
-                      : ""
+                      ? 'text-foreground font-medium'
+                      : ''
                   }
                 >
                   {c.label}

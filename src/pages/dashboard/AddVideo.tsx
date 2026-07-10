@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useValidateUrl } from "@/features/dashboard/hooks/useValidateUrl";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useValidateUrl } from '@/features/dashboard/hooks/useValidateUrl';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Film,
   FileText,
@@ -18,27 +18,27 @@ import {
   Languages,
   GraduationCap,
   Loader2,
-} from "lucide-react";
-import { PageHeader } from "@/app/layouts/dashboard/components/page-header";
+} from 'lucide-react';
+import { PageHeader } from '@/app/layouts/dashboard/components/page-header';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useImportVideo } from "@/features/dashboard/hooks/useImportVideo";
+} from '@/components/ui/select';
+import { useImportVideo } from '@/features/dashboard/hooks/useImportVideo';
 
 const steps = [
-  { icon: FileText, title: "Pobieramy transkrypcję" },
-  { icon: Scissors, title: "Dzielimy na zdania" },
-  { icon: Languages, title: "Tłumaczymy i wyjaśniamy" },
-  { icon: GraduationCap, title: "Tworzymy materiały do nauki" },
+  { icon: FileText, title: 'Pobieramy transkrypcję' },
+  { icon: Scissors, title: 'Dzielimy na zdania' },
+  { icon: Languages, title: 'Tłumaczymy i wyjaśniamy' },
+  { icon: GraduationCap, title: 'Tworzymy materiały do nauki' },
 ];
 
 export default function AddVideo() {
   const navigate = useNavigate();
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const { importVideo } = useImportVideo();
   const {
@@ -73,7 +73,7 @@ export default function AddVideo() {
       <div className="max-w-2xl space-y-5">
         <PageHeader
           title="Dodaj nowy film"
-          breadcrumbs={[{ label: "Moje filmy" }, { label: "Dodaj film" }]}
+          breadcrumbs={[{ label: 'Moje filmy' }, { label: 'Dodaj film' }]}
           description="Wklej link do filmu z YouTube, a my zajmiemy się resztą."
         />
 
@@ -106,8 +106,8 @@ export default function AddVideo() {
                   <SelectValue
                     placeholder={
                       fetchingLanguages
-                        ? "Wykrywanie dostępnych języków…"
-                        : "Wklej link, aby wyświetlić języki"
+                        ? 'Wykrywanie dostępnych języków…'
+                        : 'Wklej link, aby wyświetlić języki'
                     }
                   />
                 </SelectTrigger>
@@ -119,14 +119,14 @@ export default function AddVideo() {
                       disabled={item.alreadyImported}
                     >
                       {item.language}
-                      {item.alreadyImported ? " (już zaimportowany)" : ""}
+                      {item.alreadyImported ? ' (już zaimportowany)' : ''}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               {singleAlreadyImported ? (
                 <p className="text-xs text-muted-foreground">
-                  Ten film został już zaimportowany w języku{" "}
+                  Ten film został już zaimportowany w języku{' '}
                   {languages[0].language}.
                 </p>
               ) : null}
@@ -148,7 +148,7 @@ export default function AddVideo() {
               }
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-              {loading ? "Importowanie filmu…" : "Importuj film"}
+              {loading ? 'Importowanie filmu…' : 'Importuj film'}
             </Button>
           </CardContent>
         </Card>
@@ -167,7 +167,7 @@ export default function AddVideo() {
                 className="flex flex-col items-center gap-2 text-center"
               >
                 <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-full ${loading ? "bg-primary-100 text-primary-600 animate-pulse" : "bg-secondary text-muted-foreground"}`}
+                  className={`flex h-10 w-10 items-center justify-center rounded-full ${loading ? 'bg-primary-100 text-primary-600 animate-pulse' : 'bg-secondary text-muted-foreground'}`}
                 >
                   <s.icon className="h-4.5 w-4.5" />
                 </div>

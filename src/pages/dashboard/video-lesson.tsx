@@ -1,23 +1,23 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import type { TranscriptSegment } from "@/features/dashboard/api/dashboard.types";
-import { useYouTubePlayer } from "@/features/dashboard/hooks/useYouTubePlayer";
-import { useSaveWatchPosition } from "@/features/dashboard/hooks/useSaveWatchPosition";
-import { getActiveSegmentIndex } from "@/features/dashboard/utils/transcript";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Loader2, Maximize2, Minimize2 } from "lucide-react";
-import { useGetTranscript } from "@/features/dashboard/hooks/useGetTranscript";
-import { SentenceAnalysisPanel } from "@/features/dashboard/components/sentence-analysis-panel";
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import type { TranscriptSegment } from '@/features/dashboard/api/dashboard.types';
+import { useYouTubePlayer } from '@/features/dashboard/hooks/useYouTubePlayer';
+import { useSaveWatchPosition } from '@/features/dashboard/hooks/useSaveWatchPosition';
+import { getActiveSegmentIndex } from '@/features/dashboard/utils/transcript';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { Loader2, Maximize2, Minimize2 } from 'lucide-react';
+import { useGetTranscript } from '@/features/dashboard/hooks/useGetTranscript';
+import { SentenceAnalysisPanel } from '@/features/dashboard/components/sentence-analysis-panel';
 import {
   LessonLoadingPanel,
   TranscriptLoadingSkeleton,
-} from "@/features/dashboard/components/video-lesson-loading";
+} from '@/features/dashboard/components/video-lesson-loading';
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
-  return `${m}:${s.toString().padStart(2, "0")}`;
+  return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
 type TranscriptListProps = {
@@ -37,7 +37,7 @@ function TranscriptPanel({
   isLoading,
   error,
   transcriptProps,
-  errorClassName = "text-destructive",
+  errorClassName = 'text-destructive',
   isFullscreen = false,
 }: TranscriptPanelProps & { isFullscreen?: boolean }) {
   if (isLoading) {
@@ -45,7 +45,7 @@ function TranscriptPanel({
   }
 
   if (error) {
-    return <div className={cn("p-4 text-sm", errorClassName)}>{error}</div>;
+    return <div className={cn('p-4 text-sm', errorClassName)}>{error}</div>;
   }
 
   return <TranscriptList {...transcriptProps} />;
@@ -63,8 +63,8 @@ function TranscriptList({
     if (activeIndex < 0 || activeIndex === prevActiveIndexRef.current) return;
     prevActiveIndexRef.current = activeIndex;
     activeItemRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
+      behavior: 'smooth',
+      block: 'start',
     });
   }, [activeIndex]);
 
@@ -82,27 +82,25 @@ function TranscriptList({
               type="button"
               onClick={() => onSegmentClick(segment)}
               className={cn(
-                "flex w-full gap-3 px-4 pl-2 py-3 text-left transition-colors hover:bg-muted/40",
-                isActive && "bg-primary/10",
+                'flex w-full gap-3 px-4 pl-2 py-3 text-left transition-colors hover:bg-muted/40',
+                isActive && 'bg-primary/10',
               )}
             >
               <div className="flex shrink-0 items-start gap-2 pt-0.5 font-mono text-2xs tabular-nums">
                 <span
                   className={cn(
-                    "w-4 text-right",
-                    isActive
-                      ? "text-primary/60"
-                      : "text-muted-foreground/50",
+                    'w-4 text-right',
+                    isActive ? 'text-primary/60' : 'text-muted-foreground/50',
                   )}
                 >
                   {index + 1}
                 </span>
                 <span
                   className={cn(
-                    "w-9",
+                    'w-9',
                     isActive
-                      ? "font-medium text-primary"
-                      : "text-muted-foreground",
+                      ? 'font-medium text-primary'
+                      : 'text-muted-foreground',
                   )}
                 >
                   {formatTime(segment.start)}
@@ -111,16 +109,16 @@ function TranscriptList({
               <div className="min-w-0 flex-1">
                 <p
                   className={cn(
-                    "text-sm leading-snug",
-                    isActive ? "font-semibold text-foreground" : "font-medium",
+                    'text-sm leading-snug',
+                    isActive ? 'font-semibold text-foreground' : 'font-medium',
                   )}
                 >
                   {segment.nativeText}
                 </p>
                 <p
                   className={cn(
-                    "mt-1 text-sm leading-snug",
-                    isActive ? "text-foreground/80" : "text-muted-foreground",
+                    'mt-1 text-sm leading-snug',
+                    isActive ? 'text-foreground/80' : 'text-muted-foreground',
                   )}
                 >
                   {segment.targetText}
@@ -145,7 +143,7 @@ export default function VideoLessonPage() {
 
   const { currentTime, seekTo, isReady } = useYouTubePlayer(
     playerContainerRef,
-    videoId ?? "",
+    videoId ?? '',
   );
 
   useEffect(() => {
@@ -190,16 +188,16 @@ export default function VideoLessonPage() {
     if (!isFullscreen) return;
 
     const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
 
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsFullscreen(false);
+      if (e.key === 'Escape') setIsFullscreen(false);
     };
-    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener('keydown', onKeyDown);
 
     return () => {
       document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener('keydown', onKeyDown);
     };
   }, [isFullscreen]);
 
@@ -207,32 +205,32 @@ export default function VideoLessonPage() {
     <div
       className={cn(
         isFullscreen
-          ? "fixed inset-0 z-50 flex bg-black"
-          : "flex h-full min-h-0 w-full flex-col",
+          ? 'fixed inset-0 z-50 flex bg-black'
+          : 'flex h-full min-h-0 w-full flex-col',
       )}
     >
       <div
         className={cn(
-          "flex min-h-0 min-w-0",
-          isFullscreen ? "flex-1" : "h-full flex-col lg:flex-row",
+          'flex min-h-0 min-w-0',
+          isFullscreen ? 'flex-1' : 'h-full flex-col lg:flex-row',
         )}
       >
         <div className="flex min-h-0 min-w-0 flex-1 flex-col">
           <div
             className={cn(
-              "group relative min-h-0 overflow-hidden bg-black",
+              'group relative min-h-0 overflow-hidden bg-black',
               isFullscreen
-                ? "flex flex-1 items-center justify-center p-4"
-                : "min-h-0 flex-1",
+                ? 'flex flex-1 items-center justify-center p-4'
+                : 'min-h-0 flex-1',
             )}
           >
             <div
               ref={playerContainerRef}
               className={cn(
-                "overflow-hidden [&_iframe]:h-full [&_iframe]:w-full [&_iframe]:border-0",
+                'overflow-hidden [&_iframe]:h-full [&_iframe]:w-full [&_iframe]:border-0',
                 isFullscreen
-                  ? "aspect-video max-h-full w-full"
-                  : "h-full w-full",
+                  ? 'aspect-video max-h-full w-full'
+                  : 'h-full w-full',
               )}
             />
             {isPlayerLoading && (
@@ -275,24 +273,24 @@ export default function VideoLessonPage() {
 
         <div
           className={cn(
-            "flex min-h-0 w-full shrink-0 flex-col border-l",
+            'flex min-h-0 w-full shrink-0 flex-col border-l',
             isFullscreen
-              ? "w-72 border-white/10 xl:w-80"
-              : "min-h-48 flex-1 border-t lg:h-full lg:max-h-none lg:flex-none lg:border-t-0 lg:w-80 xl:w-96",
+              ? 'w-72 border-white/10 xl:w-80'
+              : 'min-h-48 flex-1 border-t lg:h-full lg:max-h-none lg:flex-none lg:border-t-0 lg:w-80 xl:w-96',
           )}
         >
           {isFullscreen && (
             <>
               <div
                 className={cn(
-                  "flex shrink-0 items-center justify-between gap-3 border-b px-4 py-3",
-                  isFullscreen && "border-white/10",
+                  'flex shrink-0 items-center justify-between gap-3 border-b px-4 py-3',
+                  isFullscreen && 'border-white/10',
                 )}
               >
                 <h2
                   className={cn(
-                    "font-display text-base font-semibold",
-                    isFullscreen && "text-white",
+                    'font-display text-base font-semibold',
+                    isFullscreen && 'text-white',
                   )}
                 >
                   Transkrypcja
@@ -313,16 +311,16 @@ export default function VideoLessonPage() {
           )}
           <div
             className={cn(
-              "min-h-0 flex-1 overflow-y-auto scrollbar-thin",
+              'min-h-0 flex-1 overflow-y-auto scrollbar-thin',
               isFullscreen &&
-                "[&_button:hover]:bg-white/5 [&_.bg-primary\\/10]:bg-white/10 [&_p]:text-white/90 [&_.text-muted-foreground]:text-white/40",
+                '[&_button:hover]:bg-white/5 [&_.bg-primary\\/10]:bg-white/10 [&_p]:text-white/90 [&_.text-muted-foreground]:text-white/40',
             )}
           >
             <TranscriptPanel
               {...transcriptPanelProps}
               isFullscreen={isFullscreen}
               errorClassName={
-                isFullscreen ? "text-red-400" : "text-destructive"
+                isFullscreen ? 'text-red-400' : 'text-destructive'
               }
             />
           </div>

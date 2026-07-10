@@ -1,5 +1,5 @@
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Sidebar } from "./side-bar";
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Sidebar } from './side-bar';
 
 export function MobileSidebar({
   open,

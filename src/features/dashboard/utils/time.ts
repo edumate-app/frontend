@@ -1,6 +1,6 @@
 export function timeAgo(dateString: string | null): string {
   if (!dateString) {
-    return "Nigdy nie otwierano";
+    return 'Nigdy nie otwierano';
   }
 
   const date = new Date(dateString);
@@ -9,7 +9,7 @@ export function timeAgo(dateString: string | null): string {
   const diffSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
   if (diffSeconds < 60) {
-    return "przed chwilą";
+    return 'przed chwilą';
   }
 
   const minutes = Math.floor(diffSeconds / 60);
@@ -35,7 +35,7 @@ export function formatDuration(seconds: number): string {
   const s = Math.floor(seconds % 60);
 
   if (h > 0) {
-    return `${h}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+    return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   }
-  return `${m}:${s.toString().padStart(2, "0")}`;
+  return `${m}:${s.toString().padStart(2, '0')}`;
 }

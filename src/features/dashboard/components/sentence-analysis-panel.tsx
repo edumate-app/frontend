@@ -1,16 +1,16 @@
-import { useId, useState } from "react";
-import { MOCK_SENTENCE_ANALYSIS } from "@/features/dashboard/mocks/sentence-analysis.mock";
+import { useId, useState } from 'react';
+import { MOCK_SENTENCE_ANALYSIS } from '@/features/dashboard/mocks/sentence-analysis.mock';
 import {
   isVerbWord,
   type SentenceAnalysis,
   type SentenceAnalysisWord,
-} from "@/features/dashboard/types/sentence-analysis.types";
-import { cn } from "@/lib/utils";
+} from '@/features/dashboard/types/sentence-analysis.types';
+import { cn } from '@/lib/utils';
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
-  return `${m}:${s.toString().padStart(2, "0")}`;
+  return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
 type SentenceAnalysisPanelProps = {
@@ -30,7 +30,7 @@ function WordDetailCard({ token }: { token: SentenceAnalysisWord }) {
         id={titleId}
         className="font-mono text-sm font-semibold text-foreground"
       >
-        {token.text.replace(/[.,!?]$/, "")}
+        {token.text.replace(/[.,!?]$/, '')}
       </p>
       <dl className="mt-2 space-y-1 text-xs">
         <div className="flex gap-2">
@@ -39,11 +39,11 @@ function WordDetailCard({ token }: { token: SentenceAnalysisWord }) {
         </div>
         <div className="flex gap-2">
           <dt className="shrink-0 text-muted-foreground">
-            {isVerbWord(token) ? "Lemat (bezokolicznik):" : "Lemat:"}
+            {isVerbWord(token) ? 'Lemat (bezokolicznik):' : 'Lemat:'}
           </dt>
           <dd className="text-foreground">
             <span className="font-mono">{token.lemma}</span>
-            {" — "}
+            {' — '}
             {token.lemmaTranslation}
           </dd>
         </div>
@@ -71,18 +71,15 @@ function WordDetailCard({ token }: { token: SentenceAnalysisWord }) {
                 const isActivePerson = entry.person === token.conjugationPerson;
 
                 return (
-                  <p
-                    key={entry.person}
-                    className="font-mono text-foreground"
-                  >
+                  <p key={entry.person} className="font-mono text-foreground">
                     <span
                       className={cn(
                         isActivePerson &&
-                          "font-semibold underline decoration-2 underline-offset-2",
+                          'font-semibold underline decoration-2 underline-offset-2',
                       )}
                     >
                       {entry.person}
-                    </span>{" "}
+                    </span>{' '}
                     {entry.form}
                   </p>
                 );
@@ -130,13 +127,13 @@ function WordBlock({
         onClick={onClick}
         aria-expanded={isActive}
         className={cn(
-          "cursor-pointer rounded-sm px-0.5 transition-colors",
-          "hover:bg-muted/70 focus-visible:outline-none focus-visible:shadow-focus",
-          isActive && "bg-muted ring-1 ring-ring/30",
-          token.familiarity === "known" &&
-            "bg-blue-100/90 text-blue-900 hover:bg-blue-200/80",
-          token.familiarity === "fresh" &&
-            "bg-emerald-100/90 text-emerald-900 hover:bg-emerald-200/80",
+          'cursor-pointer rounded-sm px-0.5 transition-colors',
+          'hover:bg-muted/70 focus-visible:outline-none focus-visible:shadow-focus',
+          isActive && 'bg-muted ring-1 ring-ring/30',
+          token.familiarity === 'known' &&
+            'bg-blue-100/90 text-blue-900 hover:bg-blue-200/80',
+          token.familiarity === 'fresh' &&
+            'bg-emerald-100/90 text-emerald-900 hover:bg-emerald-200/80',
         )}
       >
         {token.text}
@@ -203,7 +200,7 @@ export function SentenceAnalysisPanel({
                     )
                   }
                 />
-                {index < words.length - 1 && " "}
+                {index < words.length - 1 && ' '}
               </span>
             ))}
           </p>

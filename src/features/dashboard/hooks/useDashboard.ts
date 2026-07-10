@@ -1,6 +1,6 @@
-import { dashboardApi } from "../api/dashboard.api";
-import { useEffect, useState } from "react";
-import type { VideoDto } from "../api/dashboard.types";
+import { dashboardApi } from '../api/dashboard.api';
+import { useEffect, useState } from 'react';
+import type { VideoDto } from '../api/dashboard.types';
 
 export const useDashboard = () => {
   const [videos, setVideos] = useState<VideoDto[]>([]);
@@ -18,7 +18,7 @@ export const useDashboard = () => {
       })
       .catch(() => {
         if (cancelled) return;
-        setError("Nie udało się pobrać listy filmów.");
+        setError('Nie udało się pobrać listy filmów.');
       })
       .finally(() => {
         if (!cancelled) setIsLoading(false);

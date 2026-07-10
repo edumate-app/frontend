@@ -1,4 +1,4 @@
-import { apiClient } from "@/app/api/apiClient";
+import { apiClient } from '@/app/api/apiClient';
 import type {
   ImportRequest,
   ImportResponse,
@@ -6,7 +6,7 @@ import type {
   TranscriptResponse,
   UpdatePositionRequest,
   VideoDto,
-} from "./dashboard.types";
+} from './dashboard.types';
 
 export const dashboardApi = {
   validateYtUrl: (url: string) =>

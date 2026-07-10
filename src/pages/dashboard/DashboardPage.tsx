@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import {
   Play,
   MoreHorizontal,
@@ -10,11 +10,11 @@ import {
   BookOpen,
   Plus,
   Calendar,
-} from "lucide-react";
-import { PageHeader } from "@/app/layouts/dashboard/components/page-header";
-import { useAuthStore } from "@/features/auth/store/auth.store";
-import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
-import { timeAgo, formatDuration } from "@/features/dashboard/utils/time";
+} from 'lucide-react';
+import { PageHeader } from '@/app/layouts/dashboard/components/page-header';
+import { useAuthStore } from '@/features/auth/store/auth.store';
+import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
+import { timeAgo, formatDuration } from '@/features/dashboard/utils/time';
 
 export default function DashboardPage() {
   const user = useAuthStore((s) => s.user);
@@ -25,7 +25,7 @@ export default function DashboardPage() {
     <div className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
       <div className="space-y-6">
         <PageHeader
-          title={`Witaj ponownie, ${user?.name.split(" ")[0]}! 👋`}
+          title={`Witaj ponownie, ${user?.name.split(' ')[0]}! 👋`}
           description="Gotowy na kolejną sesję nauki?"
           actions={
             <Button asChild>
@@ -46,7 +46,7 @@ export default function DashboardPage() {
             </div>
             <div className="mt-2 flex items-end justify-between">
               <span className="font-display text-3xl font-semibold">
-                24{" "}
+                24{' '}
                 <span className="text-base font-normal text-muted-foreground">
                   karty
                 </span>
@@ -118,8 +118,8 @@ export default function DashboardPage() {
                           2, 3, 4, 6, 7, 9, 10, 12, 13, 14, 16, 18, 20, 21, 23,
                           24, 25, 26, 27,
                         ].includes(i)
-                          ? "bg-primary-400"
-                          : "bg-muted"
+                          ? 'bg-primary-400'
+                          : 'bg-muted'
                       }`}
                     >
                       {i + 1}
@@ -136,8 +136,8 @@ export default function DashboardPage() {
                       key={`jun-${i}`}
                       className={`h-4 w-4 flex items-center justify-center text-[10px] rounded-sm ${
                         [1, 2, 5, 6, 8, 9, 12, 15, 18, 21, 24, 27].includes(i)
-                          ? "bg-primary-400"
-                          : "bg-muted"
+                          ? 'bg-primary-400'
+                          : 'bg-muted'
                       }`}
                     >
                       {i + 1}

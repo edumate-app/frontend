@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 let apiReadyPromise: Promise<void> | null = null;
 
@@ -14,8 +14,8 @@ function loadYouTubeApi(): Promise<void> {
     };
 
     if (!document.querySelector('script[src*="iframe_api"]')) {
-      const tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
       document.head.appendChild(tag);
     }
   });
@@ -45,7 +45,7 @@ export function useYouTubePlayer(
 
     const syncTime = () => {
       const time = playerRef.current?.getCurrentTime();
-      if (typeof time === "number") setCurrentTime(time);
+      if (typeof time === 'number') setCurrentTime(time);
     };
 
     const startPolling = () => {
@@ -75,8 +75,8 @@ export function useYouTubePlayer(
 
       playerRef.current = new window.YT.Player(container, {
         videoId,
-        width: "100%",
-        height: "100%",
+        width: '100%',
+        height: '100%',
         playerVars: {
           rel: 0,
           modestbranding: 1,
@@ -92,8 +92,7 @@ export function useYouTubePlayer(
             setIsReady(true);
           },
           onStateChange: (event) => {
-            const { PLAYING, PAUSED, ENDED, BUFFERING } =
-              window.YT.PlayerState;
+            const { PLAYING, PAUSED, ENDED, BUFFERING } = window.YT.PlayerState;
 
             if (event.data === PLAYING) {
               startPolling();

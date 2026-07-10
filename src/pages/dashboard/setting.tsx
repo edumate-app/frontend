@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -8,29 +8,29 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { PageHeader } from "@/app/layouts/dashboard/components/page-header";
-import { LANGUAGES } from "@/features/dashboard/constants";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertTriangle } from "lucide-react";
-import { useAuthStore } from "@/features/auth/store/auth.store";
-import { useUpdateNativeLang } from "@/features/dashboard/hooks/useUpdateNativeLang";
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/app/layouts/dashboard/components/page-header';
+import { LANGUAGES } from '@/features/dashboard/constants';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AlertTriangle } from 'lucide-react';
+import { useAuthStore } from '@/features/auth/store/auth.store';
+import { useUpdateNativeLang } from '@/features/dashboard/hooks/useUpdateNativeLang';
 
 export default function SettingsPage() {
   const { user } = useAuthStore();
 
-  const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [originalLanguage, setOriginalLanguage] = useState("");
+  const [originalLanguage, setOriginalLanguage] = useState('');
 
   const { updateNativeLang } = useUpdateNativeLang();
 
@@ -51,14 +51,14 @@ export default function SettingsPage() {
     setIsLoading(false);
   };
 
-  const hasNativeLang = user?.nativeLang && user.nativeLang !== "";
+  const hasNativeLang = user?.nativeLang && user.nativeLang !== '';
 
   return (
     <div className="mx-auto w-full px-4 py-5 sm:px-6 lg:px-8">
       <div className="max-w-3xl space-y-6">
         <PageHeader
           title="Ustawienia"
-          breadcrumbs={[{ label: "Dashboard" }, { label: "Ustawienia" }]}
+          breadcrumbs={[{ label: 'Dashboard' }, { label: 'Ustawienia' }]}
         />
 
         {!hasNativeLang && (
@@ -79,8 +79,8 @@ export default function SettingsPage() {
         <Card
           className={
             !hasNativeLang
-              ? "border-2 border-yellow-500 shadow-lg shadow-yellow-500/20"
-              : ""
+              ? 'border-2 border-yellow-500 shadow-lg shadow-yellow-500/20'
+              : ''
           }
         >
           <CardHeader>
@@ -94,8 +94,8 @@ export default function SettingsPage() {
             </CardTitle>
             <CardDescription>
               {hasNativeLang
-                ? "Dostosuj języki i poziom trudności"
-                : "⚠️ Wybierz swój język ojczysty, aby kontynuować naukę"}
+                ? 'Dostosuj języki i poziom trudności'
+                : '⚠️ Wybierz swój język ojczysty, aby kontynuować naukę'}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 pt-0">
@@ -114,8 +114,8 @@ export default function SettingsPage() {
                   <SelectTrigger
                     className={
                       !hasNativeLang
-                        ? "border-yellow-500 focus:ring-yellow-500"
-                        : ""
+                        ? 'border-yellow-500 focus:ring-yellow-500'
+                        : ''
                     }
                   >
                     <SelectValue placeholder="Wybierz język" />
@@ -138,9 +138,9 @@ export default function SettingsPage() {
 
             {isLanguageChanged && (
               <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">
-                <span className="font-medium">Zmieniono język:</span>{" "}
+                <span className="font-medium">Zmieniono język:</span>{' '}
                 {LANGUAGES.find((l) => l.code === originalLanguage)?.name} (
-                {LANGUAGES.find((l) => l.code === originalLanguage)?.code}) →{" "}
+                {LANGUAGES.find((l) => l.code === originalLanguage)?.code}) →{' '}
                 {LANGUAGES.find((l) => l.code === selectedLanguage)?.name}
               </div>
             )}
@@ -179,15 +179,15 @@ export default function SettingsPage() {
               }
               className={
                 !hasNativeLang && selectedLanguage
-                  ? "bg-yellow-600 hover:bg-yellow-700"
-                  : ""
+                  ? 'bg-yellow-600 hover:bg-yellow-700'
+                  : ''
               }
             >
               {isLoading
-                ? "Zapisywanie..."
+                ? 'Zapisywanie...'
                 : hasNativeLang
-                  ? "Zapisz zmiany"
-                  : "Zapisz i kontynuuj"}
+                  ? 'Zapisz zmiany'
+                  : 'Zapisz i kontynuuj'}
             </Button>
           </CardFooter>
         </Card>

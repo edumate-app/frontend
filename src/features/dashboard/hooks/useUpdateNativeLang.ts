@@ -1,6 +1,6 @@
-import { useAuthStore } from "@/features/auth/store/auth.store";
-import { dashboardApi } from "../api/dashboard.api";
-import { authApi } from "@/features/auth/api/auth.api";
+import { useAuthStore } from '@/features/auth/store/auth.store';
+import { dashboardApi } from '../api/dashboard.api';
+import { authApi } from '@/features/auth/api/auth.api';
 
 export const useUpdateNativeLang = () => {
   const setAuth = useAuthStore((s) => s.setAuth);

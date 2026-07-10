@@ -1,4 +1,4 @@
-export type WordFamiliarity = "known" | "fresh";
+export type WordFamiliarity = 'known' | 'fresh';
 
 export type VerbConjugationForm = {
   person: string;
@@ -18,7 +18,7 @@ type SentenceAnalysisWordBase = {
 
 export type SentenceAnalysisWord =
   | (SentenceAnalysisWordBase & {
-      pos: "czasownik";
+      pos: 'czasownik';
       conjugation: VerbConjugationForm[];
       conjugationPerson: string;
     })
@@ -30,11 +30,11 @@ export type SentenceAnalysisWord =
 export function isVerbWord(
   token: SentenceAnalysisWord,
 ): token is SentenceAnalysisWordBase & {
-  pos: "czasownik";
+  pos: 'czasownik';
   conjugation: VerbConjugationForm[];
   conjugationPerson: string;
 } {
-  return token.pos === "czasownik";
+  return token.pos === 'czasownik';
 }
 
 export type SentenceAnalysis = {

@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { dashboardApi } from "../api/dashboard.api";
+import { useEffect, useRef } from 'react';
+import { dashboardApi } from '../api/dashboard.api';
 
 const SAVE_INTERVAL_MS = 5000;
 
@@ -8,11 +8,10 @@ export function useSaveWatchPosition(
   currentTime: number,
 ) {
   const currentTimeRef = useRef(currentTime);
-  
+
   useEffect(() => {
     currentTimeRef.current = currentTime;
   }, [currentTime]);
- 
 
   const lastSavedRef = useRef(-1);
 
@@ -24,7 +23,9 @@ export function useSaveWatchPosition(
       if (seconds === lastSavedRef.current) return;
 
       lastSavedRef.current = seconds;
-      dashboardApi.updatePosition(videoUuid, { positionSeconds: seconds }).catch(() => {});
+      dashboardApi
+        .updatePosition(videoUuid, { positionSeconds: seconds })
+        .catch(() => {});
     };
 
     const interval = setInterval(save, SAVE_INTERVAL_MS);

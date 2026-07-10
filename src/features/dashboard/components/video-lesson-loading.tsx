@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 export function TranscriptLoadingSkeleton({
   isFullscreen = false,
@@ -11,20 +11,20 @@ export function TranscriptLoadingSkeleton({
         <div key={index} className="space-y-2 px-4 py-3">
           <div
             className={cn(
-              "skeleton h-3 w-10 rounded",
-              isFullscreen && "bg-white/10",
+              'skeleton h-3 w-10 rounded',
+              isFullscreen && 'bg-white/10',
             )}
           />
           <div
             className={cn(
-              "skeleton h-4 w-full rounded",
-              isFullscreen && "bg-white/10",
+              'skeleton h-4 w-full rounded',
+              isFullscreen && 'bg-white/10',
             )}
           />
           <div
             className={cn(
-              "skeleton h-4 w-4/5 rounded",
-              isFullscreen && "bg-white/10",
+              'skeleton h-4 w-4/5 rounded',
+              isFullscreen && 'bg-white/10',
             )}
           />
         </div>

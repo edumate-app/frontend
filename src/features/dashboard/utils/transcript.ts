@@ -1,4 +1,4 @@
-import type { TranscriptSegment } from "@/features/dashboard/api/dashboard.types";
+import type { TranscriptSegment } from '@/features/dashboard/api/dashboard.types';
 
 export function getActiveSegmentIndex(
   segments: TranscriptSegment[],

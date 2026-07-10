@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   Film,
@@ -8,19 +8,19 @@ import {
   Settings,
   LogOut,
   Sparkles,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { useLogout } from "@/features/auth/hooks/useLogout";
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { useLogout } from '@/features/auth/hooks/useLogout';
 
 const nav = [
-  { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/app/videos", label: "Moje filmy", icon: Film },
-  { to: "/app/review", label: "Powtórki", icon: RotateCcw },
-  { to: "/app/saved", label: "Zapisane", icon: Bookmark },
-  { to: "/app/stats", label: "Statystyki", icon: BarChart3 },
-  { to: "/app/explain", label: "AI Wyjaśnienia", icon: Sparkles },
-  { to: "/app/settings", label: "Ustawienia", icon: Settings },
+  { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/app/videos', label: 'Moje filmy', icon: Film },
+  { to: '/app/review', label: 'Powtórki', icon: RotateCcw },
+  { to: '/app/saved', label: 'Zapisane', icon: Bookmark },
+  { to: '/app/stats', label: 'Statystyki', icon: BarChart3 },
+  { to: '/app/explain', label: 'AI Wyjaśnienia', icon: Sparkles },
+  { to: '/app/settings', label: 'Ustawienia', icon: Settings },
 ];
 
 type SidebarProps = {
@@ -48,10 +48,10 @@ export function Sidebar({ onNavigate }: SidebarProps) {
             onClick={onNavigate}
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium transition-colors",
+                'flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium transition-colors',
                 isActive
-                  ? "bg-primary-50 text-primary-700"
-                  : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+                  ? 'bg-primary-50 text-primary-700'
+                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
               )
             }
           >

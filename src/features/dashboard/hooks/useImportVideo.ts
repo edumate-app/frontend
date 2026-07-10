@@ -1,4 +1,4 @@
-import { dashboardApi } from "../api/dashboard.api";
+import { dashboardApi } from '../api/dashboard.api';
 
 export const useImportVideo = () => {
   const importVideo = async (url: string, targetLang: string) => {

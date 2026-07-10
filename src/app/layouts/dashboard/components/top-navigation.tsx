@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Search, Bell, Plus, Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState } from 'react';
+import { Search, Bell, Plus, Menu } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -9,13 +9,13 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { useNavigate } from "react-router-dom";
-import { UserMenu } from "@/components/UserMenu";
+} from '@/components/ui/dropdown-menu';
+import { useNavigate } from 'react-router-dom';
+import { UserMenu } from '@/components/UserMenu';
 
 export function TopNavigation({ onMenuClick }: { onMenuClick?: () => void }) {
   const navigate = useNavigate();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
 
   return (
     <header className="flex h-14 shrink-0 items-center gap-3 border-b border-border bg-surface px-4">
@@ -45,7 +45,7 @@ export function TopNavigation({ onMenuClick }: { onMenuClick?: () => void }) {
         <Button
           size="sm"
           className="hidden sm:inline-flex"
-          onClick={() => navigate("/app/videos/new")}
+          onClick={() => navigate('/app/videos/new')}
         >
           <Plus className="h-4 w-4" /> Dodaj film
         </Button>
