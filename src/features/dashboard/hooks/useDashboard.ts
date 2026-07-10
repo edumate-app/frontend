@@ -9,9 +9,6 @@ export const useDashboard = () => {
 
   useEffect(() => {
     let cancelled = false;
-    setIsLoading(true);
-    setError(null);
-    setVideos([]);
 
     dashboardApi
       .getVideos()

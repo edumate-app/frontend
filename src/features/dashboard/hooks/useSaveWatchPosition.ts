@@ -8,7 +8,11 @@ export function useSaveWatchPosition(
   currentTime: number,
 ) {
   const currentTimeRef = useRef(currentTime);
-  currentTimeRef.current = currentTime;
+  
+  useEffect(() => {
+    currentTimeRef.current = currentTime;
+  }, [currentTime]);
+ 
 
   const lastSavedRef = useRef(-1);
 

@@ -8,45 +8,59 @@ export const useGetTranscript = () => {
   const [segments, setSegments] = useState<TranscriptSegment[]>([]);
   const [videoId, setVideoId] = useState<string | null>(null);
   const [lastPositionSeconds, setLastPositionSeconds] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [loadedVideoUuid, setLoadedVideoUuid] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!video_uuid) {
-      setIsLoading(false);
-      setError("Brak identyfikatora wideo.");
-      return;
-    }
+  const isLoading = Boolean(video_uuid && video_uuid !== loadedVideoUuid);
 
+  useEffect(() => {
+
+    if (!video_uuid) return;
     let cancelled = false;
-    setIsLoading(true);
-    setError(null);
-    setVideoId(null);
-    setSegments([]);
-    setLastPositionSeconds(0);
 
     dashboardApi
       .getTranscript(video_uuid)
       .then((response) => {
+
         if (cancelled) return;
         setSegments(response.data.segments);
         setVideoId(response.data.video_id);
         setLastPositionSeconds(response.data.lastPositionSeconds);
+        setLoadedVideoUuid(video_uuid);
+        setError(null);
       })
+
       .catch((err) => {
-        if (err.response.status === 400) navigate("/app/settings");
+        if (err.response?.status === 400) navigate("/app/settings");
         if (cancelled) return;
         setError("Nie udało się pobrać transkrypcji.");
-      })
-      .finally(() => {
-        if (!cancelled) setIsLoading(false);
+        setLoadedVideoUuid(video_uuid);
       });
+
+
 
     return () => {
       cancelled = true;
     };
-  }, [video_uuid]);
 
-  return { segments, videoId, lastPositionSeconds, isLoading, error };
+  }, [video_uuid, navigate]);
+
+  if (!video_uuid) {
+    return {
+      segments: [],
+      videoId: null,
+      lastPositionSeconds: 0,
+      isLoading: false,
+      error: "Brak identyfikatora wideo.",
+    };
+  }
+
+  return {
+    segments: segments,
+    videoId: videoId,
+    lastPositionSeconds: lastPositionSeconds,
+    isLoading,
+    error: error,
+  };
 };
