@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   Play,
   Sparkles,
@@ -9,9 +9,9 @@ import {
   ChevronRight,
   Quote,
   Clapperboard,
-} from "lucide-react";
-import { useAuthStore } from "@/features/auth/store/auth.store";
-import { UserMenu } from "@/components/UserMenu";
+} from 'lucide-react';
+import { useAuthStore } from '@/features/auth/store/auth.store';
+import { UserMenu } from '@/components/UserMenu';
 
 export default function HomePage() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -79,7 +79,7 @@ export default function HomePage() {
             </Button>
           </div>
           <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
-            {["Szybki start", "AI wyjaśnienia", "Skuteczne powtórki"].map(
+            {['Szybki start', 'AI wyjaśnienia', 'Skuteczne powtórki'].map(
               (t) => (
                 <span key={t} className="flex items-center gap-1.5">
                   <CheckCircle2 className="h-3.5 w-3.5 text-success" /> {t}
@@ -117,7 +117,7 @@ export default function HomePage() {
             <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
               <span className="font-medium text-foreground">
                 "I'm not sure"
-              </span>{" "}
+              </span>{' '}
               – nie jestem pewien – that's a good idea. Wyrażenie to służy do
               wyrażania wątpliwości.
             </p>
@@ -134,18 +134,18 @@ export default function HomePage() {
             {[
               {
                 icon: Play,
-                title: "Import z YouTube",
-                desc: "Wklej dowolny link, a system pobierze transkrypcję i podzieli ją na zdania.",
+                title: 'Import z YouTube',
+                desc: 'Wklej dowolny link, a system pobierze transkrypcję i podzieli ją na zdania.',
               },
               {
                 icon: Sparkles,
-                title: "AI tłumaczenie i wyjaśnienia",
-                desc: "Każde zdanie zostaje przetłumaczone i wyjaśnione w kontekście gramatycznym.",
+                title: 'AI tłumaczenie i wyjaśnienia',
+                desc: 'Każde zdanie zostaje przetłumaczone i wyjaśnione w kontekście gramatycznym.',
               },
               {
                 icon: RotateCcw,
-                title: "Inteligentne powtórki SRS",
-                desc: "Algorytm odstępów dba o to, byś zapamiętał słówka na dłużej.",
+                title: 'Inteligentne powtórki SRS',
+                desc: 'Algorytm odstępów dba o to, byś zapamiętał słówka na dłużej.',
               },
             ].map((f) => (
               <div

@@ -1,7 +1,7 @@
-import type { AuthProvider } from "@/features/auth/api/auth.types";
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
-import { env } from "@/utils/env";
+import type { AuthProvider } from '@/features/auth/api/auth.types';
+import { Button } from './ui/button';
+import { Separator } from './ui/separator';
+import { env } from '@/utils/env';
 
 export const OAuth2Buttons = () => {
   const redirectToOAuth = (provider: AuthProvider) => {
@@ -14,7 +14,7 @@ export const OAuth2Buttons = () => {
         <Button
           variant="outline"
           type="button"
-          onClick={() => redirectToOAuth("google")}
+          onClick={() => redirectToOAuth('google')}
         >
           <GoogleIcon />
           Google
@@ -23,7 +23,7 @@ export const OAuth2Buttons = () => {
         <Button
           variant="outline"
           type="button"
-          onClick={() => redirectToOAuth("github")}
+          onClick={() => redirectToOAuth('github')}
         >
           <GithubIcon />
           GitHub

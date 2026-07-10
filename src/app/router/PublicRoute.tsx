@@ -1,5 +1,5 @@
-import { useAuthStore } from "@/features/auth/store/auth.store";
-import { Navigate, Outlet } from "react-router-dom";
+import { useAuthStore } from '@/features/auth/store/auth.store';
+import { Navigate, Outlet } from 'react-router-dom';
 
 export const PublicRoute = () => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -13,7 +13,7 @@ export const PublicRoute = () => {
     return <Navigate to="/app/dashboard" replace />;
   }
   console.log(
-    "PublicRoute: User is not authenticated, rendering public content.",
+    'PublicRoute: User is not authenticated, rendering public content.',
   );
   return <Outlet />;
 };

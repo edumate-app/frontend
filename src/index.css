@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lexend:wght@500;600;700;800&display=swap");
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lexend:wght@500;600;700;800&display=swap');
+@import 'tailwindcss';
 @config "../tailwind.config.ts";
 
 @layer base {
@@ -56,7 +56,7 @@
   }
   body {
     @apply bg-canvas text-foreground font-sans antialiased;
-    font-feature-settings: "ss01", "cv01";
+    font-feature-settings: 'ss01', 'cv01';
   }
   h1,
   h2,
@@ -71,7 +71,7 @@
     @apply relative overflow-hidden bg-muted;
   }
   .skeleton::after {
-    content: "";
+    content: '';
     @apply absolute inset-0;
     background: linear-gradient(
       90deg,
