@@ -5,6 +5,11 @@ import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
 import { AppLayout } from '../layouts/AppLayout';
+import { DashboardLayout } from '../layouts/dashboard/DashboardLayout';
+import DashboardPage from '@/pages/dashboard/DashboardPage';
+import AddVideo from '@/pages/dashboard/AddVideo';
+import VideoLessonPage from '@/pages/dashboard/video-lesson';
+import SettingsPage from '@/pages/dashboard/setting';
 
 export const router = createBrowserRouter([
   {
@@ -27,10 +32,23 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
+            element: <DashboardLayout />,
             children: [
               {
-                path: '/dashboard',
-                element: <h1>Dashboard Page</h1>,
+                path: '/app/dashboard',
+                element: <DashboardPage />,
+              },
+              {
+                path: '/app/videos/new',
+                element: <AddVideo />,
+              },
+              {
+                path: '/app/settings',
+                element: <SettingsPage />,
+              },
+              {
+                path: '/app/videos/:video_uuid',
+                element: <VideoLessonPage />,
               },
             ],
           },

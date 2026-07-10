@@ -14,6 +14,7 @@ export const useAuthStatus = () => {
         setAuth({
           email: data.email,
           name: data.name,
+          nativeLang: data.nativeLang,
           avatarUrl: data.avatarUrl,
         });
       })

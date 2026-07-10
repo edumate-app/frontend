@@ -34,7 +34,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login(email, password);
-      navigate('/dashboard', { replace: true });
+      navigate('/app/dashboard', { replace: true });
     } catch {
       setLoading(false);
       setErrors({ email: 'Nieprawidłowy e-mail lub hasło.' });

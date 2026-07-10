@@ -62,7 +62,7 @@ export default function RegisterPage() {
     try {
       await register(name, email, password);
       setSuccess(true);
-      setTimeout(() => navigate('/dashboard', { replace: true }), 1400);
+      setTimeout(() => navigate('/app/dashboard', { replace: true }), 1400);
     } catch {
       setErrors({ email: 'Registration failed. Please try again' });
     } finally {

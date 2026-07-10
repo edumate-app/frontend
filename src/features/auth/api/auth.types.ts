@@ -12,6 +12,7 @@ export type RegisterRequest = {
 export type UserDto = {
   email: string;
   name: string;
+  nativeLang: string | null;
   avatarUrl: string | null;
 };
 
