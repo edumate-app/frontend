@@ -35,7 +35,7 @@ export function TranscriptLoadingSkeleton({
 
 export function LessonLoadingPanel() {
   return (
-    <div className="flex flex-1 flex-col justify-center gap-4 border-t bg-canvas px-6 py-10">
+    <div className="flex shrink-0 flex-col justify-center gap-4 border-t bg-canvas px-6 py-6">
       <div className="mx-auto w-full max-w-md space-y-3">
         <div className="skeleton mx-auto h-5 w-56 rounded" />
         <div className="skeleton mx-auto h-4 w-full max-w-sm rounded" />

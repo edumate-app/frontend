@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Loader2, Maximize2, Minimize2 } from "lucide-react";
 import { useGetTranscript } from "@/features/dashboard/hooks/useGetTranscript";
+import { SentenceAnalysisPanel } from "@/features/dashboard/components/sentence-analysis-panel";
 import {
   LessonLoadingPanel,
   TranscriptLoadingSkeleton,
@@ -31,20 +32,6 @@ type TranscriptPanelProps = {
   transcriptProps: TranscriptListProps;
   errorClassName?: string;
 };
-
-function LessonLandingPanel() {
-  return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-2 border-t bg-canvas px-6 py-10 text-center">
-      <p className="text-base font-medium text-foreground">
-        Wybierz zdanie z transkrypcji
-      </p>
-      <p className="max-w-sm text-sm text-muted-foreground">
-        Kliknij dowolną linię po prawej, aby zobaczyć pełną analizę gramatyczną
-        i słownikową każdego słowa.
-      </p>
-    </div>
-  );
-}
 
 function TranscriptPanel({
   isLoading,
@@ -219,22 +206,24 @@ export default function VideoLessonPage() {
   return (
     <div
       className={cn(
-        isFullscreen ? "fixed inset-0 z-50 flex bg-black" : "w-full",
+        isFullscreen
+          ? "fixed inset-0 z-50 flex bg-black"
+          : "flex h-full min-h-0 w-full flex-col",
       )}
     >
       <div
         className={cn(
-          "flex min-w-0",
-          isFullscreen
-            ? "flex-1"
-            : "flex-col lg:flex-row lg:min-h-[calc(100vh-7rem)]",
+          "flex min-h-0 min-w-0",
+          isFullscreen ? "flex-1" : "h-full flex-col lg:flex-row",
         )}
       >
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
           <div
             className={cn(
-              "group relative overflow-hidden bg-black",
-              isFullscreen && "flex flex-1 items-center justify-center p-4",
+              "group relative min-h-0 overflow-hidden bg-black",
+              isFullscreen
+                ? "flex flex-1 items-center justify-center p-4"
+                : "min-h-0 flex-1",
             )}
           >
             <div
@@ -243,7 +232,7 @@ export default function VideoLessonPage() {
                 "overflow-hidden [&_iframe]:h-full [&_iframe]:w-full [&_iframe]:border-0",
                 isFullscreen
                   ? "aspect-video max-h-full w-full"
-                  : "aspect-video w-full",
+                  : "h-full w-full",
               )}
             />
             {isPlayerLoading && (
@@ -281,15 +270,15 @@ export default function VideoLessonPage() {
           </div>
 
           {!isFullscreen &&
-            (isLoading ? <LessonLoadingPanel /> : <LessonLandingPanel />)}
+            (isLoading ? <LessonLoadingPanel /> : <SentenceAnalysisPanel />)}
         </div>
 
         <div
           className={cn(
-            "flex w-full shrink-0 flex-col border-l",
+            "flex min-h-0 w-full shrink-0 flex-col border-l",
             isFullscreen
               ? "w-72 border-white/10 xl:w-80"
-              : "lg:w-80 xl:w-96 lg:max-h-[calc(100vh-4rem)]",
+              : "min-h-48 flex-1 border-t lg:h-full lg:max-h-none lg:flex-none lg:border-t-0 lg:w-80 xl:w-96",
           )}
         >
           {isFullscreen && (
