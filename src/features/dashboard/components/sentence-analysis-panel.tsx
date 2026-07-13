@@ -5,6 +5,7 @@ import {
   type SentenceAnalysis,
   type SentenceAnalysisWord,
 } from '@/features/dashboard/types/sentence-analysis.types';
+import { STANZA_POS_POLISH_LABELS } from '@/features/dashboard/types/stanza-pos.types';
 import { cn } from '@/lib/utils';
 
 function formatTime(seconds: number) {
@@ -49,7 +50,9 @@ function WordDetailCard({ token }: { token: SentenceAnalysisWord }) {
         </div>
         <div className="flex gap-2">
           <dt className="shrink-0 text-muted-foreground">Część mowy:</dt>
-          <dd className="text-foreground">{token.pos}</dd>
+          <dd className="text-foreground">
+            {STANZA_POS_POLISH_LABELS[token.pos]}
+          </dd>
         </div>
         <div className="flex gap-2">
           <dt className="shrink-0 text-muted-foreground">Forma:</dt>
@@ -61,7 +64,7 @@ function WordDetailCard({ token }: { token: SentenceAnalysisWord }) {
             <dd className="text-foreground">{token.tense}</dd>
           </div>
         )}
-        {isVerbWord(token) ? (
+        {isVerbWord(token) && token.conjugation ? (
           <div>
             <dt className="text-muted-foreground">
               Odmiana (tryb oznajmujący, czas teraźniejszy):
@@ -87,6 +90,7 @@ function WordDetailCard({ token }: { token: SentenceAnalysisWord }) {
             </dd>
           </div>
         ) : (
+          token.family &&
           token.family.length > 1 && (
             <div>
               <dt className="text-muted-foreground">Rodzina:</dt>
@@ -130,9 +134,9 @@ function WordBlock({
           'cursor-pointer rounded-sm px-0.5 transition-colors',
           'hover:bg-muted/70 focus-visible:outline-none focus-visible:shadow-focus',
           isActive && 'bg-muted ring-1 ring-ring/30',
-          token.familiarity === 'known' &&
+          token.userStatus === 'known' &&
             'bg-blue-100/90 text-blue-900 hover:bg-blue-200/80',
-          token.familiarity === 'fresh' &&
+          token.userStatus === 'fresh' &&
             'bg-emerald-100/90 text-emerald-900 hover:bg-emerald-200/80',
         )}
       >

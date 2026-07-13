@@ -10,9 +10,10 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
       translation: 'jeśli',
       lemma: 'si',
       lemmaTranslation: 'jeśli',
-      pos: 'spójnik',
+      pos: 'SCONJ',
       form: '—',
       family: ['si'],
+      userStatus: 'known',
     },
     {
       id: 'hubiera',
@@ -20,7 +21,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
       translation: 'miałbym / miałabym',
       lemma: 'haber',
       lemmaTranslation: 'mieć',
-      pos: 'czasownik',
+      pos: 'AUX',
       form: 'pluskwamperfekt trybu podrzędnego',
       tense: 'czasownik posiłkowy',
       conjugation: [
@@ -32,7 +33,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
         { person: 'ellos/ellas', form: 'han' },
       ],
       conjugationPerson: 'yo',
-      familiarity: 'known',
+      userStatus: 'known',
     },
     {
       id: 'sabido',
@@ -40,7 +41,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
       translation: 'wiedziałem / wiedziałam',
       lemma: 'saber',
       lemmaTranslation: 'wiedzieć',
-      pos: 'czasownik',
+      pos: 'VERB',
       form: 'imiesłów bierny',
       tense: 'pluskwamperfekt trybu podrzędnego',
       conjugation: [
@@ -52,7 +53,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
         { person: 'ellos/ellas', form: 'saben' },
       ],
       conjugationPerson: 'yo',
-      familiarity: 'fresh',
+      userStatus: 'fresh',
     },
     {
       id: 'antes',
@@ -60,10 +61,10 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
       translation: 'wcześniej',
       lemma: 'antes',
       lemmaTranslation: 'wcześniej',
-      pos: 'przysłówek',
+      pos: 'ADV',
       form: '—',
       family: ['antes', 'antes de', 'antes de que'],
-      familiarity: 'fresh',
+      userStatus: 'fresh',
     },
     {
       id: 'habria',
@@ -71,7 +72,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
       translation: 'byłbym / byłabym',
       lemma: 'haber',
       lemmaTranslation: 'mieć',
-      pos: 'czasownik',
+      pos: 'AUX',
       form: 'tryb warunkowy',
       tense: 'czasownik posiłkowy',
       conjugation: [
@@ -83,7 +84,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
         { person: 'ellos/ellas', form: 'han' },
       ],
       conjugationPerson: 'yo',
-      familiarity: 'fresh',
+      userStatus: 'fresh',
     },
     {
       id: 'ido',
@@ -91,7 +92,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
       translation: 'poszedłem / poszłam',
       lemma: 'ir',
       lemmaTranslation: 'iść',
-      pos: 'czasownik',
+      pos: 'VERB',
       form: 'imiesłów bierny',
       tense: 'tryb warunkowy złożony',
       conjugation: [
@@ -103,6 +104,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
         { person: 'ellos/ellas', form: 'van' },
       ],
       conjugationPerson: 'yo',
+      userStatus: 'fresh',
     },
     {
       id: 'contigo',
@@ -110,10 +112,10 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
       translation: 'z tobą',
       lemma: 'tú',
       lemmaTranslation: 'ty',
-      pos: 'zaimek',
+      pos: 'PRON',
       form: 'z przyimkiem',
       family: ['tú', 'ti', 'te', 'contigo'],
-      familiarity: 'known',
+      userStatus: 'known',
     },
   ],
 };
