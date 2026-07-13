@@ -1,11 +1,10 @@
 import { useId, useState } from 'react';
 import { MOCK_SENTENCE_ANALYSIS } from '@/features/dashboard/mocks/sentence-analysis.mock';
+import { ExpressionWordDetails } from '@/features/dashboard/components/expression-word-details';
 import {
-  isVerbWord,
   type SentenceAnalysis,
   type SentenceAnalysisWord,
 } from '@/features/dashboard/types/sentence-analysis.types';
-import { STANZA_POS_POLISH_LABELS } from '@/features/dashboard/types/stanza-pos.types';
 import { cn } from '@/lib/utils';
 
 function formatTime(seconds: number) {
@@ -33,78 +32,7 @@ function WordDetailCard({ token }: { token: SentenceAnalysisWord }) {
       >
         {token.text.replace(/[.,!?]$/, '')}
       </p>
-      <dl className="mt-2 space-y-1 text-xs">
-        <div className="flex gap-2">
-          <dt className="shrink-0 text-muted-foreground">Tłumaczenie:</dt>
-          <dd className="text-foreground">{token.translation}</dd>
-        </div>
-        <div className="flex gap-2">
-          <dt className="shrink-0 text-muted-foreground">
-            {isVerbWord(token) ? 'Lemat (bezokolicznik):' : 'Lemat:'}
-          </dt>
-          <dd className="text-foreground">
-            <span className="font-mono">{token.lemma}</span>
-            {' — '}
-            {token.lemmaTranslation}
-          </dd>
-        </div>
-        <div className="flex gap-2">
-          <dt className="shrink-0 text-muted-foreground">Część mowy:</dt>
-          <dd className="text-foreground">
-            {STANZA_POS_POLISH_LABELS[token.pos]}
-          </dd>
-        </div>
-        <div className="flex gap-2">
-          <dt className="shrink-0 text-muted-foreground">Forma:</dt>
-          <dd className="text-foreground">{token.form}</dd>
-        </div>
-        {token.tense && (
-          <div className="flex gap-2">
-            <dt className="shrink-0 text-muted-foreground">Czas:</dt>
-            <dd className="text-foreground">{token.tense}</dd>
-          </div>
-        )}
-        {isVerbWord(token) && token.conjugation ? (
-          <div>
-            <dt className="text-muted-foreground">
-              Odmiana (tryb oznajmujący, czas teraźniejszy):
-            </dt>
-            <dd className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5">
-              {token.conjugation.map((entry) => {
-                const isActivePerson = entry.person === token.conjugationPerson;
-
-                return (
-                  <p key={entry.person} className="font-mono text-foreground">
-                    <span
-                      className={cn(
-                        isActivePerson &&
-                          'font-semibold underline decoration-2 underline-offset-2',
-                      )}
-                    >
-                      {entry.person}
-                    </span>{' '}
-                    {entry.form}
-                  </p>
-                );
-              })}
-            </dd>
-          </div>
-        ) : (
-          token.family &&
-          token.family.length > 1 && (
-            <div>
-              <dt className="text-muted-foreground">Rodzina:</dt>
-              <dd className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5">
-                {token.family.map((word) => (
-                  <p key={word} className="font-mono text-foreground">
-                    {word}
-                  </p>
-                ))}
-              </dd>
-            </div>
-          )
-        )}
-      </dl>
+      <ExpressionWordDetails word={token} className="mt-2" />
     </div>
   );
 }
@@ -154,7 +82,9 @@ function ExpressionLegend() {
       <span className="flex items-start gap-2">
         <span className="mt-0.5 inline-block h-3 w-5 shrink-0 rounded-sm bg-emerald-100 ring-1 ring-emerald-200/80" />
         <span>
-          <span className="block font-medium text-foreground">Nowe w bibliotece</span>
+          <span className="block font-medium text-foreground">
+            Nowe w bibliotece
+          </span>
           Dopiero dodane wyrażenie
         </span>
       </span>

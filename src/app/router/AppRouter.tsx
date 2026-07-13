@@ -10,6 +10,7 @@ import DashboardPage from '@/pages/dashboard/DashboardPage';
 import AddVideo from '@/pages/dashboard/AddVideo';
 import VideoLessonPage from '@/pages/dashboard/video-lesson';
 import SettingsPage from '@/pages/dashboard/setting';
+import SavedPage from '@/pages/dashboard/SavedPage';
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ export const router = createBrowserRouter([
               {
                 path: '/app/settings',
                 element: <SettingsPage />,
+              },
+              {
+                path: '/app/saved',
+                element: <SavedPage />,
               },
               {
                 path: '/app/videos/:video_uuid',
