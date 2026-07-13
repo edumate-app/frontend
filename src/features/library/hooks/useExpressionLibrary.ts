@@ -34,7 +34,8 @@ export function useExpressionLibrary(
   const [expressions, setExpressions] =
     useState<LibraryExpression[]>(initialExpressions);
   const [query, setQuery] = useState('');
-  const [searchLanguage, setSearchLanguage] = useState<SearchLanguage>('target');
+  const [searchLanguage, setSearchLanguage] =
+    useState<SearchLanguage>('target');
   const [selectedId, setSelectedId] = useState<string | null>(
     initialExpressions[0]?.id ?? null,
   );

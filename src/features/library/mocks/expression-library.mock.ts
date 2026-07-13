@@ -44,7 +44,8 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       {
         id: 'ctx-sabido-3',
         targetSentence: 'Nunca habría sabido la verdad sin tu ayuda.',
-        nativeTranslation: 'Nigdy nie dowiedziałbym się prawdy bez twojej pomocy.',
+        nativeTranslation:
+          'Nigdy nie dowiedziałbym się prawdy bez twojej pomocy.',
         videoId: 'n4rc0s01',
         videoTitle: 'Narcos — S01E06',
         startSeconds: 1102,
@@ -140,7 +141,8 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       {
         id: 'ctx-antes-6',
         targetSentence: 'Antes no me importaba tanto lo que pensaran.',
-        nativeTranslation: 'Wcześniej tak bardzo nie obchodziło mnie, co myślą.',
+        nativeTranslation:
+          'Wcześniej tak bardzo nie obchodziło mnie, co myślą.',
         videoId: 'm3n4o5p6',
         videoTitle: 'Elite — S02E04',
         startSeconds: 967,
@@ -347,7 +349,8 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       {
         id: 'ctx-si-5',
         targetSentence: 'Si todo sale bien, celebramos el viernes.',
-        nativeTranslation: 'Jeśli wszystko pójdzie dobrze, świętujemy w piątek.',
+        nativeTranslation:
+          'Jeśli wszystko pójdzie dobrze, świętujemy w piątek.',
         videoId: 'p4qk1t4s',
         videoTitle: 'Paquitas Salas — S01E04',
         startSeconds: 198,
@@ -512,7 +515,8 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       {
         id: 'ctx-ido-6',
         targetSentence: 'Nunca habría ido tan lejos sin tu apoyo.',
-        nativeTranslation: 'Nigdy nie poszedłbym tak daleko bez twojego wsparcia.',
+        nativeTranslation:
+          'Nigdy nie poszedłbym tak daleko bez twojego wsparcia.',
         videoId: 'p4qk1t4s',
         videoTitle: 'Paquitas Salas — S03E02',
         startSeconds: 512,
@@ -581,7 +585,8 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       {
         id: 'ctx-todavia-6',
         targetSentence: 'Todavía recuerdo la primera vez que nos vimos.',
-        nativeTranslation: 'Jeszcze pamiętam pierwszy raz, kiedy się spotkaliśmy.',
+        nativeTranslation:
+          'Jeszcze pamiętam pierwszy raz, kiedy się spotkaliśmy.',
         videoId: 'p4qk1t4s',
         videoTitle: 'Paquitas Salas — S02E05',
         startSeconds: 234,
@@ -641,7 +646,8 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       {
         id: 'ctx-quedar-4',
         targetSentence: 'Quedamos en vernos el sábado por la tarde.',
-        nativeTranslation: 'Umówiliśmy się, że zobaczymy się w sobotę po południu.',
+        nativeTranslation:
+          'Umówiliśmy się, że zobaczymy się w sobotę po południu.',
         videoId: 'a1b2c3d4',
         videoTitle: 'La Casa de Papel — S02E04',
         startSeconds: 567,
@@ -788,7 +794,8 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       {
         id: 'ctx-deberias-4',
         targetSentence: 'Deberías pensarlo dos veces antes de decidir.',
-        nativeTranslation: 'Powinieneś się dwa razy zastanowić, zanim zdecydujesz.',
+        nativeTranslation:
+          'Powinieneś się dwa razy zastanowić, zanim zdecydujesz.',
         videoId: 'n4rc0s01',
         videoTitle: 'Narcos — S01E10',
         startSeconds: 1456,
@@ -925,8 +932,10 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       },
       {
         id: 'ctx-sin-embargo-4',
-        targetSentence: 'Todo parecía perdido; sin embargo, encontraron una salida.',
-        nativeTranslation: 'Wszystko wydawało się stracone; jednak znaleźli wyjście.',
+        targetSentence:
+          'Todo parecía perdido; sin embargo, encontraron una salida.',
+        nativeTranslation:
+          'Wszystko wydawało się stracone; jednak znaleźli wyjście.',
         videoId: 'v4l3r14a',
         videoTitle: 'Valeria — S02E08',
         startSeconds: 1123,
@@ -1004,7 +1013,8 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       {
         id: 'ctx-aunque-5',
         targetSentence: 'Aunque no me guste, lo haré por ti.',
-        nativeTranslation: 'Chociaż mi się to nie podoba, zrobię to dla ciebie.',
+        nativeTranslation:
+          'Chociaż mi się to nie podoba, zrobię to dla ciebie.',
         videoId: 'p4qk1t4s',
         videoTitle: 'Paquitas Salas — S01E08',
         startSeconds: 423,
@@ -1133,7 +1143,8 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       {
         id: 'ctx-cuenta-2',
         targetSentence: 'Aquí no cuenta lo que digas, sino lo que hagas.',
-        nativeTranslation: 'Tu nie liczy się to, co mówisz, tylko to, co robisz.',
+        nativeTranslation:
+          'Tu nie liczy się to, co mówisz, tylko to, co robisz.',
         videoId: 'n4rc0s01',
         videoTitle: 'Narcos — S01E05',
         startSeconds: 721,
@@ -1151,7 +1162,8 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       {
         id: 'ctx-cuenta-4',
         targetSentence: 'No cuenta como excusa lo que pasó ayer.',
-        nativeTranslation: 'To, co się wczoraj stało, nie liczy się jako wymówka.',
+        nativeTranslation:
+          'To, co się wczoraj stało, nie liczy się jako wymówka.',
         videoId: 'a1b2c3d4',
         videoTitle: 'La Casa de Papel — S04E02',
         startSeconds: 1123,
