@@ -2,31 +2,30 @@ import { useMemo, useState } from 'react';
 import { MOCK_EXPRESSION_LIBRARY } from '@/features/library/mocks/expression-library.mock';
 import type { LibraryExpression } from '@/features/library/types/expression-library.types';
 
+export type SearchLanguage = 'target' | 'native';
+
 function matchesSearch(
   expression: LibraryExpression,
-  targetQuery: string,
-  nativeQuery: string,
+  query: string,
+  searchLanguage: SearchLanguage,
 ) {
-  const target = targetQuery.trim().toLowerCase();
-  const native = nativeQuery.trim().toLowerCase();
+  const normalizedQuery = query.trim().toLowerCase();
 
-  const matchesTarget =
-    !target ||
-    expression.text.toLowerCase().includes(target) ||
-    expression.lemma.toLowerCase().includes(target) ||
-    expression.contexts.some((context) =>
-      context.targetSentence.toLowerCase().includes(target),
+  if (!normalizedQuery) {
+    return true;
+  }
+
+  if (searchLanguage === 'target') {
+    return (
+      expression.text.toLowerCase().includes(normalizedQuery) ||
+      expression.lemma.toLowerCase().includes(normalizedQuery)
     );
+  }
 
-  const matchesNative =
-    !native ||
-    expression.translation.toLowerCase().includes(native) ||
-    expression.lemmaTranslation.toLowerCase().includes(native) ||
-    expression.contexts.some((context) =>
-      context.nativeTranslation.toLowerCase().includes(native),
-    );
-
-  return matchesTarget && matchesNative;
+  return (
+    expression.translation.toLowerCase().includes(normalizedQuery) ||
+    expression.lemmaTranslation.toLowerCase().includes(normalizedQuery)
+  );
 }
 
 export function useExpressionLibrary(
@@ -34,8 +33,8 @@ export function useExpressionLibrary(
 ) {
   const [expressions, setExpressions] =
     useState<LibraryExpression[]>(initialExpressions);
-  const [targetQuery, setTargetQuery] = useState('');
-  const [nativeQuery, setNativeQuery] = useState('');
+  const [query, setQuery] = useState('');
+  const [searchLanguage, setSearchLanguage] = useState<SearchLanguage>('target');
   const [selectedId, setSelectedId] = useState<string | null>(
     initialExpressions[0]?.id ?? null,
   );
@@ -43,14 +42,13 @@ export function useExpressionLibrary(
   const filteredExpressions = useMemo(
     () =>
       expressions.filter((expression) =>
-        matchesSearch(expression, targetQuery, nativeQuery),
+        matchesSearch(expression, query, searchLanguage),
       ),
-    [expressions, targetQuery, nativeQuery],
+    [expressions, query, searchLanguage],
   );
 
   const selectedExpression =
-    filteredExpressions.find((expression) => expression.id === selectedId) ??
-    null;
+    expressions.find((expression) => expression.id === selectedId) ?? null;
 
   function removeExpression(expressionId: string) {
     setExpressions((current) =>
@@ -91,10 +89,10 @@ export function useExpressionLibrary(
     selectedExpression,
     selectedId,
     setSelectedId,
-    targetQuery,
-    setTargetQuery,
-    nativeQuery,
-    setNativeQuery,
+    query,
+    setQuery,
+    searchLanguage,
+    setSearchLanguage,
     removeExpression,
     removeContext,
   };

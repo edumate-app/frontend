@@ -20,11 +20,18 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from '@/components/ui/native-select';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ExpressionWordDetails } from '@/features/dashboard/components/expression-word-details';
 import { STANZA_POS_POLISH_LABELS } from '@/features/dashboard/types/stanza-pos.types';
 import { formatDuration } from '@/features/dashboard/utils/time';
-import { useExpressionLibrary } from '@/features/library/hooks/useExpressionLibrary';
+import {
+  useExpressionLibrary,
+  type SearchLanguage,
+} from '@/features/library/hooks/useExpressionLibrary';
 import type {
   ExpressionContext,
   LibraryExpression,
@@ -314,10 +321,10 @@ export function ExpressionLibraryPanel() {
     selectedExpression,
     selectedId,
     setSelectedId,
-    targetQuery,
-    setTargetQuery,
-    nativeQuery,
-    setNativeQuery,
+    query,
+    setQuery,
+    searchLanguage,
+    setSearchLanguage,
     removeExpression,
     removeContext,
   } = useExpressionLibrary();
@@ -350,21 +357,27 @@ export function ExpressionLibraryPanel() {
             <div className="relative">
               <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                value={targetQuery}
-                onChange={(event) => setTargetQuery(event.target.value)}
-                placeholder="Szukaj po hiszpańsku…"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder={
+                  searchLanguage === 'target'
+                    ? 'Szukaj po hiszpańsku…'
+                    : 'Szukaj po polsku…'
+                }
                 className="pl-8"
               />
             </div>
-            <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={nativeQuery}
-                onChange={(event) => setNativeQuery(event.target.value)}
-                placeholder="Szukaj po polsku…"
-                className="pl-8"
-              />
-            </div>
+            <NativeSelect
+              value={searchLanguage}
+              onChange={(event) =>
+                setSearchLanguage(event.target.value as SearchLanguage)
+              }
+              aria-label="Język wyszukiwania"
+              className="w-full"
+            >
+              <NativeSelectOption value="target">Hiszpański</NativeSelectOption>
+              <NativeSelectOption value="native">Polski</NativeSelectOption>
+            </NativeSelect>
             <p className="text-2xs text-muted-foreground">
               {filteredExpressions.length}{' '}
               {filteredExpressions.length === 1 ? 'wyrażenie' : 'wyrażeń'}
