@@ -76,7 +76,7 @@ export function useExpressionLibrary(
         return [
           {
             ...expression,
-            contexts
+            contexts,
           },
         ];
       }),

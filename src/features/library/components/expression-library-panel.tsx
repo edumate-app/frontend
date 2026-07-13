@@ -348,10 +348,10 @@ export function ExpressionLibraryPanel() {
 
   return (
     <>
-      <div className="flex min-h-[36rem] max-h-[36rem] flex-col overflow-hidden rounded-lg border border-border bg-card lg:min-h-[40rem] lg:max-h-[47rem] lg:flex-row">
+      <div className="flex min-h-144 max-h-144 flex-col overflow-hidden rounded-lg border border-border bg-card lg:min-h-160 lg:max-h-188 lg:flex-row">
         <div
           className={cn(
-            'flex min-h-0 w-full flex-col border-border lg:w-[22rem] lg:shrink-0 lg:border-r xl:w-[26rem]',
+            'flex min-h-0 w-full flex-col border-border lg:w-88 lg:shrink-0 lg:border-r xl:w-104',
             showDetailOnMobile && 'hidden lg:flex',
           )}
         >

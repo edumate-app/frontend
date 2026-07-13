@@ -58,43 +58,44 @@ export function ExpressionWordDetails({
     </>
   );
 
-  const extraDetails = isVerbWord(word) && word.conjugation?.length ? (
-    <>
-      <dt className="text-muted-foreground">
-        Odmiana (tryb oznajmujący, czas teraźniejszy):
-      </dt>
-      <dd className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5">
-        {word.conjugation.map((entry) => {
-          const isActivePerson = entry.person === word.conjugationPerson;
+  const extraDetails =
+    isVerbWord(word) && word.conjugation?.length ? (
+      <>
+        <dt className="text-muted-foreground">
+          Odmiana (tryb oznajmujący, czas teraźniejszy):
+        </dt>
+        <dd className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5">
+          {word.conjugation.map((entry) => {
+            const isActivePerson = entry.person === word.conjugationPerson;
 
-          return (
-            <p key={entry.person} className="font-mono text-foreground">
-              <span
-                className={cn(
-                  isActivePerson &&
-                    'font-semibold underline decoration-2 underline-offset-2',
-                )}
-              >
-                {entry.person}
-              </span>{' '}
-              {entry.form}
+            return (
+              <p key={entry.person} className="font-mono text-foreground">
+                <span
+                  className={cn(
+                    isActivePerson &&
+                      'font-semibold underline decoration-2 underline-offset-2',
+                  )}
+                >
+                  {entry.person}
+                </span>{' '}
+                {entry.form}
+              </p>
+            );
+          })}
+        </dd>
+      </>
+    ) : word.family && word.family.length > 1 ? (
+      <>
+        <dt className="text-muted-foreground">Rodzina:</dt>
+        <dd className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5">
+          {word.family.map((familyWord) => (
+            <p key={familyWord} className="font-mono text-foreground">
+              {familyWord}
             </p>
-          );
-        })}
-      </dd>
-    </>
-  ) : word.family && word.family.length > 1 ? (
-    <>
-      <dt className="text-muted-foreground">Rodzina:</dt>
-      <dd className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5">
-        {word.family.map((familyWord) => (
-          <p key={familyWord} className="font-mono text-foreground">
-            {familyWord}
-          </p>
-        ))}
-      </dd>
-    </>
-  ) : null;
+          ))}
+        </dd>
+      </>
+    ) : null;
 
   if (layout === 'split') {
     return (
