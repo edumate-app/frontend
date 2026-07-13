@@ -134,9 +134,9 @@ function WordBlock({
           'cursor-pointer rounded-sm px-0.5 transition-colors',
           'hover:bg-muted/70 focus-visible:outline-none focus-visible:shadow-focus',
           isActive && 'bg-muted ring-1 ring-ring/30',
-          token.userStatus === 'known' &&
+          token.userStatus === 'familiar' &&
             'bg-blue-100/90 text-blue-900 hover:bg-blue-200/80',
-          token.userStatus === 'fresh' &&
+          token.userStatus === 'unknown' &&
             'bg-emerald-100/90 text-emerald-900 hover:bg-emerald-200/80',
         )}
       >
@@ -147,17 +147,23 @@ function WordBlock({
   );
 }
 
-function FamiliarityLegend() {
+function ExpressionLegend() {
   return (
     <aside className="flex shrink-0 flex-col gap-3 border-l pl-4 text-xs text-muted-foreground">
       <p className="font-semibold uppercase tracking-wide text-2xs">Legenda</p>
-      <span className="flex items-center gap-2">
-        <span className="inline-block h-3 w-5 shrink-0 rounded-sm bg-blue-100 ring-1 ring-blue-200/80" />
-        Już znane
+      <span className="flex items-start gap-2">
+        <span className="mt-0.5 inline-block h-3 w-5 shrink-0 rounded-sm bg-emerald-100 ring-1 ring-emerald-200/80" />
+        <span>
+          <span className="block font-medium text-foreground">Nowe w bibliotece</span>
+          Dopiero dodane wyrażenie
+        </span>
       </span>
-      <span className="flex items-center gap-2">
-        <span className="inline-block h-3 w-5 shrink-0 rounded-sm bg-emerald-100 ring-1 ring-emerald-200/80" />
-        Świeżo poznane
+      <span className="flex items-start gap-2">
+        <span className="mt-0.5 inline-block h-3 w-5 shrink-0 rounded-sm bg-blue-100 ring-1 ring-blue-200/80" />
+        <span>
+          <span className="block font-medium text-foreground">Znane (5+)</span>
+          Spotkane wielokrotnie w materiałach
+        </span>
       </span>
     </aside>
   );
@@ -213,7 +219,7 @@ export function SentenceAnalysisPanel({
           </p>
         </div>
 
-        <FamiliarityLegend />
+        <ExpressionLegend />
       </div>
     </div>
   );

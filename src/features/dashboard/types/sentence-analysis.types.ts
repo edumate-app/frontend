@@ -1,6 +1,6 @@
 import type { StanzaPos } from '@/features/dashboard/types/stanza-pos.types';
 
-export type userStatus = 'known' | 'fresh' | 'unknown';
+export type userStatus = 'new' | 'familiar' | 'unknown';
 
 export type VerbConjugationForm = {
   person: string;

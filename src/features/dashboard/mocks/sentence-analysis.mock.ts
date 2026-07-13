@@ -13,7 +13,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
       pos: 'SCONJ',
       form: '—',
       family: ['si'],
-      userStatus: 'known',
+      userStatus: 'familiar',
     },
     {
       id: 'hubiera',
@@ -33,7 +33,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
         { person: 'ellos/ellas', form: 'han' },
       ],
       conjugationPerson: 'yo',
-      userStatus: 'known',
+      userStatus: 'familiar',
     },
     {
       id: 'sabido',
@@ -53,7 +53,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
         { person: 'ellos/ellas', form: 'saben' },
       ],
       conjugationPerson: 'yo',
-      userStatus: 'fresh',
+      userStatus: 'unknown',
     },
     {
       id: 'antes',
@@ -64,7 +64,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
       pos: 'ADV',
       form: '—',
       family: ['antes', 'antes de', 'antes de que'],
-      userStatus: 'fresh',
+      userStatus: 'unknown',
     },
     {
       id: 'habria',
@@ -84,7 +84,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
         { person: 'ellos/ellas', form: 'han' },
       ],
       conjugationPerson: 'yo',
-      userStatus: 'fresh',
+      userStatus: 'unknown',
     },
     {
       id: 'ido',
@@ -104,7 +104,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
         { person: 'ellos/ellas', form: 'van' },
       ],
       conjugationPerson: 'yo',
-      userStatus: 'fresh',
+      userStatus: 'unknown',
     },
     {
       id: 'contigo',
@@ -115,7 +115,7 @@ export const MOCK_SENTENCE_ANALYSIS: SentenceAnalysis = {
       pos: 'PRON',
       form: 'z przyimkiem',
       family: ['tú', 'ti', 'te', 'contigo'],
-      userStatus: 'known',
+      userStatus: 'familiar',
     },
   ],
 };
