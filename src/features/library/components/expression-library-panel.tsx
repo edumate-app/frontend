@@ -349,7 +349,7 @@ export function ExpressionLibraryPanel() {
       <div className="flex min-h-[32rem] flex-col overflow-hidden rounded-lg border border-border bg-card lg:min-h-[36rem] lg:flex-row">
         <div
           className={cn(
-            'flex w-full flex-col border-border lg:w-[22rem] lg:shrink-0 lg:border-r xl:w-[26rem]',
+            'flex min-h-0 w-full flex-col border-border lg:w-[22rem] lg:shrink-0 lg:border-r xl:w-[26rem]',
             showDetailOnMobile && 'hidden lg:flex',
           )}
         >
@@ -384,29 +384,31 @@ export function ExpressionLibraryPanel() {
             </p>
           </div>
 
-          <div className="flex-1 space-y-1 overflow-y-auto p-2">
-            {filteredExpressions.length === 0 ? (
-              <div className="flex flex-col items-center gap-2 px-4 py-12 text-center">
-                <Bookmark className="h-8 w-8 text-muted-foreground/40" />
-                <p className="text-sm font-medium text-foreground">
-                  Brak wyników
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Zmień kryteria wyszukiwania lub dodaj wyrażenia podczas
-                  oglądania filmów.
-                </p>
-              </div>
-            ) : (
-              filteredExpressions.map((expression) => (
-                <ExpressionListItem
-                  key={expression.id}
-                  expression={expression}
-                  isSelected={selectedId === expression.id}
-                  onSelect={() => setSelectedId(expression.id)}
-                />
-              ))
-            )}
-          </div>
+          <ScrollArea className="h-128 w-full">
+            <div className="space-y-1 p-2 pr-3">
+              {filteredExpressions.length === 0 ? (
+                <div className="flex flex-col items-center gap-2 px-4 py-12 text-center">
+                  <Bookmark className="h-8 w-8 text-muted-foreground/40" />
+                  <p className="text-sm font-medium text-foreground">
+                    Brak wyników
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Zmień kryteria wyszukiwania lub dodaj wyrażenia podczas
+                    oglądania filmów.
+                  </p>
+                </div>
+              ) : (
+                filteredExpressions.map((expression) => (
+                  <ExpressionListItem
+                    key={expression.id}
+                    expression={expression}
+                    isSelected={selectedId === expression.id}
+                    onSelect={() => setSelectedId(expression.id)}
+                  />
+                ))
+              )}
+            </div>
+          </ScrollArea>
         </div>
 
         <div
