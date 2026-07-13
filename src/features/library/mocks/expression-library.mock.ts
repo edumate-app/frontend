@@ -20,7 +20,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     ],
     conjugationPerson: 'yo',
     userStatus: 'new',
-    encounterCount: 6,
     addedAt: '2026-07-13T10:30:00Z',
     contexts: [
       {
@@ -90,7 +89,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     form: '—',
     family: ['antes', 'antes de', 'antes de que'],
     userStatus: 'new',
-    encounterCount: 6,
     addedAt: '2026-07-12T18:15:00Z',
     contexts: [
       {
@@ -160,7 +158,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     form: 'z przyimkiem',
     family: ['tú', 'ti', 'te', 'contigo'],
     userStatus: 'familiar',
-    encounterCount: 12,
     addedAt: '2026-06-20T14:00:00Z',
     contexts: [
       {
@@ -238,7 +235,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     ],
     conjugationPerson: 'yo',
     userStatus: 'familiar',
-    encounterCount: 6,
     addedAt: '2026-06-15T08:00:00Z',
     contexts: [
       {
@@ -307,7 +303,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     form: '—',
     family: ['si'],
     userStatus: 'familiar',
-    encounterCount: 8,
     addedAt: '2026-05-10T12:00:00Z',
     contexts: [
       {
@@ -386,7 +381,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     ],
     conjugationPerson: 'yo',
     userStatus: 'new',
-    encounterCount: 6,
     addedAt: '2026-07-13T10:28:00Z',
     contexts: [
       {
@@ -464,7 +458,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     ],
     conjugationPerson: 'yo',
     userStatus: 'unknown',
-    encounterCount: 6,
     addedAt: '2026-07-05T11:20:00Z',
     contexts: [
       {
@@ -534,7 +527,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     form: '—',
     family: ['todavía', 'aún'],
     userStatus: 'familiar',
-    encounterCount: 9,
     addedAt: '2026-04-18T07:45:00Z',
     contexts: [
       {
@@ -613,7 +605,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     ],
     conjugationPerson: 'nosotros',
     userStatus: 'familiar',
-    encounterCount: 7,
     addedAt: '2026-03-25T18:00:00Z',
     contexts: [
       {
@@ -683,7 +674,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     form: '—',
     family: ['por favor', 'porfa'],
     userStatus: 'familiar',
-    encounterCount: 15,
     addedAt: '2026-02-14T12:00:00Z',
     contexts: [
       {
@@ -761,7 +751,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     ],
     conjugationPerson: 'tú',
     userStatus: 'unknown',
-    encounterCount: 6,
     addedAt: '2026-06-01T09:30:00Z',
     contexts: [
       {
@@ -831,7 +820,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     form: '—',
     family: ['ojalá'],
     userStatus: 'familiar',
-    encounterCount: 6,
     addedAt: '2026-05-20T16:45:00Z',
     contexts: [
       {
@@ -900,7 +888,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     form: '—',
     family: ['sin embargo', 'no obstante'],
     userStatus: 'new',
-    encounterCount: 6,
     addedAt: '2026-07-10T08:15:00Z',
     contexts: [
       {
@@ -971,7 +958,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     form: '—',
     family: ['aunque', 'a pesar de que'],
     userStatus: 'familiar',
-    encounterCount: 11,
     addedAt: '2026-01-30T14:20:00Z',
     contexts: [
       {
@@ -1050,7 +1036,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     ],
     conjugationPerson: 'yo',
     userStatus: 'unknown',
-    encounterCount: 6,
     addedAt: '2026-07-02T13:05:00Z',
     contexts: [
       {
@@ -1128,7 +1113,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     ],
     conjugationPerson: 'él/ella',
     userStatus: 'familiar',
-    encounterCount: 6,
     addedAt: '2026-04-05T11:00:00Z',
     contexts: [
       {
@@ -1199,7 +1183,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     form: '—',
     family: ['tal vez', 'quizás', 'a lo mejor'],
     userStatus: 'new',
-    encounterCount: 6,
     addedAt: '2026-07-12T21:40:00Z',
     contexts: [
       {
@@ -1268,7 +1251,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     form: 'męski l. poj. przed rzeczownikiem',
     family: ['ninguno', 'ninguna', 'ningún'],
     userStatus: 'familiar',
-    encounterCount: 10,
     addedAt: '2026-02-28T08:00:00Z',
     contexts: [
       {
@@ -1337,7 +1319,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     form: '—',
     family: ['mientras', 'mientras tanto'],
     userStatus: 'unknown',
-    encounterCount: 6,
     addedAt: '2026-06-20T07:12:00Z',
     contexts: [
       {
@@ -1406,7 +1387,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     form: '—',
     family: ['encima', 'encima de'],
     userStatus: 'new',
-    encounterCount: 6,
     addedAt: '2026-07-11T16:28:00Z',
     contexts: [
       {
@@ -1484,7 +1464,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     ],
     conjugationPerson: 'yo',
     userStatus: 'familiar',
-    encounterCount: 13,
     addedAt: '2026-01-15T10:00:00Z',
     contexts: [
       {

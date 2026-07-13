@@ -11,7 +11,6 @@ export type ExpressionContext = {
 };
 
 export type LibraryExpression = SentenceAnalysisWord & {
-  encounterCount: number;
   contexts: ExpressionContext[];
   addedAt: string;
 };

@@ -76,8 +76,7 @@ export function useExpressionLibrary(
         return [
           {
             ...expression,
-            contexts,
-            encounterCount: Math.max(1, expression.encounterCount - 1),
+            contexts
           },
         ];
       }),

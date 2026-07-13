@@ -58,7 +58,7 @@ function StatusBadge({ expression }: { expression: LibraryExpression }) {
   if (expression.userStatus === 'familiar') {
     return (
       <Badge className="border-blue-200 bg-blue-50 text-blue-800 hover:bg-blue-50">
-        Znane ({expression.encounterCount}×)
+        Znane
       </Badge>
     );
   }
@@ -197,11 +197,19 @@ function ExpressionDetail({
 
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
               <h2 className="font-mono text-xl font-semibold text-foreground">
                 {expression.text.replace(/[.,!?]$/, '')}
               </h2>
               <StatusBadge expression={expression} />
+              <span className="text-sm text-muted-foreground">
+                · Dodano{' '}
+                {new Date(expression.addedAt).toLocaleDateString('pl-PL', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </span>
             </div>
           </div>
 
