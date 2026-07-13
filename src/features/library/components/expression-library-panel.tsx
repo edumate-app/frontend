@@ -80,7 +80,7 @@ function ExpressionListItem({
       type="button"
       onClick={onSelect}
       className={cn(
-        'flex w-full items-start gap-3 rounded-lg border px-3 py-3 text-left transition-colors',
+        'flex w-full items-start gap-3 border-y px-3 py-3 text-left transition-colors',
         isSelected
           ? 'border-primary/30 bg-primary-50/60'
           : 'border-transparent hover:border-border hover:bg-secondary/50',
@@ -226,15 +226,9 @@ function ExpressionDetail({
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col">
-        <div className="p-4 border-b">
-          <ExpressionWordDetails word={expression} size="md" />
+        <div className="border-b p-4">
+          <ExpressionWordDetails word={expression} size="md" layout="split" />
         </div>
-
-        {/* <Card className="shrink-0 shadow-none">
-          <CardContent className="p-4">
-            <ExpressionWordDetails word={expression} size="md" />
-          </CardContent>
-        </Card> */}
 
         <div className="px-4 py-4 sm:px-5">
           <p className="mb-3 shrink-0 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -246,8 +240,8 @@ function ExpressionDetail({
               Brak zapisanych kontekstów dla tego wyrażenia.
             </p>
           ) : (
-            <ScrollArea className="h-75 w-full">
-              <div className="space-y-3 pr-3">
+            <ScrollArea className="h-120 w-full">
+              <div className="space-y-3">
                 {expression.contexts.map((context) => (
                   <ContextCard
                     key={context.id}
@@ -354,7 +348,7 @@ export function ExpressionLibraryPanel() {
 
   return (
     <>
-      <div className="flex min-h-[32rem] flex-col overflow-hidden rounded-lg border border-border bg-card lg:min-h-[36rem] lg:flex-row">
+      <div className="flex min-h-[36rem] max-h-[36rem] flex-col overflow-hidden rounded-lg border border-border bg-card lg:min-h-[40rem] lg:max-h-[47rem] lg:flex-row">
         <div
           className={cn(
             'flex min-h-0 w-full flex-col border-border lg:w-[22rem] lg:shrink-0 lg:border-r xl:w-[26rem]',
@@ -392,30 +386,28 @@ export function ExpressionLibraryPanel() {
             </p>
           </div>
 
-          <ScrollArea className="h-128 w-full">
-            <div className="space-y-1 p-2 pr-3">
-              {filteredExpressions.length === 0 ? (
-                <div className="flex flex-col items-center gap-2 px-4 py-12 text-center">
-                  <Bookmark className="h-8 w-8 text-muted-foreground/40" />
-                  <p className="text-sm font-medium text-foreground">
-                    Brak wyników
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Zmień kryteria wyszukiwania lub dodaj wyrażenia podczas
-                    oglądania filmów.
-                  </p>
-                </div>
-              ) : (
-                filteredExpressions.map((expression) => (
-                  <ExpressionListItem
-                    key={expression.id}
-                    expression={expression}
-                    isSelected={selectedId === expression.id}
-                    onSelect={() => setSelectedId(expression.id)}
-                  />
-                ))
-              )}
-            </div>
+          <ScrollArea className="h-150 w-full">
+            {filteredExpressions.length === 0 ? (
+              <div className="flex flex-col items-center gap-2 px-4 py-12 text-center">
+                <Bookmark className="h-8 w-8 text-muted-foreground/40" />
+                <p className="text-sm font-medium text-foreground">
+                  Brak wyników
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Zmień kryteria wyszukiwania lub dodaj wyrażenia podczas
+                  oglądania filmów.
+                </p>
+              </div>
+            ) : (
+              filteredExpressions.map((expression) => (
+                <ExpressionListItem
+                  key={expression.id}
+                  expression={expression}
+                  isSelected={selectedId === expression.id}
+                  onSelect={() => setSelectedId(expression.id)}
+                />
+              ))
+            )}
           </ScrollArea>
         </div>
 

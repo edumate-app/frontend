@@ -3,7 +3,7 @@ import { ExpressionLibraryPanel } from '@/features/library/components/expression
 
 export default function SavedPage() {
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
+    <div className="w-full h-full px-4 py-5 sm:px-6 lg:px-8">
       <PageHeader
         title="Biblioteka wyrażeń"
         description="Przeglądaj zapisane słowa i frazy wraz z kontekstami z filmów."
