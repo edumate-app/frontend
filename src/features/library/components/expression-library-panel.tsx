@@ -25,7 +25,6 @@ import {
   NativeSelectOption,
 } from '@/components/ui/native-select';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ExpressionWordDetails } from '@/features/dashboard/components/expression-word-details';
 import { STANZA_POS_POLISH_LABELS } from '@/features/dashboard/types/stanza-pos.types';
 import { formatDuration } from '@/features/dashboard/utils/time';
 import {
@@ -37,6 +36,7 @@ import type {
   LibraryExpression,
 } from '@/features/library/types/expression-library.types';
 import { cn } from '@/lib/utils';
+import { ExpressionWordDetails } from '@/features/video/components/expression-word-details';
 
 type DeleteTarget =
   | { type: 'expression'; expression: LibraryExpression }

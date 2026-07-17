@@ -1,11 +1,11 @@
 import { useId, useState } from 'react';
 import { MOCK_SENTENCE_ANALYSIS } from '@/features/dashboard/mocks/sentence-analysis.mock';
-import { ExpressionWordDetails } from '@/features/dashboard/components/expression-word-details';
 import {
   type SentenceAnalysis,
   type SentenceAnalysisWord,
 } from '@/features/dashboard/types/sentence-analysis.types';
 import { cn } from '@/lib/utils';
+import { ExpressionWordDetails } from './expression-word-details';
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);

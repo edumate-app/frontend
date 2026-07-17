@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { dashboardApi } from '../api/dashboard.api';
-import type { TranscriptSegment } from '../api/dashboard.types';
+import { VideoApi } from '../api/video.api';
+import type { TranscriptSegment } from '../api/video.types';
 
 export const useGetTranscript = () => {
   const { video_uuid } = useParams<{ video_uuid: string }>();
@@ -18,8 +18,7 @@ export const useGetTranscript = () => {
     if (!video_uuid) return;
     let cancelled = false;
 
-    dashboardApi
-      .getTranscript(video_uuid)
+    VideoApi.getTranscript(video_uuid)
       .then((response) => {
         if (cancelled) return;
         setSegments(response.data.segments);
