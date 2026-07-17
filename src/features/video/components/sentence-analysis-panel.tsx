@@ -1,11 +1,12 @@
 import { useId, useState } from 'react';
-import { MOCK_SENTENCE_ANALYSIS } from '@/features/dashboard/mocks/sentence-analysis.mock';
 import {
   type SentenceAnalysis,
   type SentenceAnalysisWord,
 } from '@/features/dashboard/types/sentence-analysis.types';
 import { cn } from '@/lib/utils';
 import { ExpressionWordDetails } from './expression-word-details';
+import type { SentenceAnalysisStatus } from '../hooks/useSentenceAnalysis';
+import { Loader2 } from 'lucide-react';
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);
@@ -14,7 +15,8 @@ function formatTime(seconds: number) {
 }
 
 type SentenceAnalysisPanelProps = {
-  analysis?: SentenceAnalysis | null;
+  analysis: SentenceAnalysis | null;
+  status: SentenceAnalysisStatus;
 };
 
 function WordDetailCard({ token }: { token: SentenceAnalysisWord }) {
@@ -100,7 +102,8 @@ function ExpressionLegend() {
 }
 
 export function SentenceAnalysisPanel({
-  analysis = MOCK_SENTENCE_ANALYSIS,
+  analysis = null,
+  status = 'idle',
 }: SentenceAnalysisPanelProps) {
   const [pinnedId, setPinnedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -116,9 +119,14 @@ export function SentenceAnalysisPanel({
   return (
     <div className="flex shrink-0 flex-col border-t bg-canvas">
       <div className="px-6 pt-4">
-        <p className="text-2xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Analiza zdania
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="text-2xs font-semibold uppercase tracking-wide text-muted-foreground">
+            Analiza zdania
+          </p>
+          {status === 'loading' && (
+            <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+          )}
+        </div>
         <p className="mt-0.5 font-mono text-xs tabular-nums text-muted-foreground">
           {formatTime(startSeconds)}
         </p>

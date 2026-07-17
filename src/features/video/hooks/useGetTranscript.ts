@@ -10,6 +10,7 @@ export const useGetTranscript = () => {
   const [lastPositionSeconds, setLastPositionSeconds] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [loadedVideoUuid, setLoadedVideoUuid] = useState<string | null>(null);
+  const [videoLang, setVideoLang] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const isLoading = Boolean(video_uuid && video_uuid !== loadedVideoUuid);
@@ -25,6 +26,7 @@ export const useGetTranscript = () => {
         setVideoId(response.data.video_id);
         setLastPositionSeconds(response.data.lastPositionSeconds);
         setLoadedVideoUuid(video_uuid);
+        setVideoLang(response.data.lang);
         setError(null);
       })
 
@@ -56,5 +58,6 @@ export const useGetTranscript = () => {
     lastPositionSeconds: lastPositionSeconds,
     isLoading,
     error: error,
+    videoLang,
   };
 };

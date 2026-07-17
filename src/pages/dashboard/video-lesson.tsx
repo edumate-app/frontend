@@ -13,6 +13,7 @@ import { useGetTranscript } from '@/features/video/hooks/useGetTranscript';
 import { useYouTubePlayer } from '@/features/video/hooks/useYouTubePlayer';
 import { SentenceAnalysisPanel } from '@/features/video/components/sentence-analysis-panel';
 import { useSaveWatchPosition } from '@/features/video/hooks/useSaveWatchPosition';
+import { useSentenceAnalysis } from '@/features/video/hooks/useSentenceAnalysis';
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);
@@ -138,8 +139,14 @@ export default function VideoLessonPage() {
   const playerContainerRef = useRef<HTMLDivElement>(null);
   const hasSeekedToSavedPosition = useRef(false);
 
-  const { segments, videoId, lastPositionSeconds, isLoading, error } =
-    useGetTranscript();
+  const {
+    segments,
+    videoId,
+    lastPositionSeconds,
+    isLoading,
+    error,
+    videoLang,
+  } = useGetTranscript();
 
   const { currentTime, seekTo, isReady } = useYouTubePlayer(
     playerContainerRef,
@@ -169,6 +176,12 @@ export default function VideoLessonPage() {
     () => getActiveSegmentIndex(segments, currentTime),
     [currentTime, segments],
   );
+
+  const activeSegment = activeIndex >= 0 ? segments[activeIndex] : null;
+  const { analysis, status: analysisStatus } = useSentenceAnalysis({
+    activeSegment,
+    lang: videoLang ?? undefined,
+  });
 
   const transcriptProps: TranscriptListProps = {
     segments,
@@ -268,7 +281,14 @@ export default function VideoLessonPage() {
           </div>
 
           {!isFullscreen &&
-            (isLoading ? <LessonLoadingPanel /> : <SentenceAnalysisPanel />)}
+            (isLoading ? (
+              <LessonLoadingPanel />
+            ) : (
+              <SentenceAnalysisPanel
+                analysis={analysis}
+                status={analysisStatus}
+              />
+            ))}
         </div>
 
         <div

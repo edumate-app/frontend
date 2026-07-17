@@ -15,7 +15,7 @@ export type SentenceAnalysisWord = {
   lemma: string;
   lemmaTranslation: string;
   form: string;
-  userStatus: userStatus;
+  userStatus?: userStatus;
 
   // for verbs and auxiliaries
   tense?: string;
