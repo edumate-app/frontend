@@ -56,7 +56,7 @@ async function loadAnalysis(
 
 export function useSentenceAnalysis({
   activeSegment,
-  lang = 'es',
+  lang,
 }: UseSentenceAnalysisOptions): SentenceAnalysisState {
   const [state, setState] = useState<SentenceAnalysisState>({
     analysis: null,
@@ -70,7 +70,7 @@ export function useSentenceAnalysis({
     : null;
 
   useEffect(() => {
-    if (!activeSegment) {
+    if (!activeSegment || !lang) {
       return;
     }
 
