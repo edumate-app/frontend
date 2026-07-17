@@ -48,8 +48,6 @@ async function loadAnalysis(
     mapWordAnalyzed(token, tokenIndex),
   );
 
-  console.log('jest kyurwa');
-
   return {
     ...preview,
     words,
@@ -67,53 +65,42 @@ export function useSentenceAnalysis({
   });
   const requestIdRef = useRef(0);
 
+  const cachedAnalysis = activeSegment
+    ? analysisCache.get(getSegmentKey(activeSegment))
+    : null;
+
   useEffect(() => {
     if (!activeSegment) {
-      setState({
-        analysis: null,
-        status: 'idle',
-        error: null,
-      });
       return;
     }
 
     const segmentKey = getSegmentKey(activeSegment);
-    const cached = analysisCache.get(segmentKey);
 
-    if (cached) {
-      setState({
-        analysis: cached,
-        status: 'complete',
-        error: null,
-      });
+    if (cachedAnalysis) {
       return;
     }
 
     const preview = createPreviewAnalysis(activeSegment);
     const requestId = requestIdRef.current + 1;
     requestIdRef.current = requestId;
+
     const controller = new AbortController();
 
-    setState({
-      analysis: preview,
-      status: 'preview',
-      error: null,
-    });
-
     const debounceId = window.setTimeout(() => {
-      setState((current) => ({
-        ...current,
+      setState({
+        analysis: preview,
         status: 'loading',
-      }));
+        error: null,
+      });
 
       loadAnalysis(activeSegment, lang, controller.signal)
         .then((analysis) => {
-          console.log(analysis);
           if (requestIdRef.current !== requestId) {
             return;
           }
 
           analysisCache.set(segmentKey, analysis);
+
           setState({
             analysis,
             status: 'complete',
@@ -141,7 +128,23 @@ export function useSentenceAnalysis({
       window.clearTimeout(debounceId);
       controller.abort();
     };
-  }, [activeSegment, lang]);
+  }, [activeSegment, lang, cachedAnalysis]);
+
+  if (!activeSegment) {
+    return {
+      analysis: null,
+      status: 'idle',
+      error: null,
+    };
+  }
+
+  if (cachedAnalysis) {
+    return {
+      analysis: cachedAnalysis,
+      status: 'complete',
+      error: null,
+    };
+  }
 
   return state;
 }
