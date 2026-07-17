@@ -178,15 +178,25 @@ export default function VideoLessonPage() {
   );
 
   const activeSegment = activeIndex >= 0 ? segments[activeIndex] : null;
-  const { analysis, status: analysisStatus } = useSentenceAnalysis({
+  const {
+    analysis,
+    status: analysisStatus,
+    isPinned: isAnalysisPinned,
+    togglePin: toggleAnalysisPin,
+    unpin: unpinAnalysis,
+  } = useSentenceAnalysis({
     activeSegment,
     lang: videoLang ?? undefined,
+    resetKey: video_uuid,
   });
 
   const transcriptProps: TranscriptListProps = {
     segments,
     activeIndex,
-    onSegmentClick: (segment) => seekTo(segment.start),
+    onSegmentClick: (segment) => {
+      unpinAnalysis();
+      seekTo(segment.start);
+    },
   };
 
   const isPlayerLoading = isLoading || Boolean(videoId && !isReady);
@@ -287,6 +297,8 @@ export default function VideoLessonPage() {
               <SentenceAnalysisPanel
                 analysis={analysis}
                 status={analysisStatus}
+                isPinned={isAnalysisPinned}
+                onTogglePin={toggleAnalysisPin}
               />
             ))}
         </div>

@@ -11,11 +11,21 @@ export type SentenceAnalysisState = {
   analysis: SentenceAnalysis | null;
   status: SentenceAnalysisStatus;
   error: string | null;
+  isPinned: boolean;
+  togglePin: () => void;
+  unpin: () => void;
 };
 
 type UseSentenceAnalysisOptions = {
   activeSegment: TranscriptSegment | null;
   lang?: string;
+  resetKey?: string;
+};
+
+type AnalysisLoadState = {
+  analysis: SentenceAnalysis | null;
+  status: SentenceAnalysisStatus;
+  error: string | null;
 };
 
 const analysisCache = new Map<string, SentenceAnalysis>();
@@ -57,34 +67,46 @@ async function loadAnalysis(
 export function useSentenceAnalysis({
   activeSegment,
   lang,
+  resetKey,
 }: UseSentenceAnalysisOptions): SentenceAnalysisState {
-  const [state, setState] = useState<SentenceAnalysisState>({
+  const [state, setState] = useState<AnalysisLoadState>({
     analysis: null,
     status: 'idle',
     error: null,
   });
+  const [pinnedSegment, setPinnedSegment] = useState<TranscriptSegment | null>(
+    null,
+  );
   const requestIdRef = useRef(0);
 
-  const cachedAnalysis = activeSegment
-    ? analysisCache.get(getSegmentKey(activeSegment))
+  useEffect(() => {
+    setPinnedSegment(null);
+  }, [resetKey]);
+
+  const analysisSegment = pinnedSegment ?? activeSegment;
+  const isPinned = pinnedSegment !== null;
+
+  const cachedAnalysis = analysisSegment
+    ? analysisCache.get(getSegmentKey(analysisSegment))
     : null;
 
   useEffect(() => {
-    if (!activeSegment || !lang) {
+    if (!analysisSegment || !lang) {
       return;
     }
 
-    const segmentKey = getSegmentKey(activeSegment);
+    const segmentKey = getSegmentKey(analysisSegment);
 
     if (cachedAnalysis) {
       return;
     }
 
-    const preview = createPreviewAnalysis(activeSegment);
+    const preview = createPreviewAnalysis(analysisSegment);
     const requestId = requestIdRef.current + 1;
     requestIdRef.current = requestId;
 
     const controller = new AbortController();
+    const segmentToLoad = analysisSegment;
 
     const debounceId = window.setTimeout(() => {
       setState({
@@ -93,7 +115,7 @@ export function useSentenceAnalysis({
         error: null,
       });
 
-      loadAnalysis(activeSegment, lang, controller.signal)
+      loadAnalysis(segmentToLoad, lang, controller.signal)
         .then((analysis) => {
           if (requestIdRef.current !== requestId) {
             return;
@@ -128,13 +150,27 @@ export function useSentenceAnalysis({
       window.clearTimeout(debounceId);
       controller.abort();
     };
-  }, [activeSegment, lang, cachedAnalysis]);
+  }, [analysisSegment, lang, cachedAnalysis]);
 
-  if (!activeSegment) {
+  const unpin = () => setPinnedSegment(null);
+
+  const togglePin = () => {
+    setPinnedSegment((current) => {
+      if (current) {
+        return null;
+      }
+      return analysisSegment;
+    });
+  };
+
+  const controls = { isPinned, togglePin, unpin };
+
+  if (!analysisSegment) {
     return {
       analysis: null,
       status: 'idle',
       error: null,
+      ...controls,
     };
   }
 
@@ -143,8 +179,12 @@ export function useSentenceAnalysis({
       analysis: cachedAnalysis,
       status: 'complete',
       error: null,
+      ...controls,
     };
   }
 
-  return state;
+  return {
+    ...state,
+    ...controls,
+  };
 }

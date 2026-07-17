@@ -3,10 +3,11 @@ import {
   type SentenceAnalysis,
   type SentenceAnalysisWord,
 } from '@/features/dashboard/types/sentence-analysis.types';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ExpressionWordDetails } from './expression-word-details';
 import type { SentenceAnalysisStatus } from '../hooks/useSentenceAnalysis';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Pin, PinOff } from 'lucide-react';
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);
@@ -17,6 +18,8 @@ function formatTime(seconds: number) {
 type SentenceAnalysisPanelProps = {
   analysis: SentenceAnalysis | null;
   status: SentenceAnalysisStatus;
+  isPinned?: boolean;
+  onTogglePin?: () => void;
 };
 
 function WordDetailCard({ token }: { token: SentenceAnalysisWord }) {
@@ -104,6 +107,8 @@ function ExpressionLegend() {
 export function SentenceAnalysisPanel({
   analysis = null,
   status = 'idle',
+  isPinned = false,
+  onTogglePin,
 }: SentenceAnalysisPanelProps) {
   const [pinnedId, setPinnedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -119,17 +124,53 @@ export function SentenceAnalysisPanel({
   return (
     <div className="flex shrink-0 flex-col border-t bg-canvas">
       <div className="px-6 pt-4">
-        <div className="flex items-center gap-2">
-          <p className="text-2xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Analiza zdania
-          </p>
-          {status === 'loading' && (
-            <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <p className="text-2xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Analiza zdania
+              </p>
+              {status === 'loading' && (
+                <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+              )}
+              {isPinned && (
+                <span className="rounded-sm bg-primary/10 px-1.5 py-0.5 text-2xs font-medium text-primary">
+                  Przypięta
+                </span>
+              )}
+            </div>
+            <p className="mt-0.5 font-mono text-xs tabular-nums text-muted-foreground">
+              {formatTime(startSeconds)}
+            </p>
+          </div>
+          {onTogglePin && (
+            <Button
+              type="button"
+              size="sm"
+              variant={isPinned ? 'secondary' : 'ghost'}
+              onClick={onTogglePin}
+              className="h-8 shrink-0 gap-1.5 px-2.5 text-xs"
+              aria-pressed={isPinned}
+              title={
+                isPinned
+                  ? 'Śledź ponownie odtwarzanie'
+                  : 'Zostań przy tej analizie podczas oglądania'
+              }
+            >
+              {isPinned ? (
+                <>
+                  <PinOff className="h-3.5 w-3.5" />
+                  Śledź wideo
+                </>
+              ) : (
+                <>
+                  <Pin className="h-3.5 w-3.5" />
+                  Zostań tutaj
+                </>
+              )}
+            </Button>
           )}
         </div>
-        <p className="mt-0.5 font-mono text-xs tabular-nums text-muted-foreground">
-          {formatTime(startSeconds)}
-        </p>
       </div>
 
       <div className="flex items-start gap-6 px-6 py-5 pt-0">
