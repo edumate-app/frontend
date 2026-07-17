@@ -74,15 +74,14 @@ export function useSentenceAnalysis({
     status: 'idle',
     error: null,
   });
-  const [pinnedSegment, setPinnedSegment] = useState<TranscriptSegment | null>(
-    null,
-  );
+  const [pinState, setPinState] = useState<{
+    resetKey: string | undefined;
+    segment: TranscriptSegment | null;
+  }>({ resetKey, segment: null });
   const requestIdRef = useRef(0);
 
-  useEffect(() => {
-    setPinnedSegment(null);
-  }, [resetKey]);
-
+  const pinnedSegment =
+    pinState.resetKey === resetKey ? pinState.segment : null;
   const analysisSegment = pinnedSegment ?? activeSegment;
   const isPinned = pinnedSegment !== null;
 
@@ -152,14 +151,16 @@ export function useSentenceAnalysis({
     };
   }, [analysisSegment, lang, cachedAnalysis]);
 
-  const unpin = () => setPinnedSegment(null);
+  const unpin = () => setPinState({ resetKey, segment: null });
 
   const togglePin = () => {
-    setPinnedSegment((current) => {
-      if (current) {
-        return null;
+    setPinState((current) => {
+      const currentPinned =
+        current.resetKey === resetKey ? current.segment : null;
+      if (currentPinned) {
+        return { resetKey, segment: null };
       }
-      return analysisSegment;
+      return { resetKey, segment: analysisSegment };
     });
   };
 

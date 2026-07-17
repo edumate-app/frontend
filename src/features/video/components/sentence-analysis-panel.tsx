@@ -130,11 +130,20 @@ export function SentenceAnalysisPanel({
               <p className="text-2xs font-semibold uppercase tracking-wide text-muted-foreground">
                 Analiza zdania
               </p>
-              {status === 'loading' && (
+              {status === 'loading' ? (
                 <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+              ) : (
+                <div className="h-3 w-3 shrink-0" aria-hidden />
               )}
-              {isPinned && (
+              {isPinned ? (
                 <span className="rounded-sm bg-primary/10 px-1.5 py-0.5 text-2xs font-medium text-primary">
+                  Przypięta
+                </span>
+              ) : (
+                <span
+                  className="invisible rounded-sm px-1.5 py-0.5 text-2xs font-medium"
+                  aria-hidden
+                >
                   Przypięta
                 </span>
               )}
