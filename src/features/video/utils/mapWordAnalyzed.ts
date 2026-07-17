@@ -1,25 +1,19 @@
 import type { SentenceAnalysisWord } from '@/features/dashboard/types/sentence-analysis.types';
 import type { WordAnalyzedDto } from '../api/video.types';
 
-function buildFormLabel(word: WordAnalyzedDto) {
-  const mood = word.mod ?? word.mood;
-  const parts = [word.tense, mood, word.number, word.gender].filter(Boolean);
-
-  return parts.length > 0 ? parts.join(' · ') : '—';
-}
-
 export function mapWordAnalyzed(
   word: WordAnalyzedDto,
   index: number,
 ): SentenceAnalysisWord {
   const mapped: SentenceAnalysisWord = {
     id: `${word.lemma}-${index}`,
+    pos: word.pos,
     text: word.text,
     translation: '…',
     lemma: word.lemma,
     lemmaTranslation: '…',
-    pos: word.pos,
-    form: buildFormLabel(word),
+
+    mood: word.mood ?? '…',
     tense: word.tense ?? undefined,
   };
 
@@ -34,6 +28,6 @@ export function createPreviewWords(sentence: string): SentenceAnalysisWord[] {
     lemma: text.replace(/[.,!?]$/, ''),
     lemmaTranslation: '',
     pos: 'X',
-    form: '—',
+    mood: '—',
   }));
 }

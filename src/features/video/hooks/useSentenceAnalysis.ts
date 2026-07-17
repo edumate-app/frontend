@@ -54,6 +54,8 @@ async function loadAnalysis(
     signal,
   );
 
+  console.log(tokens);
+
   const words = tokens.map((token, tokenIndex) =>
     mapWordAnalyzed(token, tokenIndex),
   );

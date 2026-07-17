@@ -47,7 +47,7 @@ export function ExpressionWordDetails({
       </div>
       <div className="flex gap-2">
         <dt className="shrink-0 text-muted-foreground">Forma:</dt>
-        <dd className="text-foreground">{word.form}</dd>
+        <dd className="text-foreground">{word.mood}</dd>
       </div>
       {word.tense && (
         <div className="flex gap-2">
