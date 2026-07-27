@@ -186,6 +186,7 @@ export default function VideoLessonPage() {
     unpin: unpinAnalysis,
   } = useSentenceAnalysis({
     activeSegment,
+    activeIndex,
     lang: videoLang ?? undefined,
     resetKey: video_uuid,
   });

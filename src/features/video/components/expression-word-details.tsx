@@ -2,7 +2,10 @@ import {
   isVerbWord,
   type SentenceAnalysisWord,
 } from '@/features/dashboard/types/sentence-analysis.types';
-import { STANZA_POS_POLISH_LABELS } from '@/features/dashboard/types/stanza-pos.types';
+import {
+  STANZA_MOOD_POLISH_LABELS,
+  STANZA_POS_POLISH_LABELS,
+} from '@/features/dashboard/types/stanza-tags.types';
 import { cn } from '@/lib/utils';
 
 type ExpressionWordDetailsProps = {
@@ -35,8 +38,12 @@ export function ExpressionWordDetails({
         </dt>
         <dd className="text-foreground">
           <span className="font-mono">{word.lemma}</span>
-          {' — '}
-          {word.lemmaTranslation}
+          {word.lemmaTranslation && (
+            <>
+              {' — '}
+              {word.lemmaTranslation}
+            </>
+          )}
         </dd>
       </div>
       <div className="flex gap-2">
@@ -45,10 +52,14 @@ export function ExpressionWordDetails({
           {STANZA_POS_POLISH_LABELS[word.pos]}
         </dd>
       </div>
-      <div className="flex gap-2">
-        <dt className="shrink-0 text-muted-foreground">Forma:</dt>
-        <dd className="text-foreground">{word.mood}</dd>
-      </div>
+      {word.mood && (
+        <div className="flex gap-2">
+          <dt className="shrink-0 text-muted-foreground">Forma:</dt>
+          <dd className="text-foreground">
+            {STANZA_MOOD_POLISH_LABELS[word.mood]}
+          </dd>
+        </div>
+      )}
       {word.tense && (
         <div className="flex gap-2">
           <dt className="shrink-0 text-muted-foreground">Czas:</dt>

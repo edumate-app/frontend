@@ -25,7 +25,7 @@ import {
   NativeSelectOption,
 } from '@/components/ui/native-select';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { STANZA_POS_POLISH_LABELS } from '@/features/dashboard/types/stanza-pos.types';
+import { STANZA_POS_POLISH_LABELS } from '@/features/dashboard/types/stanza-tags.types';
 import { formatDuration } from '@/features/dashboard/utils/time';
 import {
   useExpressionLibrary,

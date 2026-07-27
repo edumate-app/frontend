@@ -18,6 +18,7 @@ export type SentenceAnalysisState = {
 
 type UseSentenceAnalysisOptions = {
   activeSegment: TranscriptSegment | null;
+  activeIndex: number;
   lang?: string;
   resetKey?: string;
 };
@@ -34,8 +35,12 @@ function getSegmentKey(segment: TranscriptSegment) {
   return `${segment.start}:${segment.targetText}`;
 }
 
-function createPreviewAnalysis(segment: TranscriptSegment): SentenceAnalysis {
+function createPreviewAnalysis(
+  segment: TranscriptSegment,
+  index: number,
+): SentenceAnalysis {
   return {
+    index,
     startSeconds: segment.start,
     targetTranslation: segment.nativeText,
     words: createPreviewWords(segment.targetText),
@@ -44,10 +49,11 @@ function createPreviewAnalysis(segment: TranscriptSegment): SentenceAnalysis {
 
 async function loadAnalysis(
   segment: TranscriptSegment,
+  index: number,
   lang: string,
   signal: AbortSignal,
 ): Promise<SentenceAnalysis> {
-  const preview = createPreviewAnalysis(segment);
+  const preview = createPreviewAnalysis(segment, index);
 
   const tokens = await VideoApi.analyze(
     { text: segment.targetText, lang },
@@ -68,6 +74,7 @@ async function loadAnalysis(
 
 export function useSentenceAnalysis({
   activeSegment,
+  activeIndex,
   lang,
   resetKey,
 }: UseSentenceAnalysisOptions): SentenceAnalysisState {
@@ -79,12 +86,14 @@ export function useSentenceAnalysis({
   const [pinState, setPinState] = useState<{
     resetKey: string | undefined;
     segment: TranscriptSegment | null;
-  }>({ resetKey, segment: null });
+    index: number;
+  }>({ resetKey, segment: null, index: -1 });
   const requestIdRef = useRef(0);
 
   const pinnedSegment =
     pinState.resetKey === resetKey ? pinState.segment : null;
   const analysisSegment = pinnedSegment ?? activeSegment;
+  const analysisIndex = pinnedSegment ? pinState.index : activeIndex;
   const isPinned = pinnedSegment !== null;
 
   const cachedAnalysis = analysisSegment
@@ -92,7 +101,7 @@ export function useSentenceAnalysis({
     : null;
 
   useEffect(() => {
-    if (!analysisSegment || !lang) {
+    if (!analysisSegment || analysisIndex < 0 || !lang) {
       return;
     }
 
@@ -102,12 +111,13 @@ export function useSentenceAnalysis({
       return;
     }
 
-    const preview = createPreviewAnalysis(analysisSegment);
+    const preview = createPreviewAnalysis(analysisSegment, analysisIndex);
     const requestId = requestIdRef.current + 1;
     requestIdRef.current = requestId;
 
     const controller = new AbortController();
     const segmentToLoad = analysisSegment;
+    const indexToLoad = analysisIndex;
 
     const debounceId = window.setTimeout(() => {
       setState({
@@ -116,7 +126,7 @@ export function useSentenceAnalysis({
         error: null,
       });
 
-      loadAnalysis(segmentToLoad, lang, controller.signal)
+      loadAnalysis(segmentToLoad, indexToLoad, lang, controller.signal)
         .then((analysis) => {
           if (requestIdRef.current !== requestId) {
             return;
@@ -151,18 +161,22 @@ export function useSentenceAnalysis({
       window.clearTimeout(debounceId);
       controller.abort();
     };
-  }, [analysisSegment, lang, cachedAnalysis]);
+  }, [analysisSegment, analysisIndex, lang, cachedAnalysis]);
 
-  const unpin = () => setPinState({ resetKey, segment: null });
+  const unpin = () => setPinState({ resetKey, segment: null, index: -1 });
 
   const togglePin = () => {
     setPinState((current) => {
       const currentPinned =
         current.resetKey === resetKey ? current.segment : null;
       if (currentPinned) {
-        return { resetKey, segment: null };
+        return { resetKey, segment: null, index: -1 };
       }
-      return { resetKey, segment: analysisSegment };
+      return {
+        resetKey,
+        segment: analysisSegment,
+        index: analysisIndex,
+      };
     });
   };
 

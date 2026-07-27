@@ -37,3 +37,12 @@ export const STANZA_POS_POLISH_LABELS: Record<StanzaPos, string> = {
   VERB: 'czasownik',
   X: 'inne',
 };
+
+export type StanzaMood = 'Ind' | 'Imp' | 'Cnd' | 'Sub';
+
+export const STANZA_MOOD_POLISH_LABELS: Record<StanzaMood, string> = {
+  Ind: 'tryb oznajmujący',
+  Imp: 'tryb rozkazujący',
+  Cnd: 'tryb przypuszczający',
+  Sub: 'tryb łączący',
+};

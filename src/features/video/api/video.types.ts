@@ -1,4 +1,7 @@
-import type { StanzaPos } from '@/features/dashboard/types/stanza-pos.types';
+import type {
+  StanzaMood,
+  StanzaPos,
+} from '@/features/dashboard/types/stanza-tags.types';
 
 export type TranscriptSegment = {
   nativeText: string;
@@ -29,8 +32,6 @@ export type WordAnalyzedDto = {
   pos: StanzaPos;
   number?: string | null;
   tense?: string | null;
-  /** Prefer `mod`; NLP may still send `mood`. */
-  mod?: string | null;
-  mood?: string | null;
+  mood?: StanzaMood | null;
   gender?: string | null;
 };

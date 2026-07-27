@@ -119,7 +119,7 @@ export function SentenceAnalysisPanel({
     return null;
   }
 
-  const { startSeconds, targetTranslation, words } = analysis;
+  const { index, startSeconds, targetTranslation, words } = analysis;
 
   return (
     <div className="flex shrink-0 flex-col border-t bg-canvas">
@@ -128,7 +128,7 @@ export function SentenceAnalysisPanel({
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <p className="text-2xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Analiza zdania
+                Analiza zdania {index + 1}
               </p>
               {status === 'loading' ? (
                 <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />

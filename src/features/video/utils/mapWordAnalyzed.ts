@@ -9,11 +9,10 @@ export function mapWordAnalyzed(
     id: `${word.lemma}-${index}`,
     pos: word.pos,
     text: word.text,
-    translation: '…',
+    translation: word.text.toLowerCase().split('').reverse().join(''),
     lemma: word.lemma,
-    lemmaTranslation: '…',
-
-    mood: word.mood ?? '…',
+    lemmaTranslation: word.text.toLowerCase().split('').reverse().join(''),
+    mood: word.mood ?? undefined,
     tense: word.tense ?? undefined,
   };
 
@@ -28,6 +27,5 @@ export function createPreviewWords(sentence: string): SentenceAnalysisWord[] {
     lemma: text.replace(/[.,!?]$/, ''),
     lemmaTranslation: '',
     pos: 'X',
-    mood: '—',
   }));
 }
