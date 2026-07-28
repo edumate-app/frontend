@@ -14,6 +14,9 @@ export function mapWordAnalyzed(
     lemmaTranslation: word.text.toLowerCase().split('').reverse().join(''),
     mood: word.mood ?? undefined,
     tense: word.tense ?? undefined,
+    conjugation: word.conjugation,
+    conjugationPerson: word.person,
+    number: word.number,
   };
 
   return mapped;
@@ -27,5 +30,6 @@ export function createPreviewWords(sentence: string): SentenceAnalysisWord[] {
     lemma: text.replace(/[.,!?]$/, ''),
     lemmaTranslation: '',
     pos: 'X',
+    conjugation: [],
   }));
 }

@@ -7,6 +7,8 @@ export type VerbConjugationForm = {
   form: string;
 };
 
+export type NumberType = 'Sing' | 'Plur';
+
 export type SentenceAnalysisWord = {
   id: string;
   pos: StanzaPos;
@@ -18,9 +20,10 @@ export type SentenceAnalysisWord = {
 
   // for verbs and auxiliaries
   tense?: string;
-  conjugation?: VerbConjugationForm[];
-  conjugationPerson?: string;
+  conjugation: VerbConjugationForm[];
+  conjugationPerson?: number;
   mood?: StanzaMood;
+  number?: NumberType | null;
 
   // for non-verbs
   family?: string[];

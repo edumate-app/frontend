@@ -76,8 +76,11 @@ export function ExpressionWordDetails({
           Odmiana (tryb oznajmujący, czas teraźniejszy):
         </dt>
         <dd className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5">
-          {word.conjugation.map((entry) => {
-            const isActivePerson = entry.person === word.conjugationPerson;
+          {word.conjugation.map((entry, i) => {
+            const personOffset = word.number === 'Plur' ? 3 : 0;
+            const isActivePerson =
+              word.conjugationPerson != null &&
+              i === personOffset + word.conjugationPerson - 1;
 
             return (
               <p key={entry.person} className="font-mono text-foreground">

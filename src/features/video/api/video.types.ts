@@ -1,4 +1,8 @@
 import type {
+  NumberType,
+  VerbConjugationForm,
+} from '@/features/dashboard/types/sentence-analysis.types';
+import type {
   StanzaMood,
   StanzaPos,
 } from '@/features/dashboard/types/stanza-tags.types';
@@ -30,8 +34,11 @@ export type WordAnalyzedDto = {
   text: string;
   lemma: string;
   pos: StanzaPos;
-  number?: string | null;
   tense?: string | null;
   mood?: StanzaMood | null;
   gender?: string | null;
+
+  conjugation: VerbConjugationForm[];
+  person: number;
+  number?: NumberType | null;
 };
