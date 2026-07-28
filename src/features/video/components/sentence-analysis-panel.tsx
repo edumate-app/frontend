@@ -1,4 +1,11 @@
-import { useId, useState } from 'react';
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+} from 'react';
 import {
   type SentenceAnalysis,
   type SentenceAnalysisWord,
@@ -8,6 +15,8 @@ import { cn } from '@/lib/utils';
 import { ExpressionWordDetails } from './expression-word-details';
 import type { SentenceAnalysisStatus } from '../hooks/useSentenceAnalysis';
 import { Loader2, Pin, PinOff } from 'lucide-react';
+import SelectionBar from './SelectionBar';
+import ExpressionLegend from './ExpressionLegend';
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);
@@ -44,16 +53,18 @@ function WordDetailCard({ token }: { token: SentenceAnalysisWord }) {
 
 function WordBlock({
   token,
-  isActive,
+  isHovered,
+  isSelected,
   onHover,
   onLeave,
   onClick,
 }: {
   token: SentenceAnalysisWord;
-  isActive: boolean;
-  onHover: () => void;
+  isHovered: boolean;
+  isSelected: boolean;
+  onHover: (event: MouseEvent<HTMLButtonElement>) => void;
   onLeave: () => void;
-  onClick: () => void;
+  onClick: (event: MouseEvent<HTMLButtonElement>) => void;
 }) {
   return (
     <span className="relative inline">
@@ -62,45 +73,30 @@ function WordBlock({
         onMouseEnter={onHover}
         onMouseLeave={onLeave}
         onClick={onClick}
-        aria-expanded={isActive}
+        aria-expanded={isHovered}
+        aria-pressed={isSelected}
         className={cn(
           'cursor-pointer rounded-sm px-0.5 transition-colors',
           'hover:bg-muted/70 focus-visible:outline-none focus-visible:shadow-focus',
-          isActive && 'bg-muted ring-1 ring-ring/30',
-          token.userStatus === 'familiar' &&
+          // Analysis preview (hover / pinned tooltip)
+          isHovered && !isSelected && 'bg-muted ring-1 ring-ring/30',
+          // Selection for library save
+          isSelected &&
+            'bg-amber-100/90 text-amber-950 ring-1 ring-amber-400/70 hover:bg-amber-200/80',
+          // Familiar (seen 5+)
+          !isSelected &&
+            token.userStatus === 'familiar' &&
             'bg-blue-100/90 text-blue-900 hover:bg-blue-200/80',
-          token.userStatus === 'unknown' &&
+          // New in library / unknown
+          !isSelected &&
+            (token.userStatus === 'new' || token.userStatus === 'unknown') &&
             'bg-emerald-100/90 text-emerald-900 hover:bg-emerald-200/80',
         )}
       >
         {token.text}
       </button>
-      {isActive && <WordDetailCard token={token} />}
+      {isHovered && <WordDetailCard token={token} />}
     </span>
-  );
-}
-
-function ExpressionLegend() {
-  return (
-    <aside className="flex shrink-0 flex-col gap-3 border-l pl-4 text-xs text-muted-foreground">
-      <p className="font-semibold uppercase tracking-wide text-2xs">Legenda</p>
-      <span className="flex items-start gap-2">
-        <span className="mt-0.5 inline-block h-3 w-5 shrink-0 rounded-sm bg-emerald-100 ring-1 ring-emerald-200/80" />
-        <span>
-          <span className="block font-medium text-foreground">
-            Nowe w bibliotece
-          </span>
-          Dopiero dodane wyrażenie
-        </span>
-      </span>
-      <span className="flex items-start gap-2">
-        <span className="mt-0.5 inline-block h-3 w-5 shrink-0 rounded-sm bg-blue-100 ring-1 ring-blue-200/80" />
-        <span>
-          <span className="block font-medium text-foreground">Znane (5+)</span>
-          Spotkane wielokrotnie w materiałach
-        </span>
-      </span>
-    </aside>
   );
 }
 
@@ -112,8 +108,52 @@ export function SentenceAnalysisPanel({
 }: SentenceAnalysisPanelProps) {
   const [pinnedId, setPinnedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [lastSelectedIndex, setLastSelectedIndex] = useState<number | null>(
+    null,
+  );
+  const [isCtrlHeld, setIsCtrlHeld] = useState(false);
+  const wordsRef = useRef<HTMLParagraphElement>(null);
+  const [isSingleLine, setIsSingleLine] = useState(true);
 
-  const activeId = pinnedId ?? hoveredId;
+  useEffect(() => {
+    const syncCtrl = (event: KeyboardEvent) => {
+      setIsCtrlHeld(event.ctrlKey);
+      if (event.ctrlKey) {
+        setHoveredId(null);
+        setPinnedId(null);
+      }
+    };
+    const clearCtrl = () => setIsCtrlHeld(false);
+
+    window.addEventListener('keydown', syncCtrl);
+    window.addEventListener('keyup', syncCtrl);
+    window.addEventListener('blur', clearCtrl);
+    return () => {
+      window.removeEventListener('keydown', syncCtrl);
+      window.removeEventListener('keyup', syncCtrl);
+      window.removeEventListener('blur', clearCtrl);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const el = wordsRef.current;
+    if (!el) return;
+
+    const update = () => {
+      const styles = getComputedStyle(el);
+      let lineHeight = parseFloat(styles.lineHeight);
+      if (Number.isNaN(lineHeight)) {
+        lineHeight = parseFloat(styles.fontSize) * 1.5;
+      }
+      setIsSingleLine(el.getBoundingClientRect().height <= lineHeight * 1.25);
+    };
+
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [analysis?.words]);
 
   if (!analysis) {
     return null;
@@ -121,9 +161,45 @@ export function SentenceAnalysisPanel({
 
   const { index, startSeconds, targetTranslation, words } = analysis;
 
+  const handleWordClick = (
+    token: SentenceAnalysisWord,
+    wordIndex: number,
+    event: MouseEvent<HTMLButtonElement>,
+  ) => {
+    if (!event.ctrlKey) {
+      setPinnedId((current) => (current === token.id ? null : token.id));
+      return;
+    }
+
+    setHoveredId(null);
+    setPinnedId(null);
+
+    let next: string[];
+
+    if (
+      event.shiftKey &&
+      lastSelectedIndex != null &&
+      lastSelectedIndex !== wordIndex
+    ) {
+      const from = Math.min(lastSelectedIndex, wordIndex);
+      const to = Math.max(lastSelectedIndex, wordIndex);
+      const rangeIds = words.slice(from, to + 1).map((word) => word.id);
+      next = Array.from(new Set([...selectedIds, ...rangeIds]));
+    } else if (selectedIds.includes(token.id)) {
+      next = selectedIds.filter((id) => id !== token.id);
+    } else {
+      next = [...selectedIds, token.id];
+    }
+
+    setSelectedIds(next);
+    setLastSelectedIndex(wordIndex);
+  };
+
+  const activeTooltipId = isCtrlHeld ? null : (pinnedId ?? hoveredId);
+
   return (
     <div className="flex shrink-0 flex-col border-t bg-canvas">
-      <div className="px-6 pt-4">
+      <div className="pl-6 pr-2 pt-2">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <div className="flex items-center gap-2">
@@ -182,31 +258,56 @@ export function SentenceAnalysisPanel({
         </div>
       </div>
 
-      <div className="flex items-start gap-6 px-6 py-5 pt-0">
-        <div className="min-w-0 flex-1">
-          <p className="text-center text-xl font-medium leading-relaxed text-foreground sm:text-2xl">
-            {words.map((token, index) => (
-              <span key={token.id}>
-                <WordBlock
-                  token={token}
-                  isActive={activeId === token.id}
-                  onHover={() => setHoveredId(token.id)}
-                  onLeave={() => setHoveredId(null)}
-                  onClick={() =>
-                    setPinnedId((current) =>
-                      current === token.id ? null : token.id,
-                    )
-                  }
-                />
-                {index < words.length - 1 && ' '}
-              </span>
-            ))}
-          </p>
-          <p className="mt-3 text-center text-base leading-relaxed text-muted-foreground sm:text-lg">
-            {targetTranslation}
-          </p>
+      <div className="flex justify-center">
+        <div className="flex min-w-0 flex-1 flex-col justify-center gap-3">
+          <div
+            className={cn(
+              'h-full px-6',
+              // Largest: single line, no selection bar
+              // Medium: wrapped only, or selection bar only
+              // Smallest: wrapped + selection bar
+              !isSingleLine && selectedIds.length > 0
+                ? 'pt-2'
+                : !isSingleLine || selectedIds.length > 0
+                  ? 'pt-4'
+                  : 'pt-7',
+            )}
+          >
+            <p
+              ref={wordsRef}
+              className="text-center text-xl font-medium leading-relaxed text-foreground sm:text-2xl"
+            >
+              {words.map((token, index) => (
+                <span key={token.id}>
+                  <WordBlock
+                    token={token}
+                    isHovered={activeTooltipId === token.id}
+                    isSelected={selectedIds.includes(token.id)}
+                    onHover={(event) => {
+                      if (event.ctrlKey || isCtrlHeld) return;
+                      setHoveredId(token.id);
+                    }}
+                    onLeave={() => setHoveredId(null)}
+                    onClick={(event) => handleWordClick(token, index, event)}
+                  />
+                  {index < words.length - 1 && ' '}
+                </span>
+              ))}
+            </p>
+            <p className="mt-3 text-center text-base leading-relaxed text-muted-foreground sm:text-lg">
+              {targetTranslation}
+            </p>
+          </div>
+          {selectedIds.length > 0 && (
+            <SelectionBar
+              count={selectedIds.length}
+              onClear={() => {
+                setSelectedIds([]);
+                setLastSelectedIndex(null);
+              }}
+            />
+          )}
         </div>
-
         <ExpressionLegend />
       </div>
     </div>
