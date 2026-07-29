@@ -8,10 +8,10 @@ export type ExpressionContext = {
   id: string;
   targetSentence: string;
   nativeTranslation: string;
-  videoId: string;
+  video_uuid: string;
   videoTitle: string;
+  matchedForms: string[];
   startSeconds: number;
-  savedAt: string;
 };
 
 export type LibraryExpression = {

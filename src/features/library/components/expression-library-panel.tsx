@@ -109,16 +109,21 @@ function ExpressionListItem({
 
 function ContextCard({
   context,
-  highlightedText,
+  highlightedTexts,
   onDelete,
 }: {
   context: ExpressionContext;
-  highlightedText: string;
+  highlightedTexts: string[];
   onDelete: () => void;
 }) {
-  const highlightSource = highlightedText.replace(/[.,!?]$/, '');
+  const sanitizedHighlights = highlightedTexts
+    .map((text) => text.replace(/[.,!?]$/, '').trim())
+    .filter(Boolean)
+    .sort((a, b) => b.length - a.length);
   const highlightPattern = new RegExp(
-    `(${highlightSource.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`,
+    `(${sanitizedHighlights
+      .map((text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+      .join('|')})`,
     'gi',
   );
   const sentenceParts = context.targetSentence.split(highlightPattern);
@@ -128,7 +133,9 @@ function ContextCard({
       <CardContent className="p-4">
         <p className="text-sm leading-relaxed text-foreground">
           {sentenceParts.map((part, index) =>
-            part.toLowerCase() === highlightSource.toLowerCase() ? (
+            sanitizedHighlights.some(
+              (highlight) => part.toLowerCase() === highlight.toLowerCase(),
+            ) ? (
               <mark
                 key={index}
                 className="rounded-sm bg-primary-100/80 px-0.5 font-medium text-primary-900"
@@ -146,7 +153,7 @@ function ContextCard({
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border/60 pt-3">
           <Link
-            to={`/app/videos/${context.videoId}`}
+            to={`/app/videos/${context.video_uuid}`}
             className="inline-flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
           >
             <Film className="h-3.5 w-3.5 shrink-0" />
@@ -250,7 +257,11 @@ function ExpressionDetail({
                   <ContextCard
                     key={context.id}
                     context={context}
-                    highlightedText={expression.lemma}
+                    highlightedTexts={
+                      context.matchedForms.length > 0
+                        ? context.matchedForms
+                        : [expression.lemma]
+                    }
                     onDelete={() => onDeleteContext(context.id)}
                   />
                 ))}

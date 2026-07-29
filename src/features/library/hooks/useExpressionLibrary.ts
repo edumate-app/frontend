@@ -53,28 +53,29 @@ export function useExpressionLibrary(
   }
 
   function removeContext(expressionId: string, contextId: string) {
-    setExpressions((current) =>
-      current.flatMap((expression) => {
-        if (expression.id !== expressionId) {
-          return expression;
-        }
+    console.log('removeContext', expressionId, contextId);
+    // setExpressions((current) =>
+    //   current.flatMap((expression) => {
+    //     if (expression.id !== expressionId) {
+    //       return expression;
+    //     }
 
-        const contexts = expression.contexts.filter(
-          (context) => context.id !== contextId,
-        );
+    //     const contexts = expression.contexts.filter(
+    //       (context) => context.id !== contextId,
+    //     );
 
-        if (contexts.length === 0) {
-          return [];
-        }
+    //     if (contexts.length === 0) {
+    //       return [];
+    //     }
 
-        return [
-          {
-            ...expression,
-            contexts,
-          },
-        ];
-      }),
-    );
+    //     return [
+    //       {
+    //         ...expression,
+    //         contexts,
+    //       },
+    //     ];
+    //   }),
+    // );
   }
 
   return {
