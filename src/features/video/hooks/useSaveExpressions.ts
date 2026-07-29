@@ -5,10 +5,7 @@ import { VideoApi } from '../api/video.api';
 export default function useSaveExpressions() {
   const { video_uuid } = useParams<{ video_uuid: string }>();
 
-  const saveExpressions = async (
-    expressions: Expression[],
-    index: number,
-  ) => {
+  const saveExpressions = async (expressions: Expression[], index: number) => {
     if (!video_uuid) return;
     await VideoApi.addExpressionsToLibrary({
       expressions,
