@@ -1,6 +1,9 @@
-import { useMemo, useState } from 'react';
-import { MOCK_EXPRESSION_LIBRARY } from '@/features/library/mocks/expression-library.mock';
-import type { LibraryExpression } from '@/features/library/types/expression-library.types';
+import { useEffect, useMemo, useState } from 'react';
+import type {
+  ExpressionContext,
+  LibraryExpression,
+} from '@/features/library/types/expression-library.types';
+import { VideoApi } from '@/features/video/api/video.api';
 
 export type SearchLanguage = 'target' | 'native';
 
@@ -22,17 +25,19 @@ function matchesSearch(
   return expression.lemmaTranslation.toLowerCase().includes(normalizedQuery);
 }
 
-export function useExpressionLibrary(
-  initialExpressions = MOCK_EXPRESSION_LIBRARY,
-) {
-  const [expressions, setExpressions] =
-    useState<LibraryExpression[]>(initialExpressions);
+export function useExpressionLibrary() {
+  const [expressions, setExpressions] = useState<LibraryExpression[]>([]);
+  const [expressionError, setExpressionError] = useState<string | null>(null);
+  const [expressionIsLoading, setExpressionIsLoading] = useState(true);
+
+  const [contexts, setContexts] = useState<ExpressionContext[]>([]);
+  const [contextsError, setContextsError] = useState<string | null>(null);
+  const [contextsIsLoading, setContextsIsLoading] = useState(true);
+
   const [query, setQuery] = useState('');
   const [searchLanguage, setSearchLanguage] =
     useState<SearchLanguage>('target');
-  const [selectedId, setSelectedId] = useState<string | null>(
-    initialExpressions[0]?.id ?? null,
-  );
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const filteredExpressions = useMemo(
     () =>
@@ -44,51 +49,61 @@ export function useExpressionLibrary(
 
   const selectedExpression =
     expressions.find((expression) => expression.id === selectedId) ?? null;
+  const showDetailOnMobile = selectedId !== null;
 
-  function removeExpression(expressionId: string) {
-    setExpressions((current) =>
-      current.filter((expression) => expression.id !== expressionId),
-    );
-    setSelectedId((current) => (current === expressionId ? null : current));
-  }
+  const fetchExpressionContexts = async (expressionId: string) => {
+    setContextsIsLoading(true);
+    setContextsError(null);
+    VideoApi.getExpressionContexts(expressionId)
+      .then((response) => {
+        setContexts(response.data);
+      })
+      .catch(() => {
+        setContextsError('Nie udało się pobrać kontekstów wyrażenia.');
+        setContexts([]);
+      });
+  };
 
-  function removeContext(expressionId: string, contextId: string) {
-    console.log('removeContext', expressionId, contextId);
-    // setExpressions((current) =>
-    //   current.flatMap((expression) => {
-    //     if (expression.id !== expressionId) {
-    //       return expression;
-    //     }
+  const selectExpression = (expressionId: string | null) => {
+    setSelectedId(expressionId);
 
-    //     const contexts = expression.contexts.filter(
-    //       (context) => context.id !== contextId,
-    //     );
+    if (expressionId === null) {
+      setContexts([]);
+      setContextsError(null);
+      setContextsIsLoading(false);
+      return;
+    }
 
-    //     if (contexts.length === 0) {
-    //       return [];
-    //     }
+    void fetchExpressionContexts(expressionId);
+  };
 
-    //     return [
-    //       {
-    //         ...expression,
-    //         contexts,
-    //       },
-    //     ];
-    //   }),
-    // );
-  }
+  useEffect(() => {
+    VideoApi.getExpressions()
+      .then((response) => {
+        setExpressions(response.data);
+      })
+      .catch(() => {
+        setExpressionError('Nie udało się pobrać listy wyrażeń.');
+      })
+      .finally(() => {
+        setExpressionIsLoading(false);
+      });
+  }, []);
 
   return {
     expressions,
+    expressionError,
+    expressionIsLoading,
     filteredExpressions,
     selectedExpression,
-    selectedId,
-    setSelectedId,
+    showDetailOnMobile,
+    selectExpression,
     query,
     setQuery,
     searchLanguage,
     setSearchLanguage,
-    removeExpression,
-    removeContext,
+    contexts,
+    contextsError,
+    contextsIsLoading,
   };
 }

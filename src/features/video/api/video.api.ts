@@ -6,6 +6,10 @@ import type {
   UpdatePositionRequest,
   WordAnalyzedDto,
 } from './video.types';
+import type {
+  ExpressionContext,
+  LibraryExpression,
+} from '@/features/library/types/expression-library.types';
 
 export const VideoApi = {
   getTranscript: (video_uuid: string) =>
@@ -18,4 +22,7 @@ export const VideoApi = {
       .then((response) => response.data),
   addExpressionsToLibrary: (req: AddExpressionRequest) =>
     apiClient.post('/expression', req),
+  getExpressions: () => apiClient.get<LibraryExpression[]>('/expression'),
+  getExpressionContexts: (expressionId: string) =>
+    apiClient.get<ExpressionContext[]>(`/expression/${expressionId}/contexts`),
 };

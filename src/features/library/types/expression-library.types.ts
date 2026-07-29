@@ -20,7 +20,6 @@ export type LibraryExpression = {
   lemmaTranslation: string;
   pos: StanzaPos;
   conjugation: VerbConjugationForm[];
-  contexts: ExpressionContext[];
   addedAt: string;
   userStatus?: userStatus;
   family?: string[];

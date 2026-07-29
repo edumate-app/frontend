@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -11,14 +10,6 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import {
   NativeSelect,
@@ -37,14 +28,6 @@ import type {
   LibraryExpression,
 } from '@/features/library/types/expression-library.types';
 import { cn } from '@/lib/utils';
-
-type DeleteTarget =
-  | { type: 'expression'; expression: LibraryExpression }
-  | {
-      type: 'context';
-      expression: LibraryExpression;
-      context: ExpressionContext;
-    };
 
 function StatusBadge({ expression }: { expression: LibraryExpression }) {
   if (expression.userStatus === 'new') {
@@ -68,10 +51,12 @@ function StatusBadge({ expression }: { expression: LibraryExpression }) {
 
 function ExpressionListItem({
   expression,
+  contexts,
   isSelected,
   onSelect,
 }: {
   expression: LibraryExpression;
+  contexts: ExpressionContext[];
   isSelected: boolean;
   onSelect: () => void;
 }) {
@@ -97,9 +82,8 @@ function ExpressionListItem({
           {expression.lemmaTranslation}
         </p>
         <p className="mt-1.5 text-2xs text-muted-foreground/80">
-          {STANZA_POS_POLISH_LABELS[expression.pos]} ·{' '}
-          {expression.contexts.length}{' '}
-          {expression.contexts.length === 1 ? 'kontekst' : 'konteksty'}
+          {STANZA_POS_POLISH_LABELS[expression.pos]} · {contexts.length}{' '}
+          {contexts.length === 1 ? 'kontekst' : 'konteksty'}
         </p>
       </div>
       <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/50" />
@@ -120,13 +104,18 @@ function ContextCard({
     .map((text) => text.replace(/[.,!?]$/, '').trim())
     .filter(Boolean)
     .sort((a, b) => b.length - a.length);
-  const highlightPattern = new RegExp(
-    `(${sanitizedHighlights
-      .map((text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-      .join('|')})`,
-    'gi',
-  );
-  const sentenceParts = context.targetSentence.split(highlightPattern);
+  const highlightPattern =
+    sanitizedHighlights.length > 0
+      ? new RegExp(
+          `(?<![\\p{L}\\p{N}_])(${sanitizedHighlights
+            .map((text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+            .join('|')})(?![\\p{L}\\p{N}_])`,
+          'giu',
+        )
+      : null;
+  const sentenceParts = highlightPattern
+    ? context.targetSentence.split(highlightPattern)
+    : [context.targetSentence];
 
   return (
     <Card className="overflow-hidden shadow-none">
@@ -180,11 +169,13 @@ function ContextCard({
 
 function ExpressionDetail({
   expression,
+  contexts,
   onBack,
   onDeleteExpression,
   onDeleteContext,
 }: {
   expression: LibraryExpression;
+  contexts: ExpressionContext[];
   onBack: () => void;
   onDeleteExpression: () => void;
   onDeleteContext: (contextId: string) => void;
@@ -243,17 +234,17 @@ function ExpressionDetail({
 
         <div className="px-4 py-4 sm:px-5">
           <p className="mb-3 shrink-0 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Konteksty ({expression.contexts.length})
+            Konteksty ({contexts.length})
           </p>
 
-          {expression.contexts.length === 0 ? (
+          {contexts.length === 0 ? (
             <p className="text-sm text-muted-foreground">
               Brak zapisanych kontekstów dla tego wyrażenia.
             </p>
           ) : (
             <ScrollArea className="h-120 w-full">
               <div className="space-y-3">
-                {expression.contexts.map((context) => (
+                {contexts.map((context) => (
                   <ContextCard
                     key={context.id}
                     context={context}
@@ -274,92 +265,18 @@ function ExpressionDetail({
   );
 }
 
-function DeleteConfirmDialog({
-  target,
-  onClose,
-  onConfirm,
-}: {
-  target: DeleteTarget | null;
-  onClose: () => void;
-  onConfirm: () => void;
-}) {
-  if (!target) {
-    return null;
-  }
-
-  const isExpression = target.type === 'expression';
-
-  return (
-    <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            {isExpression ? 'Usunąć wyrażenie?' : 'Usunąć kontekst?'}
-          </DialogTitle>
-          <DialogDescription>
-            {isExpression ? (
-              <>
-                Wyrażenie{' '}
-                <span className="font-mono font-medium text-foreground">
-                  {target.expression.lemma}
-                </span>{' '}
-                zostanie trwale usunięte z biblioteki wraz ze wszystkimi
-                kontekstami ({target.expression.contexts.length}).
-              </>
-            ) : (
-              <>
-                Kontekst z filmu{' '}
-                <span className="font-medium text-foreground">
-                  {target.context.videoTitle}
-                </span>{' '}
-                zostanie usunięty.
-                {target.expression.contexts.length === 1 &&
-                  ' To ostatni kontekst — wyrażenie również zostanie usunięte.'}
-              </>
-            )}
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            Anuluj
-          </Button>
-          <Button variant="destructive" onClick={onConfirm}>
-            Usuń
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
 export function ExpressionLibraryPanel() {
   const {
     filteredExpressions,
     selectedExpression,
-    selectedId,
-    setSelectedId,
+    showDetailOnMobile,
+    selectExpression,
     query,
     setQuery,
     searchLanguage,
     setSearchLanguage,
-    removeExpression,
-    removeContext,
+    contexts,
   } = useExpressionLibrary();
-
-  const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
-  const showDetailOnMobile = selectedId !== null;
-
-  function handleDeleteConfirm() {
-    if (!deleteTarget) return;
-
-    if (deleteTarget.type === 'expression') {
-      removeExpression(deleteTarget.expression.id);
-    } else {
-      removeContext(deleteTarget.expression.id, deleteTarget.context.id);
-    }
-
-    setDeleteTarget(null);
-  }
 
   return (
     <>
@@ -418,8 +335,9 @@ export function ExpressionLibraryPanel() {
                 <ExpressionListItem
                   key={expression.id}
                   expression={expression}
-                  isSelected={selectedId === expression.id}
-                  onSelect={() => setSelectedId(expression.id)}
+                  contexts={contexts}
+                  isSelected={selectedExpression?.id === expression.id}
+                  onSelect={() => selectExpression(expression.id)}
                 />
               ))
             )}
@@ -435,25 +353,10 @@ export function ExpressionLibraryPanel() {
           {selectedExpression ? (
             <ExpressionDetail
               expression={selectedExpression}
-              onBack={() => setSelectedId(null)}
-              onDeleteExpression={() =>
-                setDeleteTarget({
-                  type: 'expression',
-                  expression: selectedExpression,
-                })
-              }
-              onDeleteContext={(contextId) => {
-                const context = selectedExpression.contexts.find(
-                  (item) => item.id === contextId,
-                );
-                if (!context) return;
-
-                setDeleteTarget({
-                  type: 'context',
-                  expression: selectedExpression,
-                  context,
-                });
-              }}
+              contexts={contexts}
+              onBack={() => selectExpression(null)}
+              onDeleteExpression={() => {}}
+              onDeleteContext={() => {}}
             />
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-3 px-6 py-16 text-center">
@@ -469,12 +372,6 @@ export function ExpressionLibraryPanel() {
           )}
         </div>
       </div>
-
-      <DeleteConfirmDialog
-        target={deleteTarget}
-        onClose={() => setDeleteTarget(null)}
-        onConfirm={handleDeleteConfirm}
-      />
     </>
   );
 }
