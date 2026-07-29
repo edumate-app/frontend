@@ -17,6 +17,7 @@ import type { SentenceAnalysisStatus } from '../hooks/useSentenceAnalysis';
 import { Loader2, Pin, PinOff } from 'lucide-react';
 import SelectionBar from './SelectionBar';
 import ExpressionLegend from './ExpressionLegend';
+import useSaveExpressions from '../hooks/useSaveExpressions';
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);
@@ -115,6 +116,8 @@ export function SentenceAnalysisPanel({
   const [isCtrlHeld, setIsCtrlHeld] = useState(false);
   const wordsRef = useRef<HTMLParagraphElement>(null);
   const [isSingleLine, setIsSingleLine] = useState(true);
+
+  const { saveExpressions } = useSaveExpressions();
 
   useEffect(() => {
     const syncCtrl = (event: KeyboardEvent) => {
@@ -302,6 +305,35 @@ export function SentenceAnalysisPanel({
             <SelectionBar
               count={selectedIds.length}
               onClear={() => {
+                setSelectedIds([]);
+                setLastSelectedIndex(null);
+              }}
+              onSubmit={async () => {
+                console.log(
+                  'saving expressions',
+                  words
+                    .filter((w) => selectedIds.includes(w.id))
+                    .map((w) => ({
+                      text: w.text,
+                      lemma: w.lemma,
+                      translation: w.translation,
+                      pos: w.pos,
+                      conjugation: w.conjugation,
+                    })),
+                );
+                await saveExpressions(
+                  words
+                    .filter((w) => selectedIds.includes(w.id))
+                    .map((w) => ({
+                      text: w.text,
+                      lemma: w.lemma,
+                      lemmaTranslation: w.lemmaTranslation,
+                      pos: w.pos,
+                      conjugation: w.conjugation,
+                    })),
+                  index,
+                );
+
                 setSelectedIds([]);
                 setLastSelectedIndex(null);
               }}

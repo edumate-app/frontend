@@ -42,3 +42,17 @@ export type WordAnalyzedDto = {
   person: number;
   number?: NumberType | null;
 };
+
+export type Expression = {
+  text: string;
+  lemma: string;
+  lemmaTranslation: string;
+  pos: StanzaPos;
+  conjugation: VerbConjugationForm[];
+};
+
+export type AddExpressionRequest = {
+  expressions: Expression[];
+  contextIndex: number;
+  video_uuid: string;
+};

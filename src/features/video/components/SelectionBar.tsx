@@ -10,9 +10,11 @@ function selectionLabel(count: number) {
 export default function SelectionBar({
   count,
   onClear,
+  onSubmit,
 }: {
   count: number;
   onClear: () => void;
+  onSubmit: () => void;
 }) {
   return (
     <div className="flex w-full items-center justify-between gap-3 border-t border-amber-200/80 bg-amber-50/80 px-6 py-2.5">
@@ -30,7 +32,12 @@ export default function SelectionBar({
           <X className="h-3.5 w-3.5" />
           Wyczyść
         </Button>
-        <Button type="button" size="sm" className="h-8 gap-1.5 px-2.5 text-xs">
+        <Button
+          type="button"
+          size="sm"
+          onClick={onSubmit}
+          className="h-8 gap-1.5 px-2.5 text-xs"
+        >
           <BookmarkPlus className="h-3.5 w-3.5" />
           Zapisz do biblioteki
         </Button>

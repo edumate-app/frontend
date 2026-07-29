@@ -1,5 +1,6 @@
 import { apiClient } from '@/app/api/apiClient';
 import type {
+  AddExpressionRequest,
   AnalyzeRequest,
   TranscriptResponse,
   UpdatePositionRequest,
@@ -15,4 +16,6 @@ export const VideoApi = {
     apiClient
       .post<WordAnalyzedDto[]>('/expression/analyze', req, { signal })
       .then((response) => response.data),
+  addExpressionsToLibrary: (req: AddExpressionRequest) =>
+    apiClient.post('/expression', req),
 };
