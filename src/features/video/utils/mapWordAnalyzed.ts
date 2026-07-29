@@ -1,0 +1,35 @@
+import type { SentenceAnalysisWord } from '@/features/dashboard/types/sentence-analysis.types';
+import type { WordAnalyzedDto } from '../api/video.types';
+
+export function mapWordAnalyzed(
+  word: WordAnalyzedDto,
+  index: number,
+): SentenceAnalysisWord {
+  const mapped: SentenceAnalysisWord = {
+    id: `${word.lemma}-${index}`,
+    pos: word.pos,
+    text: word.text,
+    translation: word.text.toLowerCase().split('').reverse().join(''),
+    lemma: word.lemma,
+    lemmaTranslation: word.text.toLowerCase().split('').reverse().join(''),
+    mood: word.mood ?? undefined,
+    tense: word.tense ?? undefined,
+    conjugation: word.conjugation,
+    conjugationPerson: word.person,
+    number: word.number,
+  };
+
+  return mapped;
+}
+
+export function createPreviewWords(sentence: string): SentenceAnalysisWord[] {
+  return sentence.split(/\s+/).map((text, index) => ({
+    id: `preview-${index}`,
+    text,
+    translation: '',
+    lemma: text.replace(/[.,!?]$/, ''),
+    lemmaTranslation: '',
+    pos: 'X',
+    conjugation: [],
+  }));
+}

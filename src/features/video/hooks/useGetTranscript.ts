@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { dashboardApi } from '../api/dashboard.api';
-import type { TranscriptSegment } from '../api/dashboard.types';
+import { VideoApi } from '../api/video.api';
+import type { TranscriptSegment } from '../api/video.types';
 
 export const useGetTranscript = () => {
   const { video_uuid } = useParams<{ video_uuid: string }>();
@@ -10,6 +10,7 @@ export const useGetTranscript = () => {
   const [lastPositionSeconds, setLastPositionSeconds] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [loadedVideoUuid, setLoadedVideoUuid] = useState<string | null>(null);
+  const [videoLang, setVideoLang] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const isLoading = Boolean(video_uuid && video_uuid !== loadedVideoUuid);
@@ -18,14 +19,14 @@ export const useGetTranscript = () => {
     if (!video_uuid) return;
     let cancelled = false;
 
-    dashboardApi
-      .getTranscript(video_uuid)
+    VideoApi.getTranscript(video_uuid)
       .then((response) => {
         if (cancelled) return;
         setSegments(response.data.segments);
         setVideoId(response.data.video_id);
         setLastPositionSeconds(response.data.lastPositionSeconds);
         setLoadedVideoUuid(video_uuid);
+        setVideoLang(response.data.lang);
         setError(null);
       })
 
@@ -57,5 +58,6 @@ export const useGetTranscript = () => {
     lastPositionSeconds: lastPositionSeconds,
     isLoading,
     error: error,
+    videoLang,
   };
 };

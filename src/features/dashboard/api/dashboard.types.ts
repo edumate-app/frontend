@@ -4,13 +4,6 @@ export type LanguageDto = {
   alreadyImported: boolean;
 };
 
-export type TranscriptSegment = {
-  nativeText: string;
-  targetText: string;
-  start: number;
-  duration: number;
-};
-
 export type ImportResponse = {
   video_uuid: string;
 };
@@ -18,12 +11,6 @@ export type ImportResponse = {
 export type ImportRequest = {
   url: string;
   targetLang: string;
-};
-
-export type TranscriptResponse = {
-  video_id: string;
-  segments: TranscriptSegment[];
-  lastPositionSeconds: number;
 };
 
 export type VideoDto = {
@@ -35,8 +22,4 @@ export type VideoDto = {
   duration: number;
   lastOpenedAt: string | null;
   lastPositionSeconds: number;
-};
-
-export type UpdatePositionRequest = {
-  positionSeconds: number;
 };

@@ -1,18 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import type { TranscriptSegment } from '@/features/dashboard/api/dashboard.types';
-import { useYouTubePlayer } from '@/features/dashboard/hooks/useYouTubePlayer';
-import { useSaveWatchPosition } from '@/features/dashboard/hooks/useSaveWatchPosition';
 import { getActiveSegmentIndex } from '@/features/dashboard/utils/transcript';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Loader2, Maximize2, Minimize2 } from 'lucide-react';
-import { useGetTranscript } from '@/features/dashboard/hooks/useGetTranscript';
-import { SentenceAnalysisPanel } from '@/features/dashboard/components/sentence-analysis-panel';
+import type { TranscriptSegment } from '@/features/video/api/video.types';
 import {
   LessonLoadingPanel,
   TranscriptLoadingSkeleton,
-} from '@/features/dashboard/components/video-lesson-loading';
+} from '@/features/video/components/video-lesson-loading';
+import { useGetTranscript } from '@/features/video/hooks/useGetTranscript';
+import { useYouTubePlayer } from '@/features/video/hooks/useYouTubePlayer';
+import { SentenceAnalysisPanel } from '@/features/video/components/sentence-analysis-panel';
+import { useSaveWatchPosition } from '@/features/video/hooks/useSaveWatchPosition';
+import { useSentenceAnalysis } from '@/features/video/hooks/useSentenceAnalysis';
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);
@@ -138,8 +139,14 @@ export default function VideoLessonPage() {
   const playerContainerRef = useRef<HTMLDivElement>(null);
   const hasSeekedToSavedPosition = useRef(false);
 
-  const { segments, videoId, lastPositionSeconds, isLoading, error } =
-    useGetTranscript();
+  const {
+    segments,
+    videoId,
+    lastPositionSeconds,
+    isLoading,
+    error,
+    videoLang,
+  } = useGetTranscript();
 
   const { currentTime, seekTo, isReady } = useYouTubePlayer(
     playerContainerRef,
@@ -170,10 +177,27 @@ export default function VideoLessonPage() {
     [currentTime, segments],
   );
 
+  const activeSegment = activeIndex >= 0 ? segments[activeIndex] : null;
+  const {
+    analysis,
+    status: analysisStatus,
+    isPinned: isAnalysisPinned,
+    togglePin: toggleAnalysisPin,
+    unpin: unpinAnalysis,
+  } = useSentenceAnalysis({
+    activeSegment,
+    activeIndex,
+    lang: videoLang ?? undefined,
+    resetKey: video_uuid,
+  });
+
   const transcriptProps: TranscriptListProps = {
     segments,
     activeIndex,
-    onSegmentClick: (segment) => seekTo(segment.start),
+    onSegmentClick: (segment) => {
+      unpinAnalysis();
+      seekTo(segment.start);
+    },
   };
 
   const isPlayerLoading = isLoading || Boolean(videoId && !isReady);
@@ -268,7 +292,16 @@ export default function VideoLessonPage() {
           </div>
 
           {!isFullscreen &&
-            (isLoading ? <LessonLoadingPanel /> : <SentenceAnalysisPanel />)}
+            (isLoading ? (
+              <LessonLoadingPanel />
+            ) : (
+              <SentenceAnalysisPanel
+                analysis={analysis}
+                status={analysisStatus}
+                isPinned={isAnalysisPinned}
+                onTogglePin={toggleAnalysisPin}
+              />
+            ))}
         </div>
 
         <div

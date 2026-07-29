@@ -15,11 +15,16 @@ import { useLogout } from '@/features/auth/hooks/useLogout';
 
 const nav = [
   { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/app/videos', label: 'Moje filmy', icon: Film },
-  { to: '/app/review', label: 'Powtórki', icon: RotateCcw },
-  { to: '/app/saved', label: 'Zapisane', icon: Bookmark },
-  { to: '/app/stats', label: 'Statystyki', icon: BarChart3 },
-  { to: '/app/explain', label: 'AI Wyjaśnienia', icon: Sparkles },
+  { to: '/app/videos', label: 'Moje filmy', icon: Film, disabled: true },
+  { to: '/app/review', label: 'Powtórki', icon: RotateCcw, disabled: true },
+  { to: '/app/saved', label: 'Biblioteka', icon: Bookmark },
+  { to: '/app/stats', label: 'Statystyki', icon: BarChart3, disabled: true },
+  {
+    to: '/app/explain',
+    label: 'AI Wyjaśnienia',
+    icon: Sparkles,
+    disabled: true,
+  },
   { to: '/app/settings', label: 'Ustawienia', icon: Settings },
 ];
 
@@ -41,24 +46,37 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       </div>
 
       <nav className="flex flex-1 flex-col gap-0.5">
-        {nav.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            onClick={onNavigate}
-            className={({ isActive }) =>
-              cn(
-                'flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium transition-colors',
-                isActive
-                  ? 'bg-primary-50 text-primary-700'
-                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
-              )
-            }
-          >
-            <item.icon className="h-4 w-4" />
-            {item.label}
-          </NavLink>
-        ))}
+        {nav.map((item) =>
+          item.disabled ? (
+            <span
+              key={item.to}
+              aria-disabled="true"
+              title="Wkrótce dostępne"
+              className="flex cursor-not-allowed items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-muted-foreground/45"
+            >
+              <item.icon className="h-4 w-4" />
+              <span className="flex-1">{item.label}</span>
+              <span className="text-2xs font-normal">Wkrótce</span>
+            </span>
+          ) : (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              onClick={onNavigate}
+              className={({ isActive }) =>
+                cn(
+                  'flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium transition-colors',
+                  isActive
+                    ? 'bg-primary-50 text-primary-700'
+                    : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
+                )
+              }
+            >
+              <item.icon className="h-4 w-4" />
+              {item.label}
+            </NavLink>
+          ),
+        )}
       </nav>
 
       <div className="mt-2 border-t border-border pt-3">
