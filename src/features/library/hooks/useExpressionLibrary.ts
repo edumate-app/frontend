@@ -16,16 +16,10 @@ function matchesSearch(
   }
 
   if (searchLanguage === 'target') {
-    return (
-      expression.text.toLowerCase().includes(normalizedQuery) ||
-      expression.lemma.toLowerCase().includes(normalizedQuery)
-    );
+    return expression.lemma.toLowerCase().includes(normalizedQuery);
   }
 
-  return (
-    expression.translation.toLowerCase().includes(normalizedQuery) ||
-    expression.lemmaTranslation.toLowerCase().includes(normalizedQuery)
-  );
+  return expression.lemmaTranslation.toLowerCase().includes(normalizedQuery);
 }
 
 export function useExpressionLibrary(

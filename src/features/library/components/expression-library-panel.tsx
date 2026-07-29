@@ -31,12 +31,12 @@ import {
   useExpressionLibrary,
   type SearchLanguage,
 } from '@/features/library/hooks/useExpressionLibrary';
+import { LibraryExpressionDetails } from '@/features/library/components/library-expression-details';
 import type {
   ExpressionContext,
   LibraryExpression,
 } from '@/features/library/types/expression-library.types';
 import { cn } from '@/lib/utils';
-import { ExpressionWordDetails } from '@/features/video/components/expression-word-details';
 
 type DeleteTarget =
   | { type: 'expression'; expression: LibraryExpression }
@@ -89,12 +89,12 @@ function ExpressionListItem({
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">
           <p className="font-mono text-sm font-semibold text-foreground">
-            {expression.text}
+            {expression.lemma}
           </p>
           <StatusBadge expression={expression} />
         </div>
         <p className="mt-0.5 text-sm text-muted-foreground">
-          {expression.translation}
+          {expression.lemmaTranslation}
         </p>
         <p className="mt-1.5 text-2xs text-muted-foreground/80">
           {STANZA_POS_POLISH_LABELS[expression.pos]} ·{' '}
@@ -199,7 +199,7 @@ function ExpressionDetail({
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
               <h2 className="font-mono text-xl font-semibold text-foreground">
-                {expression.text.replace(/[.,!?]$/, '')}
+                {expression.lemma.replace(/[.,!?]$/, '')}
               </h2>
               <StatusBadge expression={expression} />
               <span className="text-sm text-muted-foreground">
@@ -227,7 +227,11 @@ function ExpressionDetail({
 
       <div className="flex min-h-0 flex-1 flex-col">
         <div className="border-b p-4">
-          <ExpressionWordDetails word={expression} size="md" layout="split" />
+          <LibraryExpressionDetails
+            expression={expression}
+            size="md"
+            layout="split"
+          />
         </div>
 
         <div className="px-4 py-4 sm:px-5">
@@ -246,7 +250,7 @@ function ExpressionDetail({
                   <ContextCard
                     key={context.id}
                     context={context}
-                    highlightedText={expression.text}
+                    highlightedText={expression.lemma}
                     onDelete={() => onDeleteContext(context.id)}
                   />
                 ))}
@@ -286,7 +290,7 @@ function DeleteConfirmDialog({
               <>
                 Wyrażenie{' '}
                 <span className="font-mono font-medium text-foreground">
-                  {target.expression.text}
+                  {target.expression.lemma}
                 </span>{' '}
                 zostanie trwale usunięte z biblioteki wraz ze wszystkimi
                 kontekstami ({target.expression.contexts.length}).

@@ -3,12 +3,9 @@ import type { LibraryExpression } from '@/features/library/types/expression-libr
 export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   {
     id: 'expr-sabido',
-    text: 'sabido',
-    translation: 'wiedziałem / wiedziałam',
     lemma: 'saber',
     lemmaTranslation: 'wiedzieć',
     pos: 'VERB',
-    tense: 'pluskwamperfekt trybu podrzędnego',
     conjugation: [
       { person: 'yo', form: 'sé' },
       { person: 'tú', form: 'sabes' },
@@ -17,8 +14,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       { person: 'vosotros', form: 'sabéis' },
       { person: 'ellos/ellas', form: 'saben' },
     ],
-    conjugationPerson: 1,
-    number: 'Sing',
     userStatus: 'new',
     addedAt: '2026-07-13T10:30:00Z',
     contexts: [
@@ -81,8 +76,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-antes',
-    text: 'antes,',
-    translation: 'wcześniej',
     lemma: 'antes',
     lemmaTranslation: 'wcześniej',
     pos: 'ADV',
@@ -150,8 +143,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-contigo',
-    text: 'contigo.',
-    translation: 'z tobą',
     lemma: 'tú',
     lemmaTranslation: 'ty',
     pos: 'PRON',
@@ -218,13 +209,9 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-hubiera',
-    text: 'hubiera',
-    translation: 'miałbym / miałabym',
     lemma: 'haber',
     lemmaTranslation: 'mieć',
     pos: 'AUX',
-    mood: 'Sub',
-    tense: 'czasownik posiłkowy',
     conjugation: [
       { person: 'yo', form: 'he' },
       { person: 'tú', form: 'has' },
@@ -233,8 +220,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       { person: 'vosotros', form: 'habéis' },
       { person: 'ellos/ellas', form: 'han' },
     ],
-    conjugationPerson: 1,
-    number: 'Sing',
     userStatus: 'familiar',
     addedAt: '2026-06-15T08:00:00Z',
     contexts: [
@@ -296,8 +281,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-si',
-    text: 'Si',
-    translation: 'jeśli',
     lemma: 'si',
     lemmaTranslation: 'jeśli',
     pos: 'SCONJ',
@@ -365,13 +348,9 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-habria',
-    text: 'habría',
-    translation: 'byłbym / byłabym',
     lemma: 'haber',
     lemmaTranslation: 'mieć',
     pos: 'AUX',
-    mood: 'Cnd',
-    tense: 'czasownik posiłkowy',
     conjugation: [
       { person: 'yo', form: 'he' },
       { person: 'tú', form: 'has' },
@@ -380,8 +359,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       { person: 'vosotros', form: 'habéis' },
       { person: 'ellos/ellas', form: 'han' },
     ],
-    conjugationPerson: 1,
-    number: 'Sing',
     userStatus: 'new',
     addedAt: '2026-07-13T10:28:00Z',
     contexts: [
@@ -443,12 +420,9 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-ido',
-    text: 'ido',
-    translation: 'poszedłem / poszłam',
     lemma: 'ir',
     lemmaTranslation: 'iść',
     pos: 'VERB',
-    tense: 'tryb warunkowy złożony',
     conjugation: [
       { person: 'yo', form: 'voy' },
       { person: 'tú', form: 'vas' },
@@ -457,8 +431,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       { person: 'vosotros', form: 'vais' },
       { person: 'ellos/ellas', form: 'van' },
     ],
-    conjugationPerson: 1,
-    number: 'Sing',
     userStatus: 'unknown',
     addedAt: '2026-07-05T11:20:00Z',
     contexts: [
@@ -521,8 +493,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-todavia',
-    text: 'todavía',
-    translation: 'jeszcze',
     lemma: 'todavía',
     lemmaTranslation: 'jeszcze',
     pos: 'ADV',
@@ -590,13 +560,9 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-quedar',
-    text: 'quedamos',
-    translation: 'umawiamy się / zostajemy',
     lemma: 'quedar',
     lemmaTranslation: 'zostać / umówić się',
     pos: 'VERB',
-    mood: 'Ind',
-    tense: 'czas teraźniejszy',
     conjugation: [
       { person: 'yo', form: 'quedo' },
       { person: 'tú', form: 'quedas' },
@@ -605,8 +571,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       { person: 'vosotros', form: 'quedáis' },
       { person: 'ellos/ellas', form: 'quedan' },
     ],
-    conjugationPerson: 1,
-    number: 'Plur',
     userStatus: 'familiar',
     addedAt: '2026-03-25T18:00:00Z',
     contexts: [
@@ -669,8 +633,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-por-favor',
-    text: 'por favor',
-    translation: 'proszę',
     lemma: 'por favor',
     lemmaTranslation: 'proszę',
     pos: 'ADV',
@@ -737,13 +699,9 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-deberias',
-    text: 'deberías',
-    translation: 'powinieneś / powinnaś',
     lemma: 'deber',
     lemmaTranslation: 'powinien / musieć',
     pos: 'VERB',
-    mood: 'Cnd',
-    tense: 'czas teraźniejszy',
     conjugation: [
       { person: 'yo', form: 'debo' },
       { person: 'tú', form: 'debes' },
@@ -752,8 +710,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       { person: 'vosotros', form: 'debéis' },
       { person: 'ellos/ellas', form: 'deben' },
     ],
-    conjugationPerson: 2,
-    number: 'Sing',
     userStatus: 'unknown',
     addedAt: '2026-06-01T09:30:00Z',
     contexts: [
@@ -816,8 +772,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-ojala',
-    text: 'ojalá',
-    translation: 'oby / szkoda że',
     lemma: 'ojalá',
     lemmaTranslation: 'oby',
     pos: 'ADV',
@@ -884,8 +838,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-sin-embargo',
-    text: 'sin embargo',
-    translation: 'jednak / niemniej jednak',
     lemma: 'sin embargo',
     lemmaTranslation: 'jednak',
     pos: 'ADV',
@@ -954,8 +906,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-aunque',
-    text: 'aunque',
-    translation: 'chociaż / mimo że',
     lemma: 'aunque',
     lemmaTranslation: 'chociaż',
     pos: 'SCONJ',
@@ -1023,12 +973,9 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-llegar',
-    text: 'llegado',
-    translation: 'dotarłem / dotarłam',
     lemma: 'llegar',
     lemmaTranslation: 'przybyć / dotrzeć',
     pos: 'VERB',
-    tense: 'pluskwamperfekt',
     conjugation: [
       { person: 'yo', form: 'llego' },
       { person: 'tú', form: 'llegas' },
@@ -1037,8 +984,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       { person: 'vosotros', form: 'llegáis' },
       { person: 'ellos/ellas', form: 'llegan' },
     ],
-    conjugationPerson: 1,
-    number: 'Sing',
     userStatus: 'unknown',
     addedAt: '2026-07-02T13:05:00Z',
     contexts: [
@@ -1100,13 +1045,9 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-cuenta',
-    text: 'cuenta',
-    translation: 'liczy / zależy',
     lemma: 'contar',
     lemmaTranslation: 'liczyć / opowiadać',
     pos: 'VERB',
-    mood: 'Ind',
-    tense: 'czas teraźniejszy',
     conjugation: [
       { person: 'yo', form: 'cuento' },
       { person: 'tú', form: 'cuentas' },
@@ -1115,8 +1056,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       { person: 'vosotros', form: 'contáis' },
       { person: 'ellos/ellas', form: 'cuentan' },
     ],
-    conjugationPerson: 3,
-    number: 'Sing',
     userStatus: 'familiar',
     addedAt: '2026-04-05T11:00:00Z',
     contexts: [
@@ -1180,8 +1119,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-tal-vez',
-    text: 'tal vez',
-    translation: 'może / być może',
     lemma: 'tal vez',
     lemmaTranslation: 'może',
     pos: 'ADV',
@@ -1248,8 +1185,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-ningun',
-    text: 'ningún',
-    translation: 'żaden / ani jeden',
     lemma: 'ninguno',
     lemmaTranslation: 'żaden',
     pos: 'DET',
@@ -1316,8 +1251,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-mientras',
-    text: 'mientras',
-    translation: 'podczas gdy / dopóki',
     lemma: 'mientras',
     lemmaTranslation: 'podczas gdy',
     pos: 'SCONJ',
@@ -1384,8 +1317,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-encima',
-    text: 'encima',
-    translation: 'na dodatek / ponadto',
     lemma: 'encima',
     lemmaTranslation: 'na górze / na dodatek',
     pos: 'ADV',
@@ -1452,12 +1383,9 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
   },
   {
     id: 'expr-vivir',
-    text: 'vivir',
-    translation: 'żyć',
     lemma: 'vivir',
     lemmaTranslation: 'żyć',
     pos: 'VERB',
-    tense: 'bezokolicznik',
     conjugation: [
       { person: 'yo', form: 'vivo' },
       { person: 'tú', form: 'vives' },
@@ -1466,8 +1394,6 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
       { person: 'vosotros', form: 'vivís' },
       { person: 'ellos/ellas', form: 'viven' },
     ],
-    conjugationPerson: 1,
-    number: 'Sing',
     userStatus: 'familiar',
     addedAt: '2026-01-15T10:00:00Z',
     contexts: [
@@ -1528,3 +1454,4 @@ export const MOCK_EXPRESSION_LIBRARY: LibraryExpression[] = [
     ],
   },
 ];
+
