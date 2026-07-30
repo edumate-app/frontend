@@ -5,6 +5,7 @@ import type {
   LanguageDto,
   VideoDto,
 } from './dashboard.types';
+import type { UserDto } from '@/features/auth/api/auth.types';
 
 export const dashboardApi = {
   validateYtUrl: (url: string) =>
@@ -14,4 +15,12 @@ export const dashboardApi = {
   updateNativeLang: (lang: string) =>
     apiClient.patch(`/user/native-lang`, { lang: lang }),
   getVideos: () => apiClient.get<VideoDto[]>(`/video`),
+  updateProfilePhoto: (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return apiClient.put<UserDto>('/user/avatar', formData);
+  },
+  deleteProfilePhoto: () => {
+    return apiClient.delete<UserDto>('/user/avatar');
+  },
 };
