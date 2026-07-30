@@ -9,7 +9,7 @@ import { DashboardLayout } from '../layouts/dashboard/DashboardLayout';
 import DashboardPage from '@/pages/dashboard/DashboardPage';
 import AddVideo from '@/pages/dashboard/AddVideo';
 import VideoLessonPage from '@/pages/dashboard/video-lesson';
-import SettingsPage from '@/pages/dashboard/setting';
+import SettingsPage from '@/pages/dashboard/settings/setting';
 import SavedPage from '@/pages/dashboard/SavedPage';
 
 export const router = createBrowserRouter([
