@@ -64,6 +64,23 @@ export function useExpressionLibrary() {
       });
   };
 
+  const deleteExpression = async (expressionId: string) => {
+    VideoApi.deleteExpression(expressionId);
+    setContexts([]);
+    setSelectedId(null);
+    setExpressions((prev) =>
+      prev.filter((expression) => expression.id !== expressionId),
+    );
+  };
+
+  const deleteExpressionContext = async (
+    expressionId: string,
+    contextId: string,
+  ) => {
+    VideoApi.deleteExpressionContext(expressionId, contextId);
+    setContexts((prev) => prev.filter((context) => context.id !== contextId));
+  };
+
   const selectExpression = (expressionId: string | null) => {
     setSelectedId(expressionId);
 
@@ -106,5 +123,7 @@ export function useExpressionLibrary() {
     contexts,
     contextsError,
     contextsIsLoading,
+    deleteExpression,
+    deleteExpressionContext,
   };
 }

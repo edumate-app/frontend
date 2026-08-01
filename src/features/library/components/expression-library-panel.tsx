@@ -289,6 +289,8 @@ export function ExpressionLibraryPanel() {
     searchLanguage,
     setSearchLanguage,
     contexts,
+    deleteExpression,
+    deleteExpressionContext,
   } = useExpressionLibrary();
 
   return (
@@ -367,8 +369,10 @@ export function ExpressionLibraryPanel() {
               expression={selectedExpression}
               contexts={contexts}
               onBack={() => selectExpression(null)}
-              onDeleteExpression={() => {}}
-              onDeleteContext={() => {}}
+              onDeleteExpression={() => deleteExpression(selectedExpression.id)}
+              onDeleteContext={(contextId: string) =>
+                deleteExpressionContext(selectedExpression.id, contextId)
+              }
             />
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-3 px-6 py-16 text-center">

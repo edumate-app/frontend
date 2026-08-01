@@ -25,4 +25,8 @@ export const VideoApi = {
   getExpressions: () => apiClient.get<LibraryExpression[]>('/expression'),
   getExpressionContexts: (expressionId: string) =>
     apiClient.get<ExpressionContext[]>(`/expression/${expressionId}/contexts`),
+  deleteExpression: (expressionId: string) =>
+    apiClient.delete(`/expression/${expressionId}`),
+  deleteExpressionContext: (expressionId: string, contextId: string) =>
+    apiClient.delete(`/expression/${expressionId}/context/${contextId}`),
 };
