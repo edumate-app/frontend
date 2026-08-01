@@ -51,12 +51,10 @@ function StatusBadge({ expression }: { expression: LibraryExpression }) {
 
 function ExpressionListItem({
   expression,
-  contexts,
   isSelected,
   onSelect,
 }: {
   expression: LibraryExpression;
-  contexts: ExpressionContext[];
   isSelected: boolean;
   onSelect: () => void;
 }) {
@@ -82,8 +80,8 @@ function ExpressionListItem({
           {expression.lemmaTranslation}
         </p>
         <p className="mt-1.5 text-2xs text-muted-foreground/80">
-          {STANZA_POS_POLISH_LABELS[expression.pos]} · {contexts.length}{' '}
-          {contexts.length === 1 ? 'kontekst' : 'konteksty'}
+          {STANZA_POS_POLISH_LABELS[expression.pos]} · {expression.contextCount}{' '}
+          {expression.contextCount === 1 ? 'kontekst' : 'konteksty'}
         </p>
       </div>
       <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/50" />
@@ -335,7 +333,6 @@ export function ExpressionLibraryPanel() {
                 <ExpressionListItem
                   key={expression.id}
                   expression={expression}
-                  contexts={contexts}
                   isSelected={selectedExpression?.id === expression.id}
                   onSelect={() => selectExpression(expression.id)}
                 />

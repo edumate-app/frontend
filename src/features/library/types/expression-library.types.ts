@@ -23,4 +23,5 @@ export type LibraryExpression = {
   addedAt: string;
   userStatus?: userStatus;
   family?: string[];
+  contextCount: number;
 };

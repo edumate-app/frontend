@@ -80,6 +80,7 @@ export function useExpressionLibrary() {
   useEffect(() => {
     VideoApi.getExpressions()
       .then((response) => {
+        console.log(response.data);
         setExpressions(response.data);
       })
       .catch(() => {
