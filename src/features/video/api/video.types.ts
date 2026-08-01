@@ -8,6 +8,7 @@ import type {
 } from '@/features/dashboard/types/stanza-tags.types';
 
 export type TranscriptSegment = {
+  id: string;
   nativeText: string;
   targetText: string;
   start: number;
@@ -26,6 +27,7 @@ export type UpdatePositionRequest = {
 };
 
 export type AnalyzeRequest = {
+  transcriptSegmentUUID: string;
   text: string;
   lang: string;
 };

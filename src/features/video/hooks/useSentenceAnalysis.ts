@@ -56,7 +56,11 @@ async function loadAnalysis(
   const preview = createPreviewAnalysis(segment, index);
 
   const tokens = await VideoApi.analyze(
-    { text: segment.targetText, lang },
+    {
+      transcriptSegmentUUID: segment.id,
+      text: segment.targetText,
+      lang,
+    },
     signal,
   );
 
