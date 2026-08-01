@@ -28,6 +28,7 @@ import type {
   LibraryExpression,
 } from '@/features/library/types/expression-library.types';
 import { cn } from '@/lib/utils';
+import ConfirmDeleteDialog from './confirm-delete-dialog';
 
 function StatusBadge({ expression }: { expression: LibraryExpression }) {
   if (expression.userStatus === 'new') {
@@ -150,15 +151,22 @@ function ContextCard({
             </span>
           </Link>
 
-          <Button
-            variant="ghost"
-            size="xs"
-            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-            onClick={onDelete}
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-            Usuń kontekst
-          </Button>
+          <ConfirmDeleteDialog
+            title="Usunąć kontekst?"
+            description="Ten kontekst zostanie trwale usunięty z wyrażenia. Tej operacji nie można cofnąć."
+            confirmLabel="Usuń kontekst"
+            onConfirm={onDelete}
+            trigger={
+              <Button
+                variant="ghost"
+                size="xs"
+                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                Usuń kontekst
+              </Button>
+            }
+          />
         </div>
       </CardContent>
     </Card>
@@ -209,15 +217,22 @@ function ExpressionDetail({
             </div>
           </div>
 
-          <Button
-            variant="outline"
-            size="sm"
-            className="shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
-            onClick={onDeleteExpression}
-          >
-            <Trash2 className="h-4 w-4" />
-            Usuń wyrażenie
-          </Button>
+          <ConfirmDeleteDialog
+            title="Usunąć wyrażenie?"
+            description={`Wyrażenie „${expression.lemma.replace(/[.,!?]$/, '')}” oraz wszystkie jego konteksty zostaną trwale usunięte. Tej operacji nie można cofnąć.`}
+            confirmLabel="Usuń wyrażenie"
+            onConfirm={onDeleteExpression}
+            trigger={
+              <Button
+                variant="outline"
+                size="sm"
+                className="shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
+              >
+                <Trash2 className="h-4 w-4" />
+                Usuń wyrażenie
+              </Button>
+            }
+          />
         </div>
       </div>
 
