@@ -141,7 +141,7 @@ function ContextCard({
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border/60 pt-3">
           <Link
-            to={`/app/videos/${context.video_uuid}`}
+            to={`/app/videos/${context.video_uuid}?lastPositionSeconds=${Math.floor(context.startSeconds)}`}
             className="inline-flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
           >
             <Film className="h-3.5 w-3.5 shrink-0" />

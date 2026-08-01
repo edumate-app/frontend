@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { getActiveSegmentIndex } from '@/features/dashboard/utils/transcript';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -135,22 +135,30 @@ function TranscriptList({
 
 export default function VideoLessonPage() {
   const { video_uuid } = useParams<{ video_uuid: string }>();
+  const [searchParams] = useSearchParams();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const playerContainerRef = useRef<HTMLDivElement>(null);
 
   const {
     segments,
     videoId,
-    lastPositionSeconds,
+    lastPositionSeconds: savedPositionSeconds,
     isLoading,
     error,
     videoLang,
   } = useGetTranscript();
 
+  const positionParam = searchParams.get('lastPositionSeconds');
+  const positionFromParams =
+    positionParam !== null ? Number(positionParam) : NaN;
+  const startSeconds = Number.isFinite(positionFromParams)
+    ? positionFromParams
+    : savedPositionSeconds;
+
   const { currentTime, seekTo, isReady } = useYouTubePlayer(
     playerContainerRef,
     videoId ?? '',
-    lastPositionSeconds,
+    startSeconds,
   );
 
   useSaveWatchPosition(video_uuid, currentTime);
