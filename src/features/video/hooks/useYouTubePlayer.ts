@@ -75,7 +75,8 @@ export function useYouTubePlayer(
     if (!videoId) return;
 
     let resizeObserver: ResizeObserver | null = null;
-    const initialStart = Math.max(0, Math.floor(startSecondsRef.current));
+    const initialStart = Math.max(0, startSecondsRef.current);
+    const initialStartInt = Math.floor(initialStart);
 
     const syncPlayerSize = () => {
       const container = containerRef.current;
@@ -102,7 +103,7 @@ export function useYouTubePlayer(
           modestbranding: 1,
           fs: 0,
           enablejsapi: 1,
-          ...(initialStart > 0 ? { start: initialStart } : {}),
+          ...(initialStartInt > 0 ? { start: initialStartInt } : {}),
         },
         events: {
           onReady: (event) => {
@@ -111,16 +112,11 @@ export function useYouTubePlayer(
             resizeObserver = new ResizeObserver(syncPlayerSize);
             resizeObserver.observe(container);
 
-            if (initialStart > 0) {
-              setCurrentTime(initialStart);
-            }
-
-            // Mute + brief play forces a decoded frame at the resume
-            // position instead of the default YouTube thumbnail.
             isPriming = true;
             const player = event.target;
             player.mute();
             if (initialStart > 0) {
+              setCurrentTime(initialStart);
               player.seekTo(initialStart, true);
             }
             player.playVideo();
