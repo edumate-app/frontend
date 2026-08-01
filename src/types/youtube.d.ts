@@ -24,6 +24,10 @@ declare global {
     getCurrentTime(): number;
     seekTo(seconds: number, allowSeekAhead: boolean): void;
     setSize(width: number, height: number): void;
+    playVideo(): void;
+    pauseVideo(): void;
+    mute(): void;
+    unMute(): void;
   }
 
   interface YTPlayerOptions {

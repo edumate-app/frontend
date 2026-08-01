@@ -24,6 +24,7 @@ function loadYouTubeApi(): Promise<void> {
 }
 
 const POLL_INTERVAL_MS = 200;
+const PRIME_FALLBACK_MS = 2500;
 
 export function useYouTubePlayer(
   containerRef: React.RefObject<HTMLDivElement | null>,
@@ -39,6 +40,8 @@ export function useYouTubePlayer(
   useEffect(() => {
     let cancelled = false;
     let interval: ReturnType<typeof setInterval> | null = null;
+    let primeFallback: ReturnType<typeof setTimeout> | null = null;
+    let isPriming = false;
 
     const stopPolling = () => {
       if (!interval) return;
@@ -54,6 +57,19 @@ export function useYouTubePlayer(
     const startPolling = () => {
       if (interval) return;
       interval = setInterval(syncTime, POLL_INTERVAL_MS);
+    };
+
+    const finishPriming = (player: YTPlayer) => {
+      if (!isPriming || cancelled) return;
+      isPriming = false;
+      if (primeFallback) {
+        clearTimeout(primeFallback);
+        primeFallback = null;
+      }
+      player.pauseVideo();
+      player.unMute();
+      syncTime();
+      setIsReady(true);
     };
 
     if (!videoId) return;
@@ -89,18 +105,40 @@ export function useYouTubePlayer(
           ...(initialStart > 0 ? { start: initialStart } : {}),
         },
         events: {
-          onReady: () => {
+          onReady: (event) => {
             if (cancelled) return;
             syncPlayerSize();
             resizeObserver = new ResizeObserver(syncPlayerSize);
             resizeObserver.observe(container);
+
             if (initialStart > 0) {
               setCurrentTime(initialStart);
             }
-            setIsReady(true);
+
+            // Mute + brief play forces a decoded frame at the resume
+            // position instead of the default YouTube thumbnail.
+            isPriming = true;
+            const player = event.target;
+            player.mute();
+            if (initialStart > 0) {
+              player.seekTo(initialStart, true);
+            }
+            player.playVideo();
+
+            primeFallback = setTimeout(() => {
+              finishPriming(player);
+            }, PRIME_FALLBACK_MS);
           },
           onStateChange: (event) => {
             const { PLAYING, PAUSED, ENDED, BUFFERING } = window.YT.PlayerState;
+
+            if (isPriming) {
+              // Wait for an actual decoded frame before pausing.
+              if (event.data === PLAYING) {
+                finishPriming(event.target);
+              }
+              return;
+            }
 
             if (event.data === PLAYING) {
               startPolling();
@@ -122,7 +160,9 @@ export function useYouTubePlayer(
 
     return () => {
       cancelled = true;
+      isPriming = false;
       stopPolling();
+      if (primeFallback) clearTimeout(primeFallback);
       resizeObserver?.disconnect();
       resizeObserver = null;
       playerRef.current?.destroy();
