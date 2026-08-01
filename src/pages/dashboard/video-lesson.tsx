@@ -137,7 +137,6 @@ export default function VideoLessonPage() {
   const { video_uuid } = useParams<{ video_uuid: string }>();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const playerContainerRef = useRef<HTMLDivElement>(null);
-  const hasSeekedToSavedPosition = useRef(false);
 
   const {
     segments,
@@ -151,24 +150,8 @@ export default function VideoLessonPage() {
   const { currentTime, seekTo, isReady } = useYouTubePlayer(
     playerContainerRef,
     videoId ?? '',
+    lastPositionSeconds,
   );
-
-  useEffect(() => {
-    hasSeekedToSavedPosition.current = false;
-  }, [video_uuid]);
-
-  useEffect(() => {
-    if (
-      !isReady ||
-      hasSeekedToSavedPosition.current ||
-      lastPositionSeconds <= 0
-    ) {
-      return;
-    }
-
-    hasSeekedToSavedPosition.current = true;
-    seekTo(lastPositionSeconds);
-  }, [isReady, lastPositionSeconds, seekTo]);
 
   useSaveWatchPosition(video_uuid, currentTime);
 

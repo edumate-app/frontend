@@ -28,10 +28,13 @@ const POLL_INTERVAL_MS = 200;
 export function useYouTubePlayer(
   containerRef: React.RefObject<HTMLDivElement | null>,
   videoId: string,
+  startSeconds = 0,
 ) {
   const playerRef = useRef<YTPlayer | null>(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [isReady, setIsReady] = useState(false);
+  const startSecondsRef = useRef(startSeconds);
+  startSecondsRef.current = startSeconds;
 
   useEffect(() => {
     let cancelled = false;
@@ -56,6 +59,7 @@ export function useYouTubePlayer(
     if (!videoId) return;
 
     let resizeObserver: ResizeObserver | null = null;
+    const initialStart = Math.max(0, Math.floor(startSecondsRef.current));
 
     const syncPlayerSize = () => {
       const container = containerRef.current;
@@ -82,6 +86,7 @@ export function useYouTubePlayer(
           modestbranding: 1,
           fs: 0,
           enablejsapi: 1,
+          ...(initialStart > 0 ? { start: initialStart } : {}),
         },
         events: {
           onReady: () => {
@@ -89,6 +94,9 @@ export function useYouTubePlayer(
             syncPlayerSize();
             resizeObserver = new ResizeObserver(syncPlayerSize);
             resizeObserver.observe(container);
+            if (initialStart > 0) {
+              setCurrentTime(initialStart);
+            }
             setIsReady(true);
           },
           onStateChange: (event) => {
@@ -121,6 +129,8 @@ export function useYouTubePlayer(
       playerRef.current = null;
       setIsReady(false);
     };
+    // startSeconds is read once via ref when the player is created for videoId
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- recreate only on videoId change
   }, [containerRef, videoId]);
 
   const seekTo = useCallback((seconds: number) => {

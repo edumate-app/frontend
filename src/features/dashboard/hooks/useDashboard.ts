@@ -14,6 +14,7 @@ export const useDashboard = () => {
       .getVideos()
       .then((response) => {
         if (cancelled) return;
+        console.log('Fetched videos:', response.data);
         setVideos(response.data);
       })
       .catch(() => {

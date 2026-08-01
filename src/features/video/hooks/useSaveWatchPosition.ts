@@ -20,7 +20,9 @@ export function useSaveWatchPosition(
 
     const save = () => {
       const seconds = Math.floor(currentTimeRef.current);
-      if (seconds === lastSavedRef.current) return;
+      // Never persist 0 — on mount / Strict Mode remount currentTime is still 0
+      // and would wipe the saved resume position before seek completes.
+      if (seconds <= 0 || seconds === lastSavedRef.current) return;
 
       lastSavedRef.current = seconds;
       VideoApi.updatePosition(videoUuid, { positionSeconds: seconds }).catch(
