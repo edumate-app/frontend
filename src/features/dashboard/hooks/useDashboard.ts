@@ -14,7 +14,6 @@ export const useDashboard = () => {
       .getVideos()
       .then((response) => {
         if (cancelled) return;
-        console.log('Fetched videos:', response.data);
         setVideos(response.data);
       })
       .catch(() => {
@@ -30,5 +29,10 @@ export const useDashboard = () => {
     };
   }, []);
 
-  return { videos, error, isLoading };
+  const removeVideo = async (uuid: string) => {
+    await dashboardApi.removeVideo(uuid);
+    setVideos((prev) => prev.filter((video) => video.uuid !== uuid));
+  };
+
+  return { videos, error, isLoading, removeVideo };
 };

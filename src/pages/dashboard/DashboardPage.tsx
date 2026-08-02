@@ -1,7 +1,15 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   Play,
   MoreHorizontal,
@@ -10,16 +18,22 @@ import {
   BookOpen,
   Plus,
   Calendar,
+  ExternalLink,
+  Trash2,
 } from 'lucide-react';
 import { PageHeader } from '@/app/layouts/dashboard/components/page-header';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
 import { timeAgo, formatDuration } from '@/features/dashboard/utils/time';
+import type { VideoDto } from '@/features/dashboard/api/dashboard.types';
+import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
 
 export default function DashboardPage() {
   const user = useAuthStore((s) => s.user);
+  const navigate = useNavigate();
+  const [videoToDelete, setVideoToDelete] = useState<VideoDto | null>(null);
 
-  const { videos, isLoading, error } = useDashboard();
+  const { videos, isLoading, error, removeVideo } = useDashboard();
 
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
@@ -215,19 +229,71 @@ export default function DashboardPage() {
                     <span className="hidden w-28 shrink-0 text-right text-2xs text-muted-foreground md:block">
                       {timeAgo(v.lastOpenedAt)}
                     </span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-7 w-7 shrink-0"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 shrink-0"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                          onPointerDown={(e) => e.stopPropagation()}
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent
+                        align="end"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <DropdownMenuItem
+                          onSelect={() => navigate(`/app/videos/${v.uuid}`)}
+                        >
+                          <Play className="h-4 w-4" /> Otwórz
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={() =>
+                            window.open(`/app/videos/${v.uuid}`, '_blank')
+                          }
+                        >
+                          <ExternalLink className="h-4 w-4" /> Otwórz w nowej
+                          karcie
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onSelect={() => setVideoToDelete(v)}
+                        >
+                          <Trash2 className="h-4 w-4" /> Usuń
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </Link>
                 ))}
               </div>
             )}
           </Card>
+
+          <ConfirmDeleteDialog
+            open={videoToDelete !== null}
+            onOpenChange={(open) => {
+              if (!open) setVideoToDelete(null);
+            }}
+            title="Usunąć film?"
+            description={
+              videoToDelete
+                ? `Film „${videoToDelete.title}” zostanie trwale usunięty. Tej operacji nie można cofnąć.`
+                : ''
+            }
+            confirmLabel="Usuń film"
+            onConfirm={() => {
+              if (!videoToDelete) return;
+              removeVideo(videoToDelete.uuid);
+              setVideoToDelete(null);
+            }}
+          />
         </div>
 
         <Card className="flex flex-col items-start gap-3 p-5 sm:flex-row sm:items-center sm:justify-between bg-primary-50 border-primary-100">

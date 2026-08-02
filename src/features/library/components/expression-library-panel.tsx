@@ -30,7 +30,7 @@ import type {
   LibraryExpression,
 } from '@/features/library/types/expression-library.types';
 import { cn } from '@/lib/utils';
-import ConfirmDeleteDialog from './confirm-delete-dialog';
+import ConfirmDeleteDialog from '../../../components/confirm-delete-dialog';
 import { languageLabel } from '../utils/languageLabel';
 
 function StatusBadge({ expression }: { expression: LibraryExpression }) {
