@@ -19,9 +19,15 @@ export type LibraryExpression = {
   lemma: string;
   lemmaTranslation: string;
   pos: StanzaPos;
+  lang: string;
   conjugation: VerbConjugationForm[];
   addedAt: string;
   userStatus?: userStatus;
   family?: string[];
   contextCount: number;
+};
+
+export type ExpressionListResponse = {
+  expressions: LibraryExpression[];
+  languages: string[];
 };

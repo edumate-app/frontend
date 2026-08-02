@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
   Bookmark,
+  ChevronDown,
   ChevronRight,
   Film,
   Search,
@@ -10,18 +11,19 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import {
-  NativeSelect,
-  NativeSelectOption,
-} from '@/components/ui/native-select';
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { STANZA_POS_POLISH_LABELS } from '@/features/dashboard/types/stanza-tags.types';
 import { formatDuration } from '@/features/dashboard/utils/time';
-import {
-  useExpressionLibrary,
-  type SearchLanguage,
-} from '@/features/library/hooks/useExpressionLibrary';
+import { useExpressionLibrary } from '@/features/library/hooks/useExpressionLibrary';
 import { LibraryExpressionDetails } from '@/features/library/components/library-expression-details';
 import type {
   ExpressionContext,
@@ -29,6 +31,7 @@ import type {
 } from '@/features/library/types/expression-library.types';
 import { cn } from '@/lib/utils';
 import ConfirmDeleteDialog from './confirm-delete-dialog';
+import { languageLabel } from '../utils/languageLabel';
 
 function StatusBadge({ expression }: { expression: LibraryExpression }) {
   if (expression.userStatus === 'new') {
@@ -286,12 +289,21 @@ export function ExpressionLibraryPanel() {
     selectExpression,
     query,
     setQuery,
-    searchLanguage,
-    setSearchLanguage,
+    selectedLanguages,
+    toggleLanguage,
     contexts,
     deleteExpression,
     deleteExpressionContext,
+    languages,
+    nativeLang,
   } = useExpressionLibrary();
+
+  const selectedLanguageLabel =
+    selectedLanguages.length === 0
+      ? 'Wybierz język'
+      : selectedLanguages.length === languages.length
+        ? 'Wszystkie języki'
+        : selectedLanguages.map(languageLabel).join(', ');
 
   return (
     <>
@@ -308,25 +320,38 @@ export function ExpressionLibraryPanel() {
               <Input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder={
-                  searchLanguage === 'target'
-                    ? 'Szukaj po hiszpańsku…'
-                    : 'Szukaj po polsku…'
-                }
+                placeholder="Szukaj wyrażeń…"
                 className="pl-8"
               />
             </div>
-            <NativeSelect
-              value={searchLanguage}
-              onChange={(event) =>
-                setSearchLanguage(event.target.value as SearchLanguage)
-              }
-              aria-label="Język wyszukiwania"
-              className="w-full"
-            >
-              <NativeSelectOption value="target">Hiszpański</NativeSelectOption>
-              <NativeSelectOption value="native">Polski</NativeSelectOption>
-            </NativeSelect>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-between font-normal"
+                  aria-label="Filtruj po językach"
+                >
+                  <span className="truncate">{selectedLanguageLabel}</span>
+                  <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56">
+                <DropdownMenuLabel>Języki</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {languages.map((code) => (
+                  <DropdownMenuCheckboxItem
+                    key={code}
+                    checked={selectedLanguages.includes(code)}
+                    onCheckedChange={() => toggleLanguage(code)}
+                    onSelect={(event) => event.preventDefault()}
+                    className="cursor-pointer"
+                  >
+                    {languageLabel(code)}
+                    {code === nativeLang ? ' (rodzimy)' : ' (docelowy)'}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             <p className="text-2xs text-muted-foreground">
               {filteredExpressions.length}{' '}
               {filteredExpressions.length === 1 ? 'wyrażenie' : 'wyrażeń'}

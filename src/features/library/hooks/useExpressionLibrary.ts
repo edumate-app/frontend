@@ -5,24 +5,47 @@ import type {
 } from '@/features/library/types/expression-library.types';
 import { VideoApi } from '@/features/video/api/video.api';
 
-export type SearchLanguage = 'target' | 'native';
-
 function matchesSearch(
   expression: LibraryExpression,
   query: string,
-  searchLanguage: SearchLanguage,
+  selectedLanguages: string[],
+  nativeLang: string | undefined,
 ) {
-  const normalizedQuery = query.trim().toLowerCase();
+  if (selectedLanguages.length === 0) {
+    return false;
+  }
 
-  if (!normalizedQuery) {
+  const q = query.trim().toLowerCase();
+  const nativeSelected = Boolean(
+    nativeLang && selectedLanguages.includes(nativeLang),
+  );
+  const onlyNativeSelected =
+    nativeSelected && selectedLanguages.every((lang) => lang === nativeLang);
+  const languageSelected = selectedLanguages.includes(expression.lang);
+
+  // Only native → all expressions (search in translations).
+  // Otherwise → expression.lang must be one of the selected codes
+  // (including when that code is also the user's native language).
+  if (!onlyNativeSelected && !languageSelected) {
+    return false;
+  }
+
+  if (!q) {
     return true;
   }
 
-  if (searchLanguage === 'target') {
-    return expression.lemma.toLowerCase().includes(normalizedQuery);
-  }
+  const inLemma = expression.lemma.toLowerCase().includes(q);
+  const inTranslation = (expression.lemmaTranslation ?? '')
+    .toLowerCase()
+    .includes(q);
 
-  return expression.lemmaTranslation.toLowerCase().includes(normalizedQuery);
+  if (onlyNativeSelected) {
+    return inTranslation;
+  }
+  if (nativeSelected) {
+    return inLemma || inTranslation;
+  }
+  return inLemma;
 }
 
 export function useExpressionLibrary() {
@@ -34,22 +57,37 @@ export function useExpressionLibrary() {
   const [contextsError, setContextsError] = useState<string | null>(null);
   const [contextsIsLoading, setContextsIsLoading] = useState(true);
 
+  const [languages, setLanguages] = useState<string[]>([]);
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+
   const [query, setQuery] = useState('');
-  const [searchLanguage, setSearchLanguage] =
-    useState<SearchLanguage>('target');
   const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const nativeLang = languages[0];
 
   const filteredExpressions = useMemo(
     () =>
       expressions.filter((expression) =>
-        matchesSearch(expression, query, searchLanguage),
+        matchesSearch(expression, query, selectedLanguages, nativeLang),
       ),
-    [expressions, query, searchLanguage],
+    [expressions, query, selectedLanguages, nativeLang],
   );
 
   const selectedExpression =
     expressions.find((expression) => expression.id === selectedId) ?? null;
   const showDetailOnMobile = selectedId !== null;
+
+  const toggleLanguage = (code: string) => {
+    setSelectedLanguages((prev) => {
+      if (prev.includes(code)) {
+        if (prev.length === 1) {
+          return prev;
+        }
+        return prev.filter((lang) => lang !== code);
+      }
+      return [...prev, code];
+    });
+  };
 
   const fetchExpressionContexts = async (expressionId: string) => {
     setContextsIsLoading(true);
@@ -97,8 +135,9 @@ export function useExpressionLibrary() {
   useEffect(() => {
     VideoApi.getExpressions()
       .then((response) => {
-        console.log(response.data);
-        setExpressions(response.data);
+        setLanguages(response.data.languages);
+        setExpressions(response.data.expressions);
+        setSelectedLanguages(response.data.languages);
       })
       .catch(() => {
         setExpressionError('Nie udało się pobrać listy wyrażeń.');
@@ -118,12 +157,14 @@ export function useExpressionLibrary() {
     selectExpression,
     query,
     setQuery,
-    searchLanguage,
-    setSearchLanguage,
+    selectedLanguages,
+    toggleLanguage,
     contexts,
     contextsError,
     contextsIsLoading,
     deleteExpression,
     deleteExpressionContext,
+    languages,
+    nativeLang,
   };
 }

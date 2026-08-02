@@ -8,7 +8,7 @@ import type {
 } from './video.types';
 import type {
   ExpressionContext,
-  LibraryExpression,
+  ExpressionListResponse,
 } from '@/features/library/types/expression-library.types';
 
 export const VideoApi = {
@@ -22,7 +22,7 @@ export const VideoApi = {
       .then((response) => response.data),
   addExpressionsToLibrary: (req: AddExpressionRequest) =>
     apiClient.post('/expression', req),
-  getExpressions: () => apiClient.get<LibraryExpression[]>('/expression'),
+  getExpressions: () => apiClient.get<ExpressionListResponse>('/expression'),
   getExpressionContexts: (expressionId: string) =>
     apiClient.get<ExpressionContext[]>(`/expression/${expressionId}/contexts`),
   deleteExpression: (expressionId: string) =>
