@@ -35,7 +35,10 @@ export function useYouTubePlayer(
   const [currentTime, setCurrentTime] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const startSecondsRef = useRef(startSeconds);
-  startSecondsRef.current = startSeconds;
+
+  useEffect(() => {
+    startSecondsRef.current = startSeconds;
+  }, [startSeconds]);
 
   useEffect(() => {
     let cancelled = false;
@@ -165,8 +168,6 @@ export function useYouTubePlayer(
       playerRef.current = null;
       setIsReady(false);
     };
-    // startSeconds is read once via ref when the player is created for videoId
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- recreate only on videoId change
   }, [containerRef, videoId]);
 
   const seekTo = useCallback((seconds: number) => {
