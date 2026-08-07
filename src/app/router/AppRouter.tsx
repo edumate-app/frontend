@@ -11,6 +11,7 @@ import AddVideo from '@/pages/dashboard/AddVideo';
 import VideoLessonPage from '@/pages/dashboard/video-lesson';
 import SettingsPage from '@/pages/dashboard/setting';
 import SavedPage from '@/pages/dashboard/SavedPage';
+import ImportVideoPage from '@/pages/dashboard/ImportVideoPage';
 
 export const router = createBrowserRouter([
   {
@@ -40,16 +41,20 @@ export const router = createBrowserRouter([
                 element: <DashboardPage />,
               },
               {
-                path: '/app/videos/new',
-                element: <AddVideo />,
-              },
-              {
                 path: '/app/settings',
                 element: <SettingsPage />,
               },
               {
                 path: '/app/saved',
                 element: <SavedPage />,
+              },
+              {
+                path: '/app/videos/new',
+                element: <AddVideo />,
+              },
+              {
+                path: '/app/videos/import/:jobId',
+                element: <ImportVideoPage />,
               },
               {
                 path: '/app/videos/:video_uuid',
