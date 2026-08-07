@@ -4,11 +4,14 @@ import { useState } from 'react';
 import { Sidebar } from './components/side-bar';
 import { MobileSidebar } from './components/mobile-side-bar';
 import { cn } from '@/lib/utils';
+import { useImportTasksToasts } from '@/features/dashboard/hooks/useImportTasksToasts';
 
 export function DashboardLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { pathname } = useLocation();
   const isVideoLesson = /^\/app\/videos\/(?!new$)[^/]+$/.test(pathname);
+
+  useImportTasksToasts({ enabled: !isVideoLesson });
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-canvas">
