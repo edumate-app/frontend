@@ -30,13 +30,7 @@ export function useImportJob(jobId: string | undefined) {
   );
 
   useEffect(() => {
-    if (!jobId) {
-      setError('Brak ID importu.');
-      return;
-    }
-
-    setError(null);
-    setStatus(null);
+    if (!jobId) return;
 
     const es = new EventSource(dashboardApi.importEventsUrl(jobId), {
       withCredentials: true,
@@ -76,7 +70,7 @@ export function useImportJob(jobId: string | undefined) {
 
   return {
     status,
-    error,
+    error: !jobId ? 'Brak ID importu.' : error,
     progress: status?.progress ?? 0,
     activeStep: stepIndex(status?.step),
     importing: !!jobId && !error && status?.status !== 'FAILED',
