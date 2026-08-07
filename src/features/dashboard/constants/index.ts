@@ -1,3 +1,6 @@
+import { FileText, GraduationCap, Languages, Scissors } from 'lucide-react';
+import type { ImportJobStep } from '../api/dashboard.types';
+
 export const LANGUAGES = [
   { code: 'pl', name: 'Polski' },
   { code: 'en', name: 'English' },
@@ -37,4 +40,31 @@ export const LANGUAGES = [
   // { code: "id", name: "Bahasa Indonesia" },
   // { code: "ms", name: "Bahasa Melayu" },
   // { code: "fa", name: "فارسی" },
+];
+
+export const steps = [
+  {
+    icon: FileText,
+    title: 'Pobieramy transkrypcję',
+    match: [
+      'QUEUED',
+      'FETCH_VIDEO_INFO',
+      'FETCH_TRANSCRIPT',
+    ] as ImportJobStep[],
+  },
+  {
+    icon: Scissors,
+    title: 'Dzielimy na zdania',
+    match: ['SAVE_VIDEO'] as ImportJobStep[],
+  },
+  {
+    icon: Languages,
+    title: 'Tłumaczymy i wyjaśniamy',
+    match: ['ENSURE_LANGUAGE'] as ImportJobStep[],
+  },
+  {
+    icon: GraduationCap,
+    title: 'Tworzymy materiały do nauki',
+    match: ['TOKENIZE_SEGMENTS', 'COMPLETED'] as ImportJobStep[],
+  },
 ];

@@ -114,7 +114,7 @@ function TranscriptList({
                     isActive ? 'font-semibold text-foreground' : 'font-medium',
                   )}
                 >
-                  {segment.nativeText}
+                  {segment.targetText}
                 </p>
                 <p
                   className={cn(
@@ -122,7 +122,7 @@ function TranscriptList({
                     isActive ? 'text-foreground/80' : 'text-muted-foreground',
                   )}
                 >
-                  {segment.targetText}
+                  {segment.nativeText}
                 </p>
               </div>
             </button>
