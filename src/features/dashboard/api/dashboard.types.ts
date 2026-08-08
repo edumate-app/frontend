@@ -27,6 +27,7 @@ export type ImportStatusResponse = {
   progress: number;
   video_uuid: string | null;
   error: string | null;
+  title: string | null;
 };
 
 export type ImportRequest = {

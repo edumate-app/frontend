@@ -3,6 +3,7 @@ import { Check, Loader2, X } from 'lucide-react';
 import type { ImportJobStatus } from '@/features/dashboard/api/dashboard.types';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
+import { Link } from 'react-router-dom';
 
 export type ImportTaskItem = {
   id: string;
@@ -57,7 +58,10 @@ export function ImportTaskToast({
   const showPercent = task.status === 'RUNNING' || task.status === 'PENDING';
 
   return (
-    <div className="flex w-80 items-start gap-3 rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-md">
+    <Link
+      to={`/app/videos/import/${task.id}`}
+      className="flex w-80 items-start gap-3 rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-md"
+    >
       <Icon
         className={cn('mt-0.5 h-4 w-4 shrink-0', meta.iconClass)}
         aria-hidden
@@ -91,7 +95,11 @@ export function ImportTaskToast({
             )}
             <button
               type="button"
-              onClick={() => toast.dismiss(toastId)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toast.dismiss(toastId);
+              }}
               className="text-muted-foreground/70 transition-colors hover:text-foreground"
               aria-label="Zamknij"
             >
@@ -107,6 +115,6 @@ export function ImportTaskToast({
           />
         ) : null}
       </div>
-    </div>
+    </Link>
   );
 }

@@ -4,58 +4,36 @@ import {
   ImportTaskToast,
   type ImportTaskItem,
 } from '@/features/dashboard/components/ImportTaskToast';
+import { steps } from '../constants';
+import { dashboardApi } from '../api/dashboard.api';
+import type { ImportStatusResponse } from '../api/dashboard.types';
 
-/** Mock — podmienić na dane z API. */
-const MOCK_TASKS: ImportTaskItem[] = [
-  {
-    id: '1',
-    title: 'How to Learn Any Language in 6 Months',
-    status: 'RUNNING',
-    progress: 62,
-    stepLabel: 'Tłumaczymy i wyjaśniamy',
-  },
-  {
-    id: '2',
-    title: 'Spanish Conversation Practice',
-    status: 'RUNNING',
-    progress: 28,
-    stepLabel: 'Pobieramy transkrypcję',
-  },
-  {
-    id: '3',
-    title: 'German Grammar Basics',
-    status: 'PENDING',
-    progress: 0,
-    stepLabel: 'W kolejce',
-  },
-  {
-    id: '4',
-    title: 'French Pronunciation Guide',
-    status: 'COMPLETED',
-    progress: 100,
-  },
-  {
-    id: '5',
-    title: 'Italian for Beginners',
-    status: 'FAILED',
-    progress: 45,
-    stepLabel: 'Brak napisów',
-  },
-];
-
-function toastIdFor(taskId: string) {
-  return `import-task-${taskId}`;
+function stepLabel(step: string | undefined) {
+  if (!step) return undefined;
+  return steps.find((s) => s.match.includes(step as never))?.title;
 }
 
 export function showImportTaskToast(task: ImportTaskItem) {
-  const id = toastIdFor(task.id);
   toast.custom((t) => <ImportTaskToast task={task} toastId={t} />, {
-    id,
+    id: task.id,
     duration: Infinity,
     position: 'top-right',
     unstyled: true,
     className: '!border-0 !bg-transparent !p-0 !shadow-none',
   });
+}
+
+function toTask(dto: ImportStatusResponse): ImportTaskItem {
+  return {
+    id: dto.jobId,
+    title: dto.title?.trim() || 'Import filmu',
+    status: dto.status,
+    progress: dto.progress,
+    stepLabel:
+      dto.status === 'FAILED'
+        ? (dto.error ?? 'Błąd importu')
+        : stepLabel(dto.step),
+  };
 }
 
 /**
@@ -64,31 +42,72 @@ export function showImportTaskToast(task: ImportTaskItem) {
  * odpala się przed efektem rodzica, więc synchroniczne toast() ginie).
  */
 export function useImportTasksToasts({
-  tasks = MOCK_TASKS,
   enabled = true,
 }: {
-  tasks?: ImportTaskItem[];
   enabled?: boolean;
 } = {}) {
   useEffect(() => {
     if (!enabled) {
-      for (const task of tasks) {
-        toast.dismiss(`import-task-${task.id}`);
-      }
+      toast.dismiss();
       return;
     }
-
+    const sources: EventSource[] = [];
+    let cancelled = false;
     const timer = window.setTimeout(() => {
-      for (const task of tasks) {
-        showImportTaskToast(task);
-      }
-    }, 0);
+      void (async () => {
+        try {
+          const { data: jobs } = await dashboardApi.listImportJobs();
+          if (cancelled) return;
 
+          const completedIds: string[] = [];
+
+          for (const job of jobs) {
+            showImportTaskToast(toTask(job));
+
+            if (job.status === 'COMPLETED' || job.status === 'FAILED') {
+              completedIds.push(job.jobId);
+              continue;
+            }
+
+            const es = new EventSource(
+              dashboardApi.importEventsUrl(job.jobId),
+              { withCredentials: true },
+            );
+            sources.push(es);
+            es.addEventListener('status', ((event: MessageEvent<string>) => {
+              try {
+                const data = JSON.parse(event.data) as ImportStatusResponse;
+                showImportTaskToast(toTask(data));
+                if (data.status === 'COMPLETED' || data.status === 'FAILED') {
+                  es.close();
+                  window.setTimeout(() => {
+                    toast.dismiss(data.jobId);
+                  }, 2000);
+                }
+              } catch {
+                es.close();
+              }
+            }) as EventListener);
+          }
+
+          // Sonner dokłada na górę — ostatni w completedIds jest na wierzchu
+          [...completedIds].reverse().forEach((id, i) => {
+            window.setTimeout(
+              () => {
+                toast.dismiss(id);
+              },
+              2000 + i * 800,
+            );
+          });
+        } catch {
+          // brak listy jobów — UI milczy
+        }
+      })();
+    }, 0);
     return () => {
+      cancelled = true;
       window.clearTimeout(timer);
-      // for (const task of tasks) {
-      //   toast.dismiss(`import-task-${task.id}`);
-      // }
+      for (const es of sources) es.close();
     };
-  }, [tasks, enabled]);
+  }, [enabled]);
 }

@@ -21,4 +21,6 @@ export const dashboardApi = {
     apiClient.patch(`/user/native-lang`, { lang: lang }),
   getVideos: () => apiClient.get<VideoDto[]>(`/video`),
   removeVideo: (uuid: string) => apiClient.delete(`/video/${uuid}`),
+  listImportJobs: () =>
+    apiClient.get<ImportStatusResponse[]>(`/video/import/jobs`),
 };
