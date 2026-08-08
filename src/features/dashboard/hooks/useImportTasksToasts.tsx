@@ -7,6 +7,7 @@ import {
 import { steps } from '../constants';
 import { dashboardApi } from '../api/dashboard.api';
 import type { ImportStatusResponse } from '../api/dashboard.types';
+import { useImportToastStore } from '../store/import-toast.store';
 
 function stepLabel(step: string | undefined) {
   if (!step) return undefined;
@@ -14,6 +15,8 @@ function stepLabel(step: string | undefined) {
 }
 
 export function showImportTaskToast(task: ImportTaskItem) {
+  if (useImportToastStore.getState().isDismissed(task.id)) return;
+
   toast.custom((t) => <ImportTaskToast task={task} toastId={t} />, {
     id: task.id,
     duration: Infinity,
@@ -34,6 +37,11 @@ function toTask(dto: ImportStatusResponse): ImportTaskItem {
         ? (dto.error ?? 'Błąd importu')
         : stepLabel(dto.step),
   };
+}
+
+function dismissToast(jobId: string) {
+  useImportToastStore.getState().dismiss(jobId);
+  toast.dismiss(jobId);
 }
 
 /**
@@ -77,11 +85,12 @@ export function useImportTasksToasts({
             es.addEventListener('status', ((event: MessageEvent<string>) => {
               try {
                 const data = JSON.parse(event.data) as ImportStatusResponse;
+
                 showImportTaskToast(toTask(data));
                 if (data.status === 'COMPLETED' || data.status === 'FAILED') {
                   es.close();
                   window.setTimeout(() => {
-                    toast.dismiss(data.jobId);
+                    dismissToast(data.jobId);
                   }, 2000);
                 }
               } catch {
@@ -94,7 +103,7 @@ export function useImportTasksToasts({
           [...completedIds].reverse().forEach((id, i) => {
             window.setTimeout(
               () => {
-                toast.dismiss(id);
+                dismissToast(id);
               },
               2000 + i * 800,
             );

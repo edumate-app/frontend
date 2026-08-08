@@ -4,6 +4,7 @@ import type { ImportJobStatus } from '@/features/dashboard/api/dashboard.types';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
+import { useImportToastStore } from '../store/import-toast.store';
 
 export type ImportTaskItem = {
   id: string;
@@ -98,6 +99,7 @@ export function ImportTaskToast({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                useImportToastStore.getState().dismiss(task.id);
                 toast.dismiss(toastId);
               }}
               className="text-muted-foreground/70 transition-colors hover:text-foreground"
