@@ -12,6 +12,7 @@ import VideoLessonPage from '@/pages/dashboard/video-lesson';
 import SettingsPage from '@/pages/dashboard/setting';
 import SavedPage from '@/pages/dashboard/SavedPage';
 import ImportVideoPage from '@/pages/dashboard/ImportVideoPage';
+import MyVideosPage from '@/pages/dashboard/MyVideosPage';
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
               {
                 path: '/app/saved',
                 element: <SavedPage />,
+              },
+              {
+                path: '/app/videos',
+                element: <MyVideosPage />,
               },
               {
                 path: '/app/videos/new',

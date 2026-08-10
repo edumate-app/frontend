@@ -15,7 +15,7 @@ import { useLogout } from '@/features/auth/hooks/useLogout';
 
 const nav = [
   { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/app/videos', label: 'Moje filmy', icon: Film, disabled: true },
+  { to: '/app/videos', label: 'Moje filmy', icon: Film },
   { to: '/app/review', label: 'Powtórki', icon: RotateCcw, disabled: true },
   { to: '/app/saved', label: 'Biblioteka', icon: Bookmark },
   { to: '/app/stats', label: 'Statystyki', icon: BarChart3, disabled: true },
@@ -62,6 +62,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
             <NavLink
               key={item.to}
               to={item.to}
+              end={true}
               onClick={onNavigate}
               className={({ isActive }) =>
                 cn(

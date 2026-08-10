@@ -1,38 +1,15 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  Play,
-  MoreHorizontal,
-  Flame,
-  Clock,
-  BookOpen,
-  Plus,
-  Calendar,
-  ExternalLink,
-  Trash2,
-} from 'lucide-react';
+import { Flame, Clock, BookOpen, Plus, Calendar } from 'lucide-react';
 import { PageHeader } from '@/app/layouts/dashboard/components/page-header';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
-import { timeAgo, formatDuration } from '@/features/dashboard/utils/time';
-import type { VideoDto } from '@/features/dashboard/api/dashboard.types';
-import ConfirmDeleteDialog from '@/components/confirm-delete-dialog';
+import { VideosList } from '@/features/dashboard/components/videos-list';
 
 export default function DashboardPage() {
   const user = useAuthStore((s) => s.user);
-  const navigate = useNavigate();
-  const [videoToDelete, setVideoToDelete] = useState<VideoDto | null>(null);
-
   const { videos, isLoading, error, removeVideo } = useDashboard();
 
   return (
@@ -171,7 +148,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-display text-lg font-semibold">Twoje filmy</h2>
             <Link
-              to="/dashboard/videos"
+              to="/app/videos"
               className="text-xs font-medium text-primary hover:underline"
             >
               Zobacz wszystkie
@@ -179,121 +156,15 @@ export default function DashboardPage() {
           </div>
 
           <Card className="overflow-hidden">
-            {isLoading ? (
-              <p className="p-4 text-sm text-muted-foreground">Ładowanie...</p>
-            ) : error ? (
-              <p className="p-4 text-sm text-destructive">{error}</p>
-            ) : (
-              <div className="divide-y divide-border">
-                {videos.slice(0, 3).map((v) => (
-                  <Link
-                    to={`/app/videos/${v.uuid}`}
-                    key={v.uuid}
-                    className="flex items-center gap-4 px-4 py-3 hover:bg-surface-hover transition-colors"
-                  >
-                    <div className="relative h-12 w-20 shrink-0 overflow-hidden rounded-md">
-                      <img
-                        src={`https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg`}
-                        alt={v.title}
-                        className="h-full w-full object-cover"
-                      />
-                      <Play className="absolute inset-0 m-auto h-4 w-4 fill-white text-white drop-shadow" />
-                      <span className="absolute bottom-0.5 right-0.5 rounded bg-black/75 px-1 py-px text-[10px] font-medium leading-tight text-white">
-                        {formatDuration(v.duration)}
-                      </span>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">{v.title}</p>
-                      <p className="truncate text-xs text-muted-foreground">
-                        {v.author} · {v.targetLang.toUpperCase()}
-                      </p>
-                    </div>
-                    <div className="hidden w-40 items-center gap-2 sm:flex">
-                      <Progress
-                        value={
-                          v.duration
-                            ? (v.lastPositionSeconds / v.duration) * 100
-                            : 0
-                        }
-                        className="h-1.5"
-                      />
-                      <span className="w-9 shrink-0 text-right text-xs text-muted-foreground">
-                        {v.duration
-                          ? Math.round(
-                              (v.lastPositionSeconds / v.duration) * 100,
-                            )
-                          : 0}
-                        %
-                      </span>
-                    </div>
-                    <span className="hidden w-28 shrink-0 text-right text-2xs text-muted-foreground md:block">
-                      {timeAgo(v.lastOpenedAt)}
-                    </span>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-7 w-7 shrink-0"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                          }}
-                          onPointerDown={(e) => e.stopPropagation()}
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        align="end"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <DropdownMenuItem
-                          onSelect={() => navigate(`/app/videos/${v.uuid}`)}
-                        >
-                          <Play className="h-4 w-4" /> Otwórz
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() =>
-                            window.open(`/app/videos/${v.uuid}`, '_blank')
-                          }
-                        >
-                          <ExternalLink className="h-4 w-4" /> Otwórz w nowej
-                          karcie
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          className="text-destructive focus:text-destructive"
-                          onSelect={() => setVideoToDelete(v)}
-                        >
-                          <Trash2 className="h-4 w-4" /> Usuń
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </Link>
-                ))}
-              </div>
-            )}
+            <ScrollArea className="h-85">
+              <VideosList
+                videos={videos}
+                isLoading={isLoading}
+                error={error}
+                onRemove={removeVideo}
+              />
+            </ScrollArea>
           </Card>
-
-          <ConfirmDeleteDialog
-            open={videoToDelete !== null}
-            onOpenChange={(open) => {
-              if (!open) setVideoToDelete(null);
-            }}
-            title="Usunąć film?"
-            description={
-              videoToDelete
-                ? `Film „${videoToDelete.title}” zostanie trwale usunięty. Tej operacji nie można cofnąć.`
-                : ''
-            }
-            confirmLabel="Usuń film"
-            onConfirm={() => {
-              if (!videoToDelete) return;
-              removeVideo(videoToDelete.uuid);
-              setVideoToDelete(null);
-            }}
-          />
         </div>
 
         <Card className="flex flex-col items-start gap-3 p-5 sm:flex-row sm:items-center sm:justify-between bg-primary-50 border-primary-100">
