@@ -14,6 +14,8 @@ import { useYouTubePlayer } from '@/features/video/hooks/useYouTubePlayer';
 import { SentenceAnalysisPanel } from '@/features/video/components/sentence-analysis-panel';
 import { useSaveWatchPosition } from '@/features/video/hooks/useSaveWatchPosition';
 import { useSentenceAnalysis } from '@/features/video/hooks/useSentenceAnalysis';
+import { useStartImport } from '@/features/dashboard/hooks/useStartImport';
+import { VideoLessonEmptyState } from '@/features/video/components/video-lesson-empty-state';
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);
@@ -146,6 +148,7 @@ export default function VideoLessonPage() {
     isLoading,
     error,
     videoLang,
+    importHint,
   } = useGetTranscript();
 
   const positionParam = searchParams.get('lastPositionSeconds');
@@ -215,6 +218,20 @@ export default function VideoLessonPage() {
       window.removeEventListener('keydown', onKeyDown);
     };
   }, [isFullscreen]);
+
+  const { starting, error: importError, handleImport } = useStartImport();
+
+  if (error) {
+    return (
+      <VideoLessonEmptyState
+        error={error}
+        importError={importError}
+        importHint={importHint}
+        starting={starting}
+        handleImport={handleImport}
+      />
+    );
+  }
 
   return (
     <div

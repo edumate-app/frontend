@@ -31,7 +31,7 @@ export type ImportStatusResponse = {
 };
 
 export type ImportRequest = {
-  url: string;
+  videoId: string;
   targetLang: string;
 };
 

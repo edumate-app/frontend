@@ -58,3 +58,8 @@ export type AddExpressionRequest = {
   contextIndex: number;
   video_uuid: string;
 };
+
+export type ImportHint = {
+  videoId: string;
+  lang: string;
+};

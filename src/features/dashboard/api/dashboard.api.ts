@@ -9,8 +9,8 @@ import type {
 } from './dashboard.types';
 
 export const dashboardApi = {
-  validateYtUrl: (url: string) =>
-    apiClient.post<LanguageDto[]>(`/video/validation?url=${url}`),
+  validateYtUrl: (videoId: string) =>
+    apiClient.post<LanguageDto[]>(`/video/validation?videoId=${videoId}`),
   add: (req: ImportRequest) =>
     apiClient.post<ImportResponse>(`/video/import`, req),
   getImportStatus: (jobId: string) =>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { VideoApi } from '../api/video.api';
-import type { TranscriptSegment } from '../api/video.types';
+import type { ImportHint, TranscriptSegment } from '../api/video.types';
 
 export const useGetTranscript = () => {
   const { video_uuid } = useParams<{ video_uuid: string }>();
@@ -12,6 +12,8 @@ export const useGetTranscript = () => {
   const [loadedVideoUuid, setLoadedVideoUuid] = useState<string | null>(null);
   const [videoLang, setVideoLang] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const [importHint, setImportHint] = useState<ImportHint | null>(null);
 
   const isLoading = Boolean(video_uuid && video_uuid !== loadedVideoUuid);
 
@@ -31,9 +33,28 @@ export const useGetTranscript = () => {
       })
 
       .catch((err) => {
-        if (err.response?.status === 400) navigate('/app/settings');
         if (cancelled) return;
-        setError('Nie udało się pobrać transkrypcji.');
+        console.log(err.response);
+
+        const data = err.response?.data;
+        const code = data?.code;
+
+        if (code === 'NATIVE_LANGUAGE_NOT_SET') {
+          navigate('/app/settings');
+          return;
+        } else if (code === 'VIDEO_NOT_IMPORTED') {
+          setError(
+            'Ten materiał nie jest zaimportowany. Zaimportuj go, aby zobaczyć lekcję.',
+          );
+          setImportHint({
+            videoId: data.details.videoId,
+            lang: data.details.targetLang,
+          });
+        } else {
+          setError('Nie udało się pobrać transkrypcji.');
+          setImportHint(null);
+        }
+
         setLoadedVideoUuid(video_uuid);
       });
 
@@ -49,6 +70,8 @@ export const useGetTranscript = () => {
       lastPositionSeconds: 0,
       isLoading: false,
       error: 'Brak identyfikatora wideo.',
+      videoLang: null,
+      importHint: null,
     };
   }
 
@@ -59,5 +82,6 @@ export const useGetTranscript = () => {
     isLoading,
     error: error,
     videoLang,
+    importHint,
   };
 };

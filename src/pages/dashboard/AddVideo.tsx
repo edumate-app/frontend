@@ -32,6 +32,7 @@ export default function AddVideo() {
     error: languageError,
     validateUrl,
     handleUrlPaste,
+    videoId,
   } = useValidateUrl();
 
   const { starting, error, handleImport } = useStartImport();
@@ -108,7 +109,7 @@ export default function AddVideo() {
             <Button
               className="w-full"
               size="lg"
-              onClick={() => void handleImport(url, lang)}
+              onClick={() => videoId && void handleImport(url, lang)}
               disabled={
                 !url ||
                 !lang ||

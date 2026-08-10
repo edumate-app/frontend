@@ -15,6 +15,7 @@ import { timeAgo, formatDuration } from '@/features/dashboard/utils/time';
 import type { VideoDto } from '@/features/dashboard/api/dashboard.types';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { getYouTubeThumbnailUrl } from '@/features/video/utils/youtube';
 
 export type VideosView = 'list' | 'grid';
 
@@ -95,7 +96,7 @@ function VideoListRow({
     >
       <div className="relative h-12 w-20 shrink-0 overflow-hidden rounded-md">
         <img
-          src={`https://img.youtube.com/vi/${video.videoId}/mqdefault.jpg`}
+          src={getYouTubeThumbnailUrl(video.videoId)}
           alt={video.title}
           className="h-full w-full object-cover"
         />
@@ -138,7 +139,7 @@ function VideoGridCard({
       <Link to={`/app/videos/${video.uuid}`} className="group block">
         <div className="relative aspect-video overflow-hidden bg-muted">
           <img
-            src={`https://img.youtube.com/vi/${video.videoId}/mqdefault.jpg`}
+            src={getYouTubeThumbnailUrl(video.videoId)}
             alt={video.title}
             className="h-full w-full object-cover transition-transform group-hover:scale-[1.02]"
           />
