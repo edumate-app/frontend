@@ -1,19 +1,16 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LayoutGrid, List, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { PageHeader } from '@/app/layouts/dashboard/components/page-header';
-import {
-  VideosList,
-  type VideosView,
-} from '@/features/dashboard/components/videos-list';
+import { VideosList } from '@/features/dashboard/components/videos-list';
 import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
 import { cn } from '@/lib/utils';
+import { useVideosView } from '@/features/dashboard/hooks/useVideosView';
 
 export default function MyVideosPage() {
   const { videos, isLoading, error, removeVideo } = useDashboard();
-  const [view, setView] = useState<VideosView>('list');
+  const { view, setView } = useVideosView();
 
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
