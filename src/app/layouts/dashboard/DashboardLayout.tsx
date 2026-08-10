@@ -9,7 +9,7 @@ import { useImportTasksToasts } from '@/features/dashboard/hooks/useImportTasksT
 export function DashboardLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { pathname } = useLocation();
-  const isVideoLesson = /^\/app\/videos\/(?!new$)[^/]+$/.test(pathname);
+  const isVideoLesson = /^\/app\/videos\/(?!new$|import$)[^/]+$/.test(pathname);
 
   useImportTasksToasts({ enabled: !isVideoLesson });
 
